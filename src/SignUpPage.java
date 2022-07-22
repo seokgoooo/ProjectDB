@@ -2,6 +2,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -15,9 +18,14 @@ public class SignUpPage extends JDialog {
 	private JFormattedTextField ageField;
 	private MouseCursor mc = new MouseCursor();
 	private TextLimit tl = new TextLimit();
+	private TextFieldFocus tff = new TextFieldFocus();
 
 	public SignUpPage() {
 		super();
+		// 회원가입 테스트용
+		Map<String, String> server = new LinkedHashMap<>();
+		server.put("sample", "value");
+
 		setType(Type.POPUP);
 		setResizable(false);
 		setFont(new Font("Dialog", Font.PLAIN, 20));
@@ -62,11 +70,13 @@ public class SignUpPage extends JDialog {
 		idField = new JTextField();
 		getContentPane().add(idField);
 		idField.setBounds(250, 50, 300, 50);
-		idField.setText(" 10글자 이내");
+		idField.setText("10글자 이내로 입력");
 		idField.setForeground(new Color(0, 102, 102));
 		idField.setBackground(new Color(255, 255, 255));
 		idField.setFont(new Font("휴먼모음T", Font.PLAIN, 25));
 		idField.setColumns(10);
+		idField.addFocusListener(tff);
+		idField.addKeyListener(tl);
 
 		passwordField = new JPasswordField();
 		getContentPane().add(passwordField);
@@ -75,6 +85,7 @@ public class SignUpPage extends JDialog {
 		passwordField.setBackground(Color.WHITE);
 		passwordField.setFont(new Font("Berlin Sans FB", Font.PLAIN, 25));
 		passwordField.setColumns(10);
+		passwordField.addKeyListener(tl);
 
 		JCheckBox managerCheckBox = new JCheckBox(" 관리자일 경우 누르세요");
 		getContentPane().add(managerCheckBox);

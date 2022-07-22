@@ -29,6 +29,7 @@ public class FirstFrame extends JFrame {
 	private MouseCursor mc = new MouseCursor();
 	private TextLimit tl = new TextLimit();
 	private SignUpPage sup = new SignUpPage();
+	private TextFieldFocus tff = new TextFieldFocus();
 
 	public FirstFrame() {
 		super();
@@ -87,10 +88,12 @@ public class FirstFrame extends JFrame {
 
 		bottomPnl.add(idTf);
 		idTf.setBounds(250, 0, 400, 50);
-		idTf.setFont(new Font("Berlin Sans FB", Font.PLAIN, 30));
+		idTf.setFont(new Font("휴먼모음T", Font.PLAIN, 30));
 		idTf.setForeground(new Color(255, 255, 255));
 		idTf.setBackground(new Color(68, 148, 148));
+		idTf.setText("10글자 이내로 입력");
 		idTf.addKeyListener(tl);
+		idTf.addFocusListener(tff);
 
 		bottomPnl.add(pwPf);
 		pwPf.setBounds(250, 75, 400, 50);
