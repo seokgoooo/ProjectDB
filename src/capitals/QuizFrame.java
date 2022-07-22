@@ -1,3 +1,5 @@
+package capitals;
+
 
 
 import java.awt.Color;
