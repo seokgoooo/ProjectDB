@@ -4,11 +4,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -51,6 +54,10 @@ public class FirstFrame extends JFrame {
 	}
 
 	public void makeGui() {
+		// 회원가입 테스트용
+		Map<String, String> server = new LinkedHashMap<>();
+		server.put("sample", "value");
+
 		mainPnl = new JPanel();
 		getContentPane().add(mainPnl);
 		mainPnl.setBounds(220, 0, 650, 450);
@@ -139,8 +146,31 @@ public class FirstFrame extends JFrame {
 		signInBtn.setForeground(new Color(0, 102, 102));
 		signInBtn.setFont(new Font("한컴산뜻돋움", Font.PLAIN, 30));
 
+		signInBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String id = new String(idTf.getText());
+				String pw = new String(pwPf.getPassword());
+				if (server.containsKey(id)) {
+					if (pw.equals(server.get(id))) {
+						showPopUp("로그인 성공");
+					} else {
+						showPopUp("비밀번호가 달라요");
+					}
+				}
+
+				if (!server.containsKey(id)) {
+					showPopUp("먼저 회원가입을 해주세요");
+				}
+			}
+		});
+
 		signUpBtn.addMouseListener(mc);
 		signInBtn.addMouseListener(mc);
+	}
+
+	private void showPopUp(String text) {
+		JOptionPane.showMessageDialog(FirstFrame.this, text);
 	}
 
 	public static void main(String[] args) {
