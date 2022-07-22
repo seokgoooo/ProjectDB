@@ -1,6 +1,5 @@
 package fourletters;
 
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -20,13 +19,11 @@ import javax.swing.border.TitledBorder;
 
 import gg.DBUtil; 
 
-public class Main3 {
+public class fourlettersQuiz {
 	int user = 1;
 	
-	public Main3() {
+	public fourlettersQuiz() {
 		Button bt = new Button();
-		
-		dummyUser du = new dummyUser("abc");
 		JFrame fr = new JFrame("퀴즈 프로그램");
 		JPanel pnlMain = new JPanel();
 		JPanel pnlLEFT = new JPanel();
@@ -92,8 +89,9 @@ public class Main3 {
 		// --왼쪽[1]
 		bt.start_button(pnlL1, ta);
 		pnlL1.add(tf);
-		bt.OK_button(pnlL1, ta, tf, du.getId());
+//		bt.OK_button(pnlL1, ta2, null);
 		bt.next_button(pnlL1, ta);
+		
 
 		// --왼쪽[2]
 //		for (int i = 0; i < bt.length; i++) {
@@ -127,7 +125,7 @@ public class Main3 {
 //		bt.questionDelete(1);
 		//수정
 //		bt.questionUpdate(2,"인생,무상,아 인생이여");
-		bt.ListAdd();
+		
 		pnlR3.setVisible(false);
 		manager(pnlR3, user);
 		
@@ -139,7 +137,7 @@ public class Main3 {
 		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-//	// 관리자 (user = 1 일경우 관리자 켜짐)
+	// 관리자 (user = 1 일경우 관리자 켜짐)
 	public void manager(JPanel p, int user) {
 		JButton btn4 = new JButton("문제추가");
 		JButton btn5 = new JButton("문제삭제");
@@ -171,6 +169,6 @@ public class Main3 {
 	}
 
 	public static void main(String[] args) {
-		new Main3();
+		new fourlettersQuiz();
 	}
 }
