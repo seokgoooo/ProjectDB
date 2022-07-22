@@ -35,6 +35,8 @@ public class FirstFrame extends JFrame {
 
 	public FirstFrame() {
 		super();
+		setTitle("그대가 들어5조");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		makeFrame();
 		makeGui();
 	}
@@ -45,8 +47,6 @@ public class FirstFrame extends JFrame {
 		getContentPane().setBackground(UIManager.getColor("window"));
 		getContentPane().setLayout(null);
 		setResizable(false);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setTitle("그대가 들어5조");
 		setLocationRelativeTo(null);
 	}
 

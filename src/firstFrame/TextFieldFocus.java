@@ -1,4 +1,5 @@
 package firstFrame;
+
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -21,5 +22,4 @@ public class TextFieldFocus implements FocusListener {
 			src.setText("10글자 이내로 입력");
 		}
 	}
-
 }

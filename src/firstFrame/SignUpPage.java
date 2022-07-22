@@ -1,4 +1,5 @@
 package firstFrame;
+
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import java.awt.Color;
