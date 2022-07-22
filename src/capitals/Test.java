@@ -1,4 +1,3 @@
-package capitals;
 
 import java.sql.SQLException;
 public class Test {

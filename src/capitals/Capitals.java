@@ -1,12 +1,10 @@
-package capitals;
-
 // 수도 클래스
 public class Capitals {
 	private int number;
 	private String question;
 	private String answer;
 	private String continent;
-
+	
 	public Capitals(int number, String question, String answer, String continent) {
 		super();
 		this.number = number;
@@ -59,5 +57,7 @@ public class Capitals {
 		return "Capitals [number=" + number + ", question=" + question + ", answer=" + answer + ", continent="
 				+ continent + "]";
 	}
+	
+	
 
 }

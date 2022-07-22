@@ -1,9 +1,7 @@
-package capitals;
-
-
-
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -120,6 +118,14 @@ public class QuizFrame {
 	// 관리자 (user = 1 일경우 관리자 켜짐)
 	public void manager(JPanel p, int user) {
 		JButton btn4 = new JButton("문제추가");
+		btn4.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		});
 		JButton btn5 = new JButton("문제삭제");
 		JButton btn6 = new JButton("문제수정");
 		JButton btn7 = new JButton("문제보기");
