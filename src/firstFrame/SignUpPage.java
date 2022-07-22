@@ -23,6 +23,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 public class SignUpPage extends JDialog {
 	private JTextField idField;
@@ -143,6 +144,10 @@ public class SignUpPage extends JDialog {
 		lblAge_1_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblAge_1_1.setForeground(new Color(255, 0, 51));
 		lblAge_1_1.setFont(new Font("휴먼모음T", Font.PLAIN, 20));
+		
+		JToggleButton tglbtnNewToggleButton = new JToggleButton("New toggle button");
+		tglbtnNewToggleButton.setBounds(546, 12, 136, 28);
+		getContentPane().add(tglbtnNewToggleButton);
 
 		signUpBtn.addActionListener(new ActionListener() {
 			@Override

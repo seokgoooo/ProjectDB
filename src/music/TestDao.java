@@ -10,7 +10,7 @@ public class TestDao {
 		MusicPlayer mp = new MusicPlayer();
 		Music result = null;
 		String path = "src\\music\\resource\\";
-		
+
 		try {
 			result = dao.read(3001);
 		} catch (SQLException e) {
@@ -21,20 +21,20 @@ public class TestDao {
 		String title = result.getTitle();
 		path += title + ".mp3";
 		mp.play(new File(path));
-		
+
 		Scanner scan = new Scanner(System.in);
-				
-		while(true) {
+
+		while (true) {
 			System.out.println("정답 입력");
 			String answer = scan.nextLine();
-			if(answer.equals(title)) {
+			if (answer.equals(title)) {
 				System.out.println("정답");
 				mp.stop();
 				break;
 			} else {
 				System.out.println("오답");
 			}
-		}		
-		
+		}
+
 	}
 }
