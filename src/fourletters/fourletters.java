@@ -63,9 +63,12 @@ public class fourletters {
 
 	}
 
-	public String toStringQuestion() {
+	public String toQuestion() {
 		return question;
 
+	}
+	public String toAwnser() {
+		return awnser;
 	}
 	
 	public int toNumber() {

@@ -7,7 +7,8 @@ public interface Dao {
 
 	List<fourletters> read() throws SQLException;
 	fourletters read(int number) throws SQLException;
-	fourletters read(String question) throws SQLException;
+	fourletters readst(String question) throws SQLException;
+	fourletters readan(String question) throws SQLException;
 
 	int update(int number, String question, String awnser, String hint) throws SQLException;
 

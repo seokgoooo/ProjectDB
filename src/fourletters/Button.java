@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 
 public class Button {
 	Dao dao = new FourlettersDaoImpl();
-	Font font = new Font("맑은 고딕", Font.BOLD, 32);
+	Font font = new Font("맑은 고딕", Font.BOLD, 100);
 	Random ran = new Random();
 	int r = (int) (Math.random() * 5);
 
@@ -80,7 +80,7 @@ public class Button {
 			@Override
 			public void actionPerformed(ActionEvent a) {
 				try {
-					ta.setText(String.valueOf(dao.read(r).toStringQuestion()));
+					ta.setText(String.valueOf(dao.read(r).toQuestion()));
 
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -101,7 +101,7 @@ public class Button {
 			@Override
 			public void actionPerformed(ActionEvent a) {
 				try {
-					ta.setText(String.valueOf(dao.read(r).toStringQuestion()) + "\n");
+					ta.setText(String.valueOf(dao.read(r).toQuestion()));
 
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -119,15 +119,35 @@ public class Button {
 	public void OK_button(JPanel p, JTextArea ta, JTextField tf, String id) {
 		JButton btn0 = new JButton("확인");
 		ActionListener a = new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent a) {
 				try {
-					if (ta.getText().equals(tf.getText())) {
-//						List<fourletters> list = dao.read();
+					String s = String.valueOf(dao.readan(ta.getText()).toQuestion());
+					if (s.equals(tf.getText())) {
 						System.out.println("정답");
-						int result = dao.read(ta.getText()).getNumber();
+						int result = (dao.readst(ta.getText()).toNumber());
 						dao.clearSave(id, result);
 					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		btn0.addActionListener(a);
+
+		p.add(btn0);
+	}
+	
+	public void hint_button(JPanel p, JTextArea ta, JTextArea ta2) {
+		JButton btn0 = new JButton("확인");
+		ActionListener a = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent a) {
+				try {
+					String s = String.valueOf(dao.readan(ta.getText()).toQuestion());
+					int result = (dao.readst(ta.getText()).toNumber());
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

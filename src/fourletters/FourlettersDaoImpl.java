@@ -18,25 +18,24 @@ public class FourlettersDaoImpl implements Dao {
 		String question = rs.getString("question");
 		String awnser = rs.getString("awnser");
 		String hint = rs.getString("hint");
-		// ResultSet은 한 행을 읽을 수 있게 도와주는 객체
-
 		return new fourletters(number, question, awnser, hint);
 	}
 
 	// 문제 불러오기
-	private fourletters answerMapping(ResultSet rs) throws SQLException {
-//		int number = rs.getInt("number");
+	private fourletters questionMappong(ResultSet rs) throws SQLException {
 		String question = rs.getString("question");
-		
 		return new fourletters(question);
 	}
 	// 정답으로 번호불러오기
 	private fourletters numberMapping(ResultSet rs) throws SQLException {
 		int number = rs.getInt("number");
-//		String question = rs.getString("question");
-		
 		return new fourletters(number);
 	}
+	private fourletters awnserMapping(ResultSet rs) throws SQLException {
+		String awnser = rs.getString("awnser");
+		return new fourletters(awnser);
+	}
+	
 
 	// 추가를 여러번 할수 있게
 	public int[] create(List<fourletters> list) throws SQLException {
@@ -152,7 +151,7 @@ public class FourlettersDaoImpl implements Dao {
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				return answerMapping(rs);
+				return resultMapping(rs);
 			}
 		} finally {
 			DBUtil.closeRs(rs);
@@ -164,8 +163,8 @@ public class FourlettersDaoImpl implements Dao {
 	}
 	//문제로 번호불러 오기
 	@Override
-	public fourletters read(String question) throws SQLException {
-		String query = "SELECT number FROM fourletters WHERE question = ?";
+	public fourletters readst(String question) throws SQLException {
+		String query = "SELECT * FROM fourletters WHERE question = ?";
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -187,6 +186,31 @@ public class FourlettersDaoImpl implements Dao {
 		}
 		return null;
 	}
+	//문제로 정답 불러오기
+			@Override
+			public fourletters readan(String question) throws SQLException {
+				String query = "SELECT * FROM fourletters WHERE question = ?";
+
+				Connection conn = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+
+				try {
+					conn = DBUtil.getConnection();
+					pstmt = conn.prepareStatement(query);
+					pstmt.setString(1, question);
+					rs = pstmt.executeQuery();
+
+					if (rs.next()) {
+						return awnserMapping(rs);
+					}
+				} finally {
+					DBUtil.closeRs(rs);
+					DBUtil.closeStmt(pstmt);
+					DBUtil.closeConn(conn);
+				}
+				return null;
+			}
 
 	@Override
 	public int update(int number, String question, String awnser, String hint) throws SQLException {
