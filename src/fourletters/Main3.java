@@ -94,6 +94,7 @@ public class Main3 {
 		pnlL1.add(tf);
 		bt.OK_button(pnlL1, ta, tf, du.getId());
 		bt.next_button(pnlL1, ta);
+		bt.hint_button(pnlL1, ta, ta2);
 
 		// --왼쪽[2]
 //		for (int i = 0; i < bt.length; i++) {

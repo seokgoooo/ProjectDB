@@ -140,14 +140,13 @@ public class Button {
 	}
 	
 	public void hint_button(JPanel p, JTextArea ta, JTextArea ta2) {
-		JButton btn0 = new JButton("확인");
+		JButton btn0 = new JButton("힌트");
 		ActionListener a = new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent a) {
 				try {
-					String s = String.valueOf(dao.readan(ta.getText()).toQuestion());
-					int result = (dao.readst(ta.getText()).toNumber());
+					ta2.setText(String.valueOf(dao.readhint(ta.getText()).toHint()));
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

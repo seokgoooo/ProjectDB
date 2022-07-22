@@ -11,7 +11,7 @@ import gg.DBUtil;
 
 public class FourlettersDaoImpl implements Dao {
 	List<fourletters> list = new ArrayList<fourletters>();
-	
+
 	// 한 행을 볼수 있게
 	private fourletters resultMapping(ResultSet rs) throws SQLException {
 		int number = rs.getInt("number");
@@ -26,16 +26,22 @@ public class FourlettersDaoImpl implements Dao {
 		String question = rs.getString("question");
 		return new fourletters(question);
 	}
+
 	// 정답으로 번호불러오기
 	private fourletters numberMapping(ResultSet rs) throws SQLException {
 		int number = rs.getInt("number");
 		return new fourletters(number);
 	}
+
 	private fourletters awnserMapping(ResultSet rs) throws SQLException {
 		String awnser = rs.getString("awnser");
 		return new fourletters(awnser);
 	}
 	
+	private fourletters hintMapping(ResultSet rs) throws SQLException {
+		String hint = rs.getString("hint");
+		return new fourletters(hint);
+	}
 
 	// 추가를 여러번 할수 있게
 	public int[] create(List<fourletters> list) throws SQLException {
@@ -87,7 +93,7 @@ public class FourlettersDaoImpl implements Dao {
 			DBUtil.closeConn(conn);
 		}
 	}
-	
+
 	// 다푼문제에 저장
 	@Override
 	public int clearSave(String id, int quizNum) throws SQLException {
@@ -102,7 +108,7 @@ public class FourlettersDaoImpl implements Dao {
 			// 준비과정을 set으로
 			pstmt.setString(1, id);
 			pstmt.setInt(2, quizNum);
-			
+
 			return pstmt.executeUpdate();
 		} finally {
 			DBUtil.closeStmt(pstmt);
@@ -134,8 +140,8 @@ public class FourlettersDaoImpl implements Dao {
 		return list;
 
 	}
-	
-	//번호로 문제 불러오기
+
+	// 번호로 문제 불러오기
 	@Override
 	public fourletters read(int number) throws SQLException {
 		String query = "SELECT * FROM fourletters WHERE number = ?";
@@ -161,7 +167,8 @@ public class FourlettersDaoImpl implements Dao {
 
 		return null;
 	}
-	//문제로 번호불러 오기
+
+	// 문제로 번호불러 오기
 	@Override
 	public fourletters readst(String question) throws SQLException {
 		String query = "SELECT * FROM fourletters WHERE question = ?";
@@ -186,31 +193,58 @@ public class FourlettersDaoImpl implements Dao {
 		}
 		return null;
 	}
-	//문제로 정답 불러오기
-			@Override
-			public fourletters readan(String question) throws SQLException {
-				String query = "SELECT * FROM fourletters WHERE question = ?";
 
-				Connection conn = null;
-				PreparedStatement pstmt = null;
-				ResultSet rs = null;
+	// 문제로 정답 불러오기
+	@Override
+	public fourletters readan(String question) throws SQLException {
+		String query = "SELECT * FROM fourletters WHERE question = ?";
 
-				try {
-					conn = DBUtil.getConnection();
-					pstmt = conn.prepareStatement(query);
-					pstmt.setString(1, question);
-					rs = pstmt.executeQuery();
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
-					if (rs.next()) {
-						return awnserMapping(rs);
-					}
-				} finally {
-					DBUtil.closeRs(rs);
-					DBUtil.closeStmt(pstmt);
-					DBUtil.closeConn(conn);
-				}
-				return null;
+		try {
+			conn = DBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, question);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				return awnserMapping(rs);
 			}
+		} finally {
+			DBUtil.closeRs(rs);
+			DBUtil.closeStmt(pstmt);
+			DBUtil.closeConn(conn);
+		}
+		return null;
+	}
+	
+	// 문제로 힌트불러 오기
+		@Override
+		public fourletters readhint(String question) throws SQLException {
+			String query = "SELECT * FROM fourletters WHERE question = ?";
+
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			try {
+				conn = DBUtil.getConnection();
+				pstmt = conn.prepareStatement(query);
+				pstmt.setString(1, question);
+				rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					return numberMapping(rs);
+				}
+			} finally {
+				DBUtil.closeRs(rs);
+				DBUtil.closeStmt(pstmt);
+				DBUtil.closeConn(conn);
+			}
+			return null;
+		}
 
 	@Override
 	public int update(int number, String question, String awnser, String hint) throws SQLException {

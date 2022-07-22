@@ -75,5 +75,7 @@ public class fourletters {
 		return number;
 
 	}
-
+	public String toHint() {
+		return hint;
+	}
 }
