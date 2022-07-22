@@ -1,4 +1,4 @@
-
+package capitals;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -80,22 +80,22 @@ public class Manager implements CapitalsDao {
 		String query = "UPDATE Capitals Set question = ?, answer = ?, continent = ? Where number = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
-			
+
 			conn = DBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, question);
 			pstmt.setString(2, answer);
 			pstmt.setString(3, continent);
 			pstmt.setInt(4, number);
-			
+
 			return pstmt.executeUpdate();
-		}  finally {
+		} finally {
 			DBUtil.closeStmt(pstmt);
 			DBUtil.closeconn(conn);
 		}
-		
+
 	}
 
 	@Override
@@ -103,19 +103,18 @@ public class Manager implements CapitalsDao {
 		String query = "DELETE FROM Capitals Where number = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			conn = DBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, number);
-			
+
 			return pstmt.executeUpdate();
-			
+
 		} finally {
 			DBUtil.closeStmt(pstmt);
 			DBUtil.closeconn(conn);
 		}
 	}
-
 
 }

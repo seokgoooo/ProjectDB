@@ -172,8 +172,4 @@ public class FirstFrame extends JFrame {
 	private void showPopUp(String text) {
 		JOptionPane.showMessageDialog(FirstFrame.this, text);
 	}
-
-	public static void main(String[] args) {
-		new FirstFrame();
-	}
 }

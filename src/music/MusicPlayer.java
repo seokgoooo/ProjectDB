@@ -20,11 +20,11 @@ public class MusicPlayer {
 		} catch (JavaLayerException e) {
 			e.printStackTrace();
 		}
-	
+
 		MusicPlayerThread playThread = new MusicPlayerThread(player);
-		
+
 		playThread.start();
-		
+
 	}
 
 	public void stop() {
