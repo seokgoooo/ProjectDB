@@ -91,6 +91,7 @@ public class FirstFrame extends JFrame {
 		mainPnl.add(imgLbl_1);
 		imgLbl_1.setBounds(0, 100, 200, 350);
 		imgLbl_1.setHorizontalAlignment(SwingConstants.CENTER);
+
 		imgLbl_1.setIcon(new ImageIcon("D:\\SG\\ProjectDBGit\\resources\\main1.png"));
 
 		JLabel imgLbl_2 = new JLabel("");
