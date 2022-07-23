@@ -1,3 +1,6 @@
+// 해야할일 : ID 중복체크 표현, age 숫자만 입력하게 제한
+// 완료 : GUI 구현, age 정수 체크 구현해봤는데 이슈 생김
+
 package firstFrame;
 
 import javax.swing.JDialog;
@@ -35,7 +38,7 @@ public class SignUpPage extends JDialog {
 
 	public SignUpPage() {
 		super();
-		// 회원가입 테스트용
+		// 회원가입 테스트용 Map
 		Map<String, String> server = new LinkedHashMap<>();
 		server.put("sample", "value");
 
