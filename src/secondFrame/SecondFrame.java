@@ -1,3 +1,7 @@
+// 할일 : 버튼 누르면 기능 실행되게 연결
+//       랭킹 기능 쪽 통계 활용, 표현 방법 고민
+// 완료 : GUI 구현
+
 package secondFrame;
 
 import javax.swing.JFrame;
