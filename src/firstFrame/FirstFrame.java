@@ -1,3 +1,6 @@
+// 해야할것 : 로그인 성공 후 secondFrame 실행
+// 완료된것 : GUI 구현
+
 package firstFrame;
 
 import java.awt.Color;
@@ -44,6 +47,7 @@ public class FirstFrame extends JFrame {
 		makeGui();
 	}
 
+//      JFrame 기본틀
 	public void makeFrame() {
 		setSize(1180, 820);
 		setVisible(true);
@@ -53,8 +57,9 @@ public class FirstFrame extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
+//      JFrame 메인프레임 그리기
 	public void makeGui() {
-		// 회원가입 테스트용
+		// 회원가입 테스트용 Map
 		Map<String, String> server = new LinkedHashMap<>();
 		server.put("sample", "value");
 
