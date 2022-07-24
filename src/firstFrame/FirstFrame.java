@@ -159,6 +159,7 @@ public class FirstFrame extends JFrame {
 				if (server.containsKey(id)) {
 					if (pw.equals(server.get(id))) {
 						showPopUp("로그인 성공");
+SecondFrame sf = new SecondFrame();
 					} else {
 						showPopUp("비밀번호가 달라요");
 					}
