@@ -16,7 +16,6 @@ public class SecondFrame extends JFrame {
 		super();
 		setTitle("선택");
 		setSize(1180, 820);
-		setVisible(true);
 		getContentPane().setBackground(UIManager.getColor("window"));
 		getContentPane().setLayout(new GridLayout(2, 3, 0, 0));
 
@@ -58,9 +57,5 @@ public class SecondFrame extends JFrame {
 
 		setResizable(false);
 		setLocationRelativeTo(null);
-	}
-
-	public static void main(String[] args) {
-		new SecondFrame();
 	}
 }

@@ -21,6 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+import secondFrame.SecondFrame;
+
 public class FirstFrame extends JFrame {
 	private JPasswordField pwPf = new JPasswordField(10);
 	private JTextField idTf = new JTextField(10);
@@ -159,7 +161,8 @@ public class FirstFrame extends JFrame {
 				if (server.containsKey(id)) {
 					if (pw.equals(server.get(id))) {
 						showPopUp("로그인 성공");
-SecondFrame sf = new SecondFrame();
+						SecondFrame sf = new SecondFrame();
+						sf.setVisible(true);
 					} else {
 						showPopUp("비밀번호가 달라요");
 					}
