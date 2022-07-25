@@ -42,7 +42,7 @@ public class MusicDaoImpl implements MusicDao {
 			return pstmt.executeUpdate();
 		} finally {
 			QuizDBUtil.closeStmt(pstmt);
-			QuizDBUtil.closeCon(conn);
+			QuizDBUtil.closeConn(conn);
 		}
 		
 	}
@@ -68,7 +68,7 @@ public class MusicDaoImpl implements MusicDao {
 		} finally {
 			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closeStmt(pstmt);
-			QuizDBUtil.closeCon(conn);
+			QuizDBUtil.closeConn(conn);
 		}
 		return list;
 	}
@@ -97,7 +97,7 @@ public class MusicDaoImpl implements MusicDao {
 		} finally {
 			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closeStmt(pstmt);
-			QuizDBUtil.closeCon(conn);
+			QuizDBUtil.closeConn(conn);
 			
 		}
 		
@@ -123,7 +123,7 @@ public class MusicDaoImpl implements MusicDao {
 			return pstmt.executeUpdate();
 		}finally {
 			QuizDBUtil.closeStmt(pstmt);
-			QuizDBUtil.closeCon(conn);
+			QuizDBUtil.closeConn(conn);
 		}
 	}
 
@@ -143,13 +143,14 @@ public class MusicDaoImpl implements MusicDao {
 			
 		} finally {
 			QuizDBUtil.closeStmt(pstmt);
-			QuizDBUtil.closeCon(conn);
+			QuizDBUtil.closeConn(conn);
 		}
 	}
 
 	// play횟수 증가 
 	public int playCountPlus(int number, int playCount) throws SQLException {
 		String query = "UPDATE music SET playcount = ? where number = ?";
+		playCount++;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
@@ -163,7 +164,7 @@ public class MusicDaoImpl implements MusicDao {
 			
 		} finally {
 			QuizDBUtil.closeStmt(pstmt);
-			QuizDBUtil.closeCon(conn);
+			QuizDBUtil.closeConn(conn);
 		}		
 	}
 }

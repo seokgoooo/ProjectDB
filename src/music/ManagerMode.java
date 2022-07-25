@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -16,7 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;

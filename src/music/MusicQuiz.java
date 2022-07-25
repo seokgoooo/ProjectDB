@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,12 +25,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-
-import javazoom.jl.player.advanced.jlap;
 
 public class MusicQuiz extends JFrame implements ActionListener {
 	private MusicDao dao = new MusicDaoImpl();
@@ -51,7 +47,9 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private final int timeOut = 60;
 	private boolean first = true;
 	private boolean prev = false;
+	private boolean select = false;
 	private JLabel timeLbl;
+	private Timer timer;
 
 	public MusicQuiz() {
 		JPanel pnlMain = new JPanel();
@@ -97,18 +95,17 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 		showQuizPnl.setPreferredSize(new Dimension(400, 500));
 		showQuizTab.setPreferredSize(new Dimension(380, 500));
-		
+
 		// 전체 문제 panel
 		quizAllPnl.setLayout(new GridLayout(5, 5));
-		
+
 		quizList = new JButton[list.size()];
-		
-		for(int i = 0; i < quizList.length;i++) {
+
+		for (int i = 0; i < quizList.length; i++) {
 			quizList[i] = new JButton(String.valueOf(i + 1));
 			quizList[i].addActionListener(this);
 			quizAllPnl.add(quizList[i]);
 		}
-		
 
 		// 왼쪽 버튼
 		leftTopPnl.setLayout(new BorderLayout());
@@ -191,7 +188,20 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			prevBtnEvent();
 		} else if (e.getSource() == nextBtn) {
 			nextBtnEvent();
-
+		} else {
+			for (int i = 0; i < quizList.length; i++) {
+				if (e.getSource() == quizList[i]) {
+					player.end();
+					pauseBtn.setVisible(false);
+					playBtn.setVisible(true);
+					prevMusic = currentMusic;
+					currentMusic = list.get(i);
+					map.put(currentMusic, prevMusic);
+					timeLbl.setText("" + 60);
+					first = true;
+					select = true;
+				}
+			}
 		}
 	}
 
@@ -217,7 +227,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		if (prev) {
 			currentMusic = map.get(currentMusic);
 			prevMusic = map.get(currentMusic);
-			
+
 			if (prevMusic == null) {
 				prevBtn.setEnabled(false);
 			}
@@ -227,39 +237,47 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			prev = false;
 
 		} else if (first) {
-			getMusic(list);
+			if (!select) {
+				getMusic(list);
+			}
 			URI uri = getURI(currentMusic.getTitle());
 			player.play(new File(uri));
 			first = false;
 		} else {
 			player.musicRun();
 		}
-		countDown();		
-		
+
+		countDown();
+
 		playBtn.setVisible(false);
 		pauseBtn.setVisible(true);
 	}
 
+	// 카운트 다운
 	public void countDown() {
-		Timer timer = new Timer();
+		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			int count = timeOut;
+
 			@Override
 			public void run() {
 				timeLbl.setText("" + count);
 				count--;
-				
-				if(count < 0) {
+
+				if (count < 0) {
 					timer.cancel();
 					timeLbl.setText("시간 초과");
+					player.end();
 				}
 			}
 		}, 0, 1000);
 	}
-	
+
 	// 이전 버튼 이벤트
 	public void prevBtnEvent() {
 		player.end();
+		timer.cancel();
+		timeLbl.setText("" + 60);
 		pauseBtn.setVisible(false);
 		playBtn.setVisible(true);
 		answerTf.setText("");
@@ -270,14 +288,16 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	// 다음 버튼 이벤트
 	public void nextBtnEvent() {
 		player.end();
+		timer.cancel();
+		timeLbl.setText("" + 60);
 		prevBtn.setEnabled(true);
 		pauseBtn.setVisible(false);
-		playBtn.setVisible(true);		
+		playBtn.setVisible(true);
 		answerTf.setText("");
 		first = true;
 	}
 
-	// uri 가져오는 메소드
+	// URI 가져오는 메소드
 	public URI getURI(String title) {
 		title += ".mp3";
 		URI uri = null;
@@ -297,20 +317,20 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		int index = random.nextInt(list.size());
 		Music music = list.get(index);
 
-		while(music.equals(currentMusic)) {
+		while (music.equals(currentMusic)) {
 			index = random.nextInt(list.size());
 			music = list.get(index);
 		}
-		
+
 		prevMusic = currentMusic;
 		currentMusic = music;
 		System.out.println("이전" + prevMusic);
 		System.out.println("현재" + currentMusic);
-		
+
 		if (prevMusic != null) {
 			map.put(currentMusic, prevMusic);
 		}
-		
+
 		return music;
 	}
 
