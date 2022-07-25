@@ -15,12 +15,10 @@ import javax.swing.JTextPane;
 import javax.swing.JLabel;
 
 public class CrudFrame extends JFrame{
-	public TestFrame() {
-	}
 	private JTextField jf2;
 	private JTextField textField_1;
 	private JTextField textField_2;
-	public TestFrame() {
+	public CrudFrame() {
 		Manager ma = new Manager();
 		
 		
@@ -107,7 +105,7 @@ public class CrudFrame extends JFrame{
 	}
 
 	public static void main(String[] args) {
-		new TestFrame();
+		new CrudFrame();
 
 	}
 }
