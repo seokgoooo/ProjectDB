@@ -1,3 +1,5 @@
+package capitals;
+
 // 수도 클래스
 public class Capitals {
 	private int number;

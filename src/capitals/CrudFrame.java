@@ -1,3 +1,5 @@
+package capitals;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -11,19 +13,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 import javax.swing.JLabel;
+import javax.swing.border.BevelBorder;
+import java.awt.SystemColor;
+import java.awt.Color;
+import javax.swing.border.TitledBorder;
+import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 
 public class CrudFrame extends JFrame{
-	public TestFrame() {
-	}
-	private JTextField jf2;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	public TestFrame() {
-		Manager ma = new Manager();
+	public CrudFrame() {
+//	private JTextField jf2;
+//	private JTextField textField_1;
+//	private JTextField textField_2;
 		
 		
 
-		Dimension dim = new Dimension(1180, 520);  //단순 2차원값 입력을 위한 클래스
+		Dimension dim = new Dimension(600, 520);  //단순 2차원값 입력을 위한 클래스
 		
 		JFrame frame = new JFrame("관리자 창");
 		frame.setLocation(0, 0);
@@ -40,6 +45,7 @@ public class CrudFrame extends JFrame{
 		JTable table = new JTable(body, header);
 		
 		JScrollPane sp = new JScrollPane(table);
+		sp.setBorder(new TitledBorder(new LineBorder(new Color(139, 0, 0), 3), "\uBB38\uC81C \uBAA9\uB85D", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		sp.setBounds(0, 22, 402, 250);
 		frame.getContentPane().add(sp);
 		
@@ -59,20 +65,20 @@ public class CrudFrame extends JFrame{
 		btn3.setBounds(291, 282, 111, 23);
 		frame.getContentPane().add(btn3);
 		
-		jf2 = new JTextField();
-		jf2.setBounds(176, 372, 226, 21);
-		frame.getContentPane().add(jf2);
-		jf2.setColumns(10);
+		JTextField jt1 = new JTextField();
+		jt1.setBounds(176, 372, 226, 21);
+		frame.getContentPane().add(jt1);
+		jt1.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(176, 414, 226, 21);
-		frame.getContentPane().add(textField_1);
-		textField_1.setColumns(10);
+		JTextField jt2 = new JTextField();
+		jt2.setBounds(176, 414, 226, 21);
+		frame.getContentPane().add(jt2);
+		jt2.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(176, 450, 226, 21);
-		frame.getContentPane().add(textField_2);
-		textField_2.setColumns(10);
+		JTextField jt3 = new JTextField();
+		jt3.setBounds(176, 450, 226, 21);
+		frame.getContentPane().add(jt3);
+		jt3.setColumns(10);
 		
 		JLabel lbl1 = new JLabel("number");
 		lbl1.setBounds(75, 333, 85, 15);
@@ -105,7 +111,7 @@ public class CrudFrame extends JFrame{
 	}
 
 	public static void main(String[] args) {
-		new TestFrame();
+		new CrudFrame();
 
 	}
 }
