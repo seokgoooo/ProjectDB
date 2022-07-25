@@ -38,6 +38,7 @@ public class MusicPlayer {
 
 	public void end() {
 		playThread.stop();
+		
 		if(player != null) {
 			player.close();
 		}

@@ -13,4 +13,6 @@ public interface MusicDao {
 	int update(int number, String title, String singer, String genre, int year) throws SQLException;
 
 	int delete(int number) throws SQLException;
+	
+	public int playCountPlus(int number, int playCount) throws SQLException;
 }
