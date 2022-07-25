@@ -20,14 +20,15 @@ import javax.swing.border.TitledBorder;
 
 import gg.DBUtil; 
 
-public class Main3 {
+public class Main3 extends JFrame {
 	int user = 1;
 	
-	public Main3() {
+	
+	
+	public Main3 () {
 		Button bt = new Button();
 		
 		dummyUser du = new dummyUser("abc");
-		JFrame fr = new JFrame("퀴즈 프로그램");
 		JPanel pnlMain = new JPanel();
 		JPanel pnlLEFT = new JPanel();
 		JPanel pnlRight = new JPanel();
@@ -39,12 +40,20 @@ public class Main3 {
 		
 		//폰트
 		Font font = new Font("맑은 고딕", Font.BOLD, 32);
+		Font font2 = new Font("맑은 고딕", Font.BOLD, 24);
 		ta.setFont(font);
+		ta2.setFont(font2);
+		
+		//왼쪽 버튼
+		JButton btn0 = new JButton("시작");
+		JButton btn1 = new JButton("확인");
+		JButton btn2 = new JButton("다음 문제");
+		JButton btn3 = new JButton("힌트");
 		
 		// 오른쪽 버튼
-		JButton btn1 = new JButton("힌트");
-		JButton btn2 = new JButton("즐겨찾기");
-		JButton btn3 = new JButton("랭킹보기");
+		JButton btn4 = new JButton("힌트");
+		JButton btn5 = new JButton("즐겨찾기");
+		JButton btn6 = new JButton("랭킹보기");
 		
 		// 왼쪽 객관식 버튼
 //		JButton[] bt = new JButton[4];
@@ -80,7 +89,7 @@ public class Main3 {
 		pnlR3.setBorder(new TitledBorder(new LineBorder(Color.MAGENTA, 3), "관리자"));
 
 		// 메인
-		fr.setContentPane(pnlMain);
+		setContentPane(pnlMain);
 		pnlMain.add(pnlLEFT);
 		pnlMain.add(pnlRight);
 
@@ -90,11 +99,15 @@ public class Main3 {
 		pnlLEFT.add(pnlL2);
 
 		// --왼쪽[1]
-		bt.start_button(pnlL1, ta);
+		pnlL1.add(btn0);
 		pnlL1.add(tf);
-		bt.OK_button(pnlL1, ta, tf, du.getId());
-		bt.next_button(pnlL1, ta);
-		bt.hint_button(pnlL1, ta, ta2);
+		pnlL1.add(btn1);
+		pnlL1.add(btn2);
+		pnlL1.add(btn3);
+		bt.start_button(btn0, ta);
+		bt.OK_button(btn1, ta, tf, du.getId(), pnlL2);
+		bt.next_button(btn2, ta);
+		bt.hint_button(btn3, ta, ta2);
 
 		// --왼쪽[2]
 //		for (int i = 0; i < bt.length; i++) {
@@ -111,9 +124,9 @@ public class Main3 {
 		pnlR1.add(ta2);
 
 		// --오른쪽[2]
-		pnlR2.add(btn1);
-		pnlR2.add(btn2);
-		pnlR2.add(btn3);
+		pnlR2.add(btn4);
+		pnlR2.add(btn5);
+		pnlR2.add(btn6);
 
 		// --오른쪽[3]
 		
@@ -132,12 +145,11 @@ public class Main3 {
 		pnlR3.setVisible(false);
 		manager(pnlR3, user);
 		
-		fr.setSize(1180, 820);
+		setSize(1180, 820);
 
-		fr.setLocationRelativeTo(null);
-		fr.setResizable(false);
-		fr.setVisible(true);
-		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 //	// 관리자 (user = 1 일경우 관리자 켜짐)
@@ -172,6 +184,6 @@ public class Main3 {
 	}
 
 	public static void main(String[] args) {
-		new Main3();
+		new Main3().setVisible(true);;
 	}
 }

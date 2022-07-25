@@ -1,5 +1,7 @@
 package fourletters;
 
+import java.util.List;
+
 public class fourletters {
 	int number;
 	String question;
@@ -55,14 +57,18 @@ public class fourletters {
 	public void setHint(String hint) {
 		this.hint = hint;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "fourletters [number=" + number + ", question=" + question + ", awnser=" + awnser + ", hint=" + hint
-				+ "]" + "\n";
+		return number + ", 문제=" + question + ", 정답=" + awnser + ", 힌트=" + hint
+				+ "\n";
 
 	}
 
+	public int toNumber() {
+		return number;
+		
+	}
 	public String toQuestion() {
 		return question;
 
@@ -71,11 +77,10 @@ public class fourletters {
 		return awnser;
 	}
 	
-	public int toNumber() {
-		return number;
-
-	}
 	public String toHint() {
 		return hint;
+	}
+	public String ManagerToString() {
+		return question + "," + awnser + "," + hint ;
 	}
 }

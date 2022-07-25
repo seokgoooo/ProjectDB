@@ -236,7 +236,7 @@ public class FourlettersDaoImpl implements Dao {
 				rs = pstmt.executeQuery();
 
 				if (rs.next()) {
-					return numberMapping(rs);
+					return resultMapping(rs);
 				}
 			} finally {
 				DBUtil.closeRs(rs);
