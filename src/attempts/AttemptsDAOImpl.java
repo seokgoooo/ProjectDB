@@ -21,7 +21,7 @@ public class AttemptsDAOImpl implements AttemptsDAO {
 	
 	@Override
 	public int create(String id, int quizNumber) throws SQLException {
-		String query = "INSERT INTO attemptsquiz (id, quizNumber) valuse (?, ?)";
+		String query = "INSERT INTO attemptsquiz (id, quizNumber) values (?, ?)";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
