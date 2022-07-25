@@ -1,63 +1,142 @@
 package music;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-public class MusicQuiz implements ActionListener {
+import javazoom.jl.player.advanced.jlap;
+
+public class MusicQuiz extends JFrame implements ActionListener {
 	private MusicDao dao = new MusicDaoImpl();
 	private MusicPlayer player = new MusicPlayer();
-	private Music music = null;
-	
-	private final String path = "src\\music\\resource\\";
-	
+	private Music currentMusic = null;
+	private Music prevMusic = null;
+	private Map<Music, Music> map = new HashMap<>();
+
 	private JButton confirmBtn;
 	private JTextField answerTf;
-	
+	private List<Music> list = new ArrayList<>();
+	private JButton prevBtn;
+	private JButton pauseBtn;
+	private JButton playBtn;
+	private JButton nextBtn;
+	private JButton[] quizList;
+	private final int timeOut = 60;
+	private boolean first = true;
+	private boolean prev = false;
+	private JLabel timeLbl;
+
 	public MusicQuiz() {
-		JFrame fr = new JFrame("음악 퀴즈");
 		JPanel pnlMain = new JPanel();
 		JPanel pnlLEFT = new JPanel();
 		JPanel pnlRight = new JPanel();
 
-		
+		// 왼쪽 하위 Panel
+		JPanel leftTopPnl = new JPanel();
+		JPanel answerPnl = new JPanel();
+		JPanel questionPnl = new JPanel();
+
+		questionPnl.setPreferredSize(new Dimension(700, 600));
+
+		// 오른쪽 하위 Panel
+		JPanel showQuizPnl = new JPanel();
+		JPanel functionPnl = new JPanel();
+
 		try {
-			music = dao.read(3001);
-		} catch (SQLException e) {
-			e.printStackTrace();
+			list = dao.read();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		// 문제와 정답을 맞출 텍스트 필드들
+		answerTf = new JTextField(20);
+		confirmBtn = new JButton("확인");
+		confirmBtn.addActionListener(this);
+
+		answerPnl.add(answerTf);
+		answerPnl.add(confirmBtn);
+
+		// tap 메뉴
+		JTabbedPane showQuizTab = new JTabbedPane();
+		JPanel quizAllPnl = new JPanel();
+		JPanel quizFavoritePnl = new JPanel();
+		JPanel quizClearPnl = new JPanel();
+
+		showQuizTab.addTab("전체 문제", quizAllPnl);
+		showQuizTab.addTab("즐겨 찾기", quizFavoritePnl);
+		showQuizTab.addTab("해결 문제", quizClearPnl);
+
+		showQuizPnl.add(showQuizTab);
+
+		showQuizPnl.setPreferredSize(new Dimension(400, 500));
+		showQuizTab.setPreferredSize(new Dimension(380, 500));
+		
+		// 전체 문제 panel
+		quizAllPnl.setLayout(new GridLayout(5, 5));
+		
+		quizList = new JButton[list.size()];
+		
+		for(int i = 0; i < quizList.length;i++) {
+			quizList[i] = new JButton(String.valueOf(i + 1));
+			quizList[i].addActionListener(this);
+			quizAllPnl.add(quizList[i]);
 		}
 		
-		String title = music.getTitle();
-		
-		player.play(new File(path + title + ".mp3"));
-		
-		// 문제와 정답을 맞출 텍스트 필드들
-		JTextArea ja = new JTextArea(15, 20);
-		answerTf = new JTextField(20);
-		JTextArea ja2 = new JTextArea(20, 30);
 
-		// 오른쪽 버튼
-		JButton btn2 = new JButton("즐겨찾기");
+		// 왼쪽 버튼
+		leftTopPnl.setLayout(new BorderLayout());
 
-		btn2.setBounds(50, 50, 100, 100);
+		JLabel quizNumberLbl = new JLabel("문제 번호");
+		timeLbl = new JLabel("" + timeOut);
+		JCheckBox favoriteCb = new JCheckBox("즐겨찾기");
 
-		// 왼,오 하위 Panel
-		JPanel pnlL1 = new JPanel();
-		JPanel pnlL2 = new JPanel();
-		JPanel pnlR1 = new JPanel();
-		JPanel pnlR2 = new JPanel();
-		JPanel pnlR3 = new JPanel();
+		leftTopPnl.add(quizNumberLbl, "West");
+		leftTopPnl.add(timeLbl, "Center");
+		timeLbl.setHorizontalAlignment((int) CENTER_ALIGNMENT);
+		leftTopPnl.add(favoriteCb, "East");
+
+		prevBtn = new JButton("이전");
+		prevBtn.addActionListener(this);
+		pauseBtn = new JButton("일시정지");
+		pauseBtn.addActionListener(this);
+		playBtn = new JButton("재생");
+		playBtn.addActionListener(this);
+		nextBtn = new JButton("다음");
+		nextBtn.addActionListener(this);
+
+		pauseBtn.setVisible(false);
+
+		functionPnl.add(prevBtn);
+		functionPnl.add(pauseBtn);
+		functionPnl.add(playBtn);
+		functionPnl.add(nextBtn);
 
 		// panel 레이아웃
 		pnlMain.setLayout(new BoxLayout(pnlMain, BoxLayout.X_AXIS));
@@ -68,65 +147,171 @@ public class MusicQuiz implements ActionListener {
 		pnlLEFT.setBorder(new TitledBorder(new LineBorder(Color.pink, 3), "문제"));
 		pnlRight.setBorder(new TitledBorder(new LineBorder(Color.pink, 3), "기타"));
 
-		pnlL1.setBorder(new TitledBorder(new LineBorder(Color.green, 3), "주관식 "));
-		pnlL2.setBorder(new TitledBorder(new LineBorder(Color.green, 3), "객관식 "));
+		leftTopPnl.setBorder(new TitledBorder(new LineBorder(Color.green, 3), "시간과 즐겨찾기"));
+		questionPnl.setBorder(new TitledBorder(new LineBorder(Color.green, 3), "lp사진 및 힌트"));
+		answerPnl.setBorder(new TitledBorder(new LineBorder(Color.green, 3), "주관식 "));
 
-		pnlR1.setBorder(new TitledBorder(new LineBorder(Color.CYAN, 3), "힌트"));
-		pnlR2.setBorder(new TitledBorder(new LineBorder(Color.yellow, 3), "기능"));
-		pnlR3.setBorder(new TitledBorder(new LineBorder(Color.MAGENTA, 3), "관리자"));
+		showQuizPnl.setBorder(new TitledBorder(new LineBorder(Color.CYAN, 3), "문제리스트"));
+		functionPnl.setBorder(new TitledBorder(new LineBorder(Color.yellow, 3), "기능"));
 
 		// 메인
-		fr.setContentPane(pnlMain);
+		add(pnlMain);
 		pnlMain.add(pnlLEFT);
 		pnlMain.add(pnlRight);
 
-		// 왼쪽
-		pnlLEFT.add(ja);
-		pnlLEFT.add(pnlL1);
+		// 왼쪽 panel
+		pnlLEFT.add(leftTopPnl);
 
-		// --왼쪽[1]
-		pnlL1.add(answerTf);
+		pnlLEFT.add(questionPnl);
+		pnlLEFT.add(answerPnl);
 
-		// 오른쪽
-		pnlRight.add(pnlR1);
-		pnlRight.add(pnlR2);
-		pnlRight.add(pnlR3);
+		// 오른쪽 panel
+		pnlRight.add(showQuizPnl);
+		pnlRight.add(functionPnl);
 
-		// --오른쪽[1]
-		pnlR1.add(ja2);
-
-		pnlR2.add(btn2);
-
-		OK_button(pnlL1);
-
-		pnlR3.setVisible(false);
-
-		fr.setSize(1180, 820);
-
-		fr.setLocationRelativeTo(null);
-		fr.setResizable(false);
-		fr.setVisible(true);
-		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
-	// 확인버튼
-	public void OK_button(JPanel p) {
-		confirmBtn = new JButton("확인");
-		confirmBtn.addActionListener(this);
-		p.add(confirmBtn);
+		setSize(1180, 820);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	public static void main(String[] args) {
-		new MusicQuiz();
+		new MusicQuiz().setVisible(true);
 	}
 
+	// 버튼 이벤트
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == confirmBtn) {
-			if(answerTf.getText().equals(music.getTitle())) {
-				player.stop();
-				System.out.println("정답");
-			}
+		if (e.getSource() == confirmBtn) {
+			confirmBtnEvent();
+		} else if (e.getSource() == pauseBtn) {
+			pauseBtnEvent();
+		} else if (e.getSource() == playBtn) {
+			playBtnEvent();
+		} else if (e.getSource() == prevBtn) {
+			prevBtnEvent();
+		} else if (e.getSource() == nextBtn) {
+			nextBtnEvent();
+
 		}
 	}
+
+	// 확인 버튼 이벤트
+	public void confirmBtnEvent() {
+		if (answerTf.getText().equals(currentMusic.getTitle())) {
+			player.stop();
+			System.out.println("정답");
+		} else {
+			System.out.println("오답");
+		}
+	}
+
+	// 일시 정지 버튼 이벤트
+	public void pauseBtnEvent() {
+		player.stop();
+		pauseBtn.setVisible(false);
+		playBtn.setVisible(true);
+	}
+
+	// 재생 버튼 이벤트
+	public void playBtnEvent() {
+		if (prev) {
+			currentMusic = map.get(currentMusic);
+			prevMusic = map.get(currentMusic);
+			
+			if (prevMusic == null) {
+				prevBtn.setEnabled(false);
+			}
+
+			URI uri = getURI(currentMusic.getTitle());
+			player.play(new File(uri));
+			prev = false;
+
+		} else if (first) {
+			getMusic(list);
+			URI uri = getURI(currentMusic.getTitle());
+			player.play(new File(uri));
+			first = false;
+		} else {
+			player.musicRun();
+		}
+		countDown();		
+		
+		playBtn.setVisible(false);
+		pauseBtn.setVisible(true);
+	}
+
+	public void countDown() {
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask() {
+			int count = timeOut;
+			@Override
+			public void run() {
+				timeLbl.setText("" + count);
+				count--;
+				
+				if(count < 0) {
+					timer.cancel();
+					timeLbl.setText("시간 초과");
+				}
+			}
+		}, 0, 1000);
+	}
+	
+	// 이전 버튼 이벤트
+	public void prevBtnEvent() {
+		player.end();
+		pauseBtn.setVisible(false);
+		playBtn.setVisible(true);
+		answerTf.setText("");
+		prev = true;
+		first = true;
+	}
+
+	// 다음 버튼 이벤트
+	public void nextBtnEvent() {
+		player.end();
+		prevBtn.setEnabled(true);
+		pauseBtn.setVisible(false);
+		playBtn.setVisible(true);		
+		answerTf.setText("");
+		first = true;
+	}
+
+	// uri 가져오는 메소드
+	public URI getURI(String title) {
+		title += ".mp3";
+		URI uri = null;
+		try {
+			uri = MusicQuiz.class.getClassLoader().getResource(title).toURI();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+			System.out.println("뭘까");
+		}
+
+		return uri;
+	}
+
+	// 음악 가져오는 메소드
+	public Music getMusic(List<Music> list) {
+		Random random = new Random();
+		int index = random.nextInt(list.size());
+		Music music = list.get(index);
+
+		while(music.equals(currentMusic)) {
+			index = random.nextInt(list.size());
+			music = list.get(index);
+		}
+		
+		prevMusic = currentMusic;
+		currentMusic = music;
+		System.out.println("이전" + prevMusic);
+		System.out.println("현재" + currentMusic);
+		
+		if (prevMusic != null) {
+			map.put(currentMusic, prevMusic);
+		}
+		
+		return music;
+	}
+
 }

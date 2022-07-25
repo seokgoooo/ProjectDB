@@ -9,6 +9,7 @@ import javazoom.jl.player.Player;
 
 public class MusicPlayer {
 	private Player player;
+	MusicPlayerThread playThread = null;
 
 	public void play(File file) {
 		try {
@@ -20,16 +21,24 @@ public class MusicPlayer {
 		} catch (JavaLayerException e) {
 			e.printStackTrace();
 		}
-	
-		MusicPlayerThread playThread = new MusicPlayerThread(player);
-		
+
+		playThread = new MusicPlayerThread(player);
+
 		playThread.start();
-		
+
+	}
+
+	public void musicRun() {
+		playThread.resume();
 	}
 
 	public void stop() {
-		if (player != null) {
-			System.out.println("음악 종료");
+		playThread.suspend();
+	}
+
+	public void end() {
+		playThread.stop();
+		if(player != null) {
 			player.close();
 		}
 	}
