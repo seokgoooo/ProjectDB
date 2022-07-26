@@ -196,7 +196,6 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		favoriteCb = new JCheckBox("즐겨찾기");
 		favoriteCb.addActionListener(this);
 
-		
 		leftTopPnl.add(quizNumberLbl, "West");
 		leftTopPnl.add(timeLbl, "Center");
 		timeLbl.setHorizontalAlignment((int) CENTER_ALIGNMENT);
@@ -523,7 +522,15 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		clearQuiz = new JButton[clearList.size()];
 
 		for (int i = 0; i < clearQuiz.length; i++) {
-			clearQuiz[i] = new JButton(String.valueOf((clearList.get(i) - 3000)));
+			Music m = null;
+
+			try {
+				m = musicDao.read(clearList.get(i));
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			clearQuiz[i] = new JButton("" + (list.indexOf(m) + 1));
 			clearQuiz[i].addMouseListener(mouseAdapter);
 			quizClearPnl.add(clearQuiz[i]);
 		}
@@ -546,7 +553,15 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		favoriteQuiz = new JButton[favoriteList.size()];
 
 		for (int i = 0; i < favoriteQuiz.length; i++) {
-			favoriteQuiz[i] = new JButton("" + (favoriteList.get(i) - 3000));
+			Music m = null;
+
+			try {
+				m = musicDao.read(favoriteList.get(i));
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			favoriteQuiz[i] = new JButton("" + (list.indexOf(m) + 1));
 			favoriteQuiz[i].addMouseListener(mouseAdapter);
 			quizFavoritePnl.add(favoriteQuiz[i]);
 		}

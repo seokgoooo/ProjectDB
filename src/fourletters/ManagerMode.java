@@ -113,10 +113,10 @@ public class ManagerMode extends JFrame {
 		scrollSingle.setPreferredSize(new Dimension(1100, 230));
 		pnlL1.add(scrollSingle);
 		
-//		pnlR3.setLayout(new GridBagLayout());
-//		JScrollPane scrollSingle2 = new JScrollPane(pnlR3, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-//				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-////		scrollSingle2.setPreferredSize(new Dimension(1100, 230));
+		pnlR3.setLayout(new GridBagLayout());
+		JScrollPane scrollSingle2 = new JScrollPane(pnlR3, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollSingle2.setPreferredSize(new Dimension(1100, 230));
 //		pnlR3.add(scrollSingle2);
 
 		// --왼쪽[2]
@@ -133,7 +133,7 @@ public class ManagerMode extends JFrame {
 
 		// --오른쪽[3]
 		multipleChoice(pnlR3, ta, tf);
-//		bt.ListAdd();
+		bt.ListAdd();
 		bt.MMOk_button(bt1, ta2, tf, btn1, btn2, btn3 , pnlR3, ta);
 		bt.MMDelete_button(bt2, tf);
 		inputButton(pnlR2, bt1, bt2, user);
@@ -144,7 +144,7 @@ public class ManagerMode extends JFrame {
 
 		// 관리자 모드 기능 버튼
 		bt.read_button(btn0, ta, ta2);
-//		setSize(1180, 820);
+		setSize(1180, 820);
 		setPreferredSize(new Dimension(1180, 820));
 		pnlR1.setPreferredSize(new Dimension(100, 100));
 
