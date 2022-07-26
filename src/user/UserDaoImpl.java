@@ -50,7 +50,7 @@ public class UserDaoImpl implements UserDao {
 	// 모든 회원 불러오기
 	@Override
 	public List<User> read() throws SQLException {
-		String query = "SELECT * FROM USER ";
+		String query = "SELECT * FROM USER_copy ";
 		List<User> list = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -77,7 +77,7 @@ public class UserDaoImpl implements UserDao {
 	// 특정 회원 불러오기
 	@Override
 	public User read(String id) throws SQLException {
-		String query = "SELECT * FROM USER WHERE id = ?";
+		String query = "SELECT * FROM USER_copy WHERE id = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -105,7 +105,7 @@ public class UserDaoImpl implements UserDao {
 	// 회원 정보 수정
 	@Override
 	public int update(String id, String password, boolean manager, int age) throws SQLException {
-		String query = "UPDATE USER SET password = ?, manager = ?, age = ? where id = ?";
+		String query = "UPDATE USER_copy SET password = ?, manager = ?, age = ? where id = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
@@ -128,7 +128,7 @@ public class UserDaoImpl implements UserDao {
 	// 회원 삭제
 	@Override
 	public int delete(String id) throws SQLException {
-		String query = "DELETE FROM USER WHERE id = ?";
+		String query = "DELETE FROM USER_copy WHERE id = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 

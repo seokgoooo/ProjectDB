@@ -8,10 +8,16 @@ public interface AttemptsDAO {
 	int create(String id, int quizNumber) throws SQLException;
 
 	// 해당인물이 해당 문제를 몇번? 클리어 여부
-	List<AttemptsQuiz> read(String id,int quizNumber) throws SQLException;
+	AttemptsQuiz read(String id,int quizNumber) throws SQLException;
+	
+	// 클리어한 문제만 불러오게
+	List<Integer> read(String id, boolean clear) throws SQLException;
 
 	// 횟수 변경
-	int update(String id, int quizNumber, int attemptsCount) throws SQLException;
+	int updateCount(String id, int quizNumber, int attemptsCount) throws SQLException;
+	
+	// 클리어 여부
+	int updateClear(String id, int quizNumber, boolean clear) throws SQLException;
 	
 	// 삭제
 	int delete(String id, int quizNumber) throws SQLException;
