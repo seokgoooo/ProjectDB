@@ -13,6 +13,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -22,7 +23,9 @@ import javax.swing.border.TitledBorder;
 public class ManagerMode extends JFrame implements ActionListener {
 	private List<Music> list = new ArrayList<>();
 	private MusicDao dao = new MusicDaoImpl();
+	private MusicPlayer player = new MusicPlayer();
 	private Music m = null;
+	
 	private JButton[] quizNumberBtns;
 	private JRadioButton createRB;
 	private JRadioButton updateRB;
@@ -32,7 +35,9 @@ public class ManagerMode extends JFrame implements ActionListener {
 	private JTextField genreTf;
 	private JTextField yearTf;
 	private JButton confirmBtn;
+	private JButton playBtn;
 	private JPanel quizNumberPnl;
+	private JPanel allPnl;
 
 	public ManagerMode() {
 		super("관리자 모드");
@@ -43,7 +48,7 @@ public class ManagerMode extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 
-		JPanel allPnl = new JPanel();
+		allPnl = new JPanel();
 
 		JPanel topPnl = new JPanel();
 		JPanel mainPnl = new JPanel();
@@ -69,7 +74,7 @@ public class ManagerMode extends JFrame implements ActionListener {
 		quizNumberPnl.setBorder(new TitledBorder(new LineBorder(Color.green, 3), "문제 번호"));
 		quizNumberPnl.setLayout(new GridLayout(5, 6));
 
-		//CRUD 라디오 버튼 
+		// CRUD 라디오 버튼
 		createRB = new JRadioButton("추가");
 		updateRB = new JRadioButton("수정");
 		deleteRB = new JRadioButton("삭제");
@@ -117,9 +122,16 @@ public class ManagerMode extends JFrame implements ActionListener {
 		mainPnl.add(yearPnl);
 
 		// 확인 버튼
+		confirmPnl.setLayout(new BoxLayout(confirmPnl, BoxLayout.Y_AXIS));
+		
 		confirmBtn = new JButton("확인");
 		confirmBtn.addActionListener(this);
+		
+		playBtn = new JButton("재생");
+		playBtn.addActionListener(this);
+		
 		confirmPnl.add(confirmBtn);
+		confirmPnl.add(playBtn);
 
 		// 문제 리스트
 		quizNumberBtns = new JButton[list.size()];
@@ -141,6 +153,7 @@ public class ManagerMode extends JFrame implements ActionListener {
 		add(allPnl);
 
 		setSize(700, 500);
+		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
@@ -171,23 +184,11 @@ public class ManagerMode extends JFrame implements ActionListener {
 			try {
 				dao.create(titleTf.getText(), singerTf.getText(), genreTf.getText(), Integer.valueOf(yearTf.getText()));
 				list = dao.read();
-
-				quizNumberPnl.removeAll();
-				quizNumberBtns = new JButton[list.size()];
-
-				for (int i = 0; i < list.size(); i++) {
-					quizNumberBtns[i] = new JButton(i + 1 + "");
-					quizNumberBtns[i].addActionListener(this);
-					quizNumberPnl.add(quizNumberBtns[i]);
-				}
-
-				quizNumberPnl.revalidate();
-				quizNumberPnl.repaint();
-
+				repaint();
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(allPnl, "수정한 값이 올바른지 확인하세요.");
 			} catch (SQLException e) {
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(allPnl, "같은 이름의 곡은 등록 할 수 없습니다.");
 			}
 		} else if (updateRB.isSelected()) {
 			try {
@@ -203,20 +204,26 @@ public class ManagerMode extends JFrame implements ActionListener {
 				dao.delete(m.getNumber());
 				list = dao.read();
 
-				quizNumberPnl.removeAll();
-				quizNumberBtns = new JButton[list.size()];
-
-				for (int i = 0; i < list.size(); i++) {
-					quizNumberBtns[i] = new JButton(i + 1 + "");
-					quizNumberBtns[i].addActionListener(this);
-					quizNumberPnl.add(quizNumberBtns[i]);
-				}
-
-				quizNumberPnl.revalidate();
-				quizNumberPnl.repaint();
+				repaint();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	// quizNumberPnl 다시 그리기
+	@Override
+	public void repaint() {
+		quizNumberPnl.removeAll();
+		quizNumberBtns = new JButton[list.size()];
+
+		for (int i = 0; i < list.size(); i++) {
+			quizNumberBtns[i] = new JButton(i + 1 + "");
+			quizNumberBtns[i].addActionListener(this);
+			quizNumberPnl.add(quizNumberBtns[i]);
+		}
+
+		quizNumberPnl.revalidate();
+		quizNumberPnl.repaint();
 	}
 }

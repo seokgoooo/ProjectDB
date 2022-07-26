@@ -66,7 +66,7 @@ public class UserDaoImpl implements UserDao {
 				list.add(user);
 			}
 		} finally {
-			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closeRs(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
@@ -95,7 +95,7 @@ public class UserDaoImpl implements UserDao {
 			}
 
 		} finally {
-			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closeRs(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
