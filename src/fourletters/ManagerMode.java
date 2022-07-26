@@ -148,7 +148,7 @@ public class ManagerMode extends JFrame {
 		bt.read_button(btn0, ta);
 		setSize(1180, 820);
 		pnlR1.setPreferredSize(new Dimension(100, 100));
-		
+
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setResizable(false);
@@ -210,7 +210,7 @@ public class ManagerMode extends JFrame {
 				}
 			});
 		}
-		
+
 		grid.setVgap(5); // 격자 사이 수직 간격 5 픽셀
 		p.setLayout(grid);
 	}

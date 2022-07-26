@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import gg.DBUtil;
+import kr.co.greenart.dbutil.QuizDBUtil;
 
 public class FourlettersDaoImpl implements Dao {
 	List<fourletters> list = new ArrayList<fourletters>();
@@ -37,7 +37,7 @@ public class FourlettersDaoImpl implements Dao {
 		String awnser = rs.getString("awnser");
 		return new fourletters(awnser);
 	}
-	
+
 	private fourletters hintMapping(ResultSet rs) throws SQLException {
 		String hint = rs.getString("hint");
 		return new fourletters(hint);
@@ -51,7 +51,7 @@ public class FourlettersDaoImpl implements Dao {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 
 			for (fourletters f : list) {
@@ -66,8 +66,8 @@ public class FourlettersDaoImpl implements Dao {
 			// 익스큐트배치는반복문으로 실행된 것을 한번에 실행하게끔 함
 			return pstmt.executeBatch();
 		} finally {
-			DBUtil.closeStmt(pstmt);
-			DBUtil.closeConn(conn);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
 
 	}
@@ -80,7 +80,7 @@ public class FourlettersDaoImpl implements Dao {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			// 준비과정을 set으로
 			pstmt.setString(1, question);
@@ -89,8 +89,8 @@ public class FourlettersDaoImpl implements Dao {
 
 			return pstmt.executeUpdate();
 		} finally {
-			DBUtil.closeStmt(pstmt);
-			DBUtil.closeConn(conn);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
 	}
 
@@ -103,7 +103,7 @@ public class FourlettersDaoImpl implements Dao {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			// 준비과정을 set으로
 			pstmt.setString(1, id);
@@ -111,8 +111,8 @@ public class FourlettersDaoImpl implements Dao {
 
 			return pstmt.executeUpdate();
 		} finally {
-			DBUtil.closeStmt(pstmt);
-			DBUtil.closeConn(conn);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
 	}
 
@@ -125,7 +125,7 @@ public class FourlettersDaoImpl implements Dao {
 		ResultSet rs = null;
 
 		try {
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			rs = pstmt.executeQuery();
 
@@ -133,9 +133,9 @@ public class FourlettersDaoImpl implements Dao {
 				list.add(resultMapping(rs));
 			}
 		} finally {
-			DBUtil.closeRs(rs);
-			DBUtil.closeStmt(pstmt);
-			DBUtil.closeConn(conn);
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
 		return list;
 
@@ -151,7 +151,7 @@ public class FourlettersDaoImpl implements Dao {
 		ResultSet rs = null;
 
 		try {
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, number);
 			rs = pstmt.executeQuery();
@@ -160,9 +160,9 @@ public class FourlettersDaoImpl implements Dao {
 				return resultMapping(rs);
 			}
 		} finally {
-			DBUtil.closeRs(rs);
-			DBUtil.closeStmt(pstmt);
-			DBUtil.closeConn(conn);
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
 
 		return null;
@@ -178,7 +178,7 @@ public class FourlettersDaoImpl implements Dao {
 		ResultSet rs = null;
 
 		try {
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, question);
 			rs = pstmt.executeQuery();
@@ -187,9 +187,9 @@ public class FourlettersDaoImpl implements Dao {
 				return numberMapping(rs);
 			}
 		} finally {
-			DBUtil.closeRs(rs);
-			DBUtil.closeStmt(pstmt);
-			DBUtil.closeConn(conn);
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
 		return null;
 	}
@@ -204,7 +204,7 @@ public class FourlettersDaoImpl implements Dao {
 		ResultSet rs = null;
 
 		try {
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, question);
 			rs = pstmt.executeQuery();
@@ -213,38 +213,38 @@ public class FourlettersDaoImpl implements Dao {
 				return awnserMapping(rs);
 			}
 		} finally {
-			DBUtil.closeRs(rs);
-			DBUtil.closeStmt(pstmt);
-			DBUtil.closeConn(conn);
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
 		return null;
 	}
-	
+
 	// 문제로 힌트불러 오기
-		@Override
-		public fourletters readhint(String question) throws SQLException {
-			String query = "SELECT * FROM fourletters WHERE question = ?";
+	@Override
+	public fourletters readhint(String question) throws SQLException {
+		String query = "SELECT * FROM fourletters WHERE question = ?";
 
-			Connection conn = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
-			try {
-				conn = DBUtil.getConnection();
-				pstmt = conn.prepareStatement(query);
-				pstmt.setString(1, question);
-				rs = pstmt.executeQuery();
+		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, question);
+			rs = pstmt.executeQuery();
 
-				if (rs.next()) {
-					return resultMapping(rs);
-				}
-			} finally {
-				DBUtil.closeRs(rs);
-				DBUtil.closeStmt(pstmt);
-				DBUtil.closeConn(conn);
+			if (rs.next()) {
+				return resultMapping(rs);
 			}
-			return null;
+		} finally {
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
+		return null;
+	}
 
 	@Override
 	public int update(int number, String question, String awnser, String hint) throws SQLException {
@@ -254,7 +254,7 @@ public class FourlettersDaoImpl implements Dao {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			// 준비과정을 set으로
 			pstmt.setString(1, question);
@@ -264,8 +264,8 @@ public class FourlettersDaoImpl implements Dao {
 
 			return pstmt.executeUpdate();
 		} finally {
-			DBUtil.closeStmt(pstmt);
-			DBUtil.closeConn(conn);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
 
 //		return 0;
@@ -279,15 +279,15 @@ public class FourlettersDaoImpl implements Dao {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			// 준비과정을 set으로
 			pstmt.setInt(1, number);
 
 			return pstmt.executeUpdate();
 		} finally {
-			DBUtil.closeStmt(pstmt);
-			DBUtil.closeConn(conn);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
 	}
 

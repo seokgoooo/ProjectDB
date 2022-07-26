@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.co.greenart.quizdbutil.QuizDBUtil;
+import kr.co.greenart.dbutil.QuizDBUtil;
 
 public class UserDaoImpl implements UserDao {
 
@@ -41,7 +41,7 @@ public class UserDaoImpl implements UserDao {
 			return pstmt.executeUpdate();
 
 		} finally {
-			QuizDBUtil.closeStmt(pstmt);
+			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
 
@@ -67,7 +67,7 @@ public class UserDaoImpl implements UserDao {
 			}
 		} finally {
 			QuizDBUtil.closeRS(rs);
-			QuizDBUtil.closeStmt(pstmt);
+			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
 
@@ -81,25 +81,25 @@ public class UserDaoImpl implements UserDao {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
+
 		try {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				return resultMapping(rs);
 			} else {
 				return null;
 			}
-			
+
 		} finally {
 			QuizDBUtil.closeRS(rs);
-			QuizDBUtil.closeStmt(pstmt);
+			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
-		
+
 	}
 
 	// 회원 정보 수정
@@ -108,7 +108,7 @@ public class UserDaoImpl implements UserDao {
 		String query = "UPDATE USER SET password = ?, manager = ?, age = ? where id = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
@@ -116,29 +116,29 @@ public class UserDaoImpl implements UserDao {
 			pstmt.setBoolean(2, manager);
 			pstmt.setInt(3, age);
 			pstmt.setString(4, id);
-			
+
 			return pstmt.executeUpdate();
-			
-		}finally {
-			QuizDBUtil.closeStmt(pstmt);
+
+		} finally {
+			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
 	}
 
-	// 회원 삭제 
+	// 회원 삭제
 	@Override
 	public int delete(String id) throws SQLException {
 		String query = "DELETE FROM USER WHERE id = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, id);
 			return pstmt.executeUpdate();
 		} finally {
-			QuizDBUtil.closeStmt(pstmt);
+			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
 	}
