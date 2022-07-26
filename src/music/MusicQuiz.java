@@ -110,6 +110,10 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private JPanel quizClearPnl;
 	private JPanel quizFavoritePnl;
 
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public MusicQuiz() {
 		pnlMain = new JPanel();
 		JPanel pnlLEFT = new JPanel();
@@ -126,7 +130,6 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println(user);
 
 		// 왼쪽 하위 Panel
 		JPanel leftTopPnl = new JPanel();
