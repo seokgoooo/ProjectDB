@@ -334,8 +334,10 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 	// 다음 버튼 이벤트
 	public void nextBtnEvent() {
-		player.end();
-		timer.cancel();
+		if (play) {
+			player.end();
+			timer.cancel();
+		}
 		timeLbl.setText("" + timeOut);
 		getMusic(list);
 		prevBtn.setEnabled(true);
