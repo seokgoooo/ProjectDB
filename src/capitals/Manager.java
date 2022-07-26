@@ -65,7 +65,7 @@ public class Manager implements CapitalsDao {
 			}
 
 		} finally {
-			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closeRs(rs);
 			QuizDBUtil.closePstmt(stmt);
 			QuizDBUtil.closeConn(conn);
 		}
