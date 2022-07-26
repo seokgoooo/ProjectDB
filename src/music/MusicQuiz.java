@@ -316,7 +316,6 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	// 재생 버튼 이벤트
 	public void playBtnEvent() {
 		if (prev) {
-			
 
 			URI uri = getURI(currentMusic.getTitle());
 			player.play(new File(uri));
@@ -451,18 +450,18 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		playBtn.setVisible(true);
 		replayBtn.setVisible(false);
 		answerTf.setText("");
-		
+
 		currentMusic = map.get(currentMusic);
 		prevMusic = map.get(currentMusic);
 
 		if (prevMusic == null) {
 			prevBtn.setEnabled(false);
 		}
-		
+
 		favoriteCheck(currentMusic);
-		
+
 		quizNumberLbl.setText("" + (list.indexOf(currentMusic) + 1));
-		
+
 		prev = true;
 		first = true;
 	}
@@ -512,29 +511,29 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			favoriteCb.setSelected(false);
 		}
 	}
-	
+
 	// 해결 문제 그리기
 	public void clearPnlRepaint() {
-			quizClearPnl.removeAll();
+		quizClearPnl.removeAll();
 
-			try {
-				clearList = attemptsDao.read(user.getClearID(), true);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-			clearQuiz = new JButton[clearList.size()];
-			
-			for (int i = 0; i < clearQuiz.length; i++) {
-				clearQuiz[i] = new JButton(String.valueOf((clearList.get(i) - 3000)));
-				clearQuiz[i].addMouseListener(mouseAdapter);
-				quizClearPnl.add(clearQuiz[i]);
-			}
-
-			quizClearPnl.revalidate();
-			quizClearPnl.repaint();
+		try {
+			clearList = attemptsDao.read(user.getClearID(), true);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-	
+
+		clearQuiz = new JButton[clearList.size()];
+
+		for (int i = 0; i < clearQuiz.length; i++) {
+			clearQuiz[i] = new JButton(String.valueOf((clearList.get(i) - 3000)));
+			clearQuiz[i].addMouseListener(mouseAdapter);
+			quizClearPnl.add(clearQuiz[i]);
+		}
+
+		quizClearPnl.revalidate();
+		quizClearPnl.repaint();
+	}
+
 	// 즐찾 문제 그리기
 
 	// 즐찾 문제 그리기
