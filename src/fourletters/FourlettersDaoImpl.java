@@ -133,7 +133,7 @@ public class FourlettersDaoImpl implements Dao {
 				list.add(resultMapping(rs));
 			}
 		} finally {
-			QuizDBUtil.closeRs(rs);
+			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
@@ -160,7 +160,7 @@ public class FourlettersDaoImpl implements Dao {
 				return resultMapping(rs);
 			}
 		} finally {
-			QuizDBUtil.closeRs(rs);
+			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
@@ -187,7 +187,7 @@ public class FourlettersDaoImpl implements Dao {
 				return numberMapping(rs);
 			}
 		} finally {
-			QuizDBUtil.closeRs(rs);
+			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
@@ -213,7 +213,7 @@ public class FourlettersDaoImpl implements Dao {
 				return awnserMapping(rs);
 			}
 		} finally {
-			QuizDBUtil.closeRs(rs);
+			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
@@ -239,7 +239,7 @@ public class FourlettersDaoImpl implements Dao {
 				return resultMapping(rs);
 			}
 		} finally {
-			QuizDBUtil.closeRs(rs);
+			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}

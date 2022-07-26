@@ -13,8 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -26,15 +24,17 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JToggleButton;
 
 public class SignUpPage extends JDialog {
 	private JTextField idField;
 	private JPasswordField passwordField;
 	private JFormattedTextField ageField;
+	private JCheckBox managerCheckBox;
 	private MouseCursor mc = new MouseCursor();
 	private TextLimit tl = new TextLimit();
 	private TextFieldFocus tff = new TextFieldFocus();
+	private JLabel idToolTipLbl;
+	private JLabel ageToolTipLbl;
 
 	public SignUpPage() {
 		super();
@@ -61,38 +61,37 @@ public class SignUpPage extends JDialog {
 		getContentPane().add(panel);
 		panel.setLayout(null);
 
-		JLabel lblId = new JLabel("ID");
-		lblId.setBounds(0, 0, 200, 50);
-		panel.add(lblId);
-		lblId.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblId.setForeground(new Color(0, 102, 102));
-		lblId.setFont(new Font("Berlin Sans FB", Font.PLAIN, 30));
+		JLabel idLbl = new JLabel("ID");
+		idLbl.setBounds(0, 0, 200, 50);
+		panel.add(idLbl);
+		idLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		idLbl.setForeground(new Color(0, 102, 102));
+		idLbl.setFont(new Font("Berlin Sans FB", Font.PLAIN, 30));
 
-		JLabel lblPassword = new JLabel("PASSWORD");
-		lblPassword.setBounds(0, 100, 200, 50);
-		panel.add(lblPassword);
-		lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblPassword.setForeground(new Color(0, 102, 102));
-		lblPassword.setFont(new Font("Berlin Sans FB", Font.PLAIN, 30));
+		JLabel passwordLbl = new JLabel("PASSWORD");
+		passwordLbl.setBounds(0, 100, 200, 50);
+		panel.add(passwordLbl);
+		passwordLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		passwordLbl.setForeground(new Color(0, 102, 102));
+		passwordLbl.setFont(new Font("Berlin Sans FB", Font.PLAIN, 30));
 
-		JLabel lblAge = new JLabel("AGE");
-		lblAge.setBounds(0, 200, 200, 50);
-		panel.add(lblAge);
-		lblAge.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblAge.setForeground(new Color(0, 102, 102));
-		lblAge.setFont(new Font("Berlin Sans FB", Font.PLAIN, 30));
+		JLabel ageLbl = new JLabel("AGE");
+		ageLbl.setBounds(0, 200, 200, 50);
+		panel.add(ageLbl);
+		ageLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		ageLbl.setForeground(new Color(0, 102, 102));
+		ageLbl.setFont(new Font("Berlin Sans FB", Font.PLAIN, 30));
 
-		JLabel lblManager = new JLabel("MANAGER");
-		lblManager.setBounds(0, 300, 200, 50);
-		panel.add(lblManager);
-		lblManager.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblManager.setForeground(new Color(0, 102, 102));
-		lblManager.setFont(new Font("Berlin Sans FB", Font.PLAIN, 30));
+		JLabel managerLbl = new JLabel("MANAGER");
+		managerLbl.setBounds(0, 300, 200, 50);
+		panel.add(managerLbl);
+		managerLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		managerLbl.setForeground(new Color(0, 102, 102));
+		managerLbl.setFont(new Font("Berlin Sans FB", Font.PLAIN, 30));
 
 		idField = new JTextField();
 		idField.setBounds(238, 0, 300, 50);
 		panel.add(idField);
-		idField.setText("10글자 이내로 입력");
 		idField.setForeground(new Color(0, 102, 102));
 		idField.setBackground(new Color(255, 255, 255));
 		idField.setFont(new Font("휴먼모음T", Font.PLAIN, 25));
@@ -106,7 +105,7 @@ public class SignUpPage extends JDialog {
 		passwordField.setFont(new Font("Berlin Sans FB", Font.PLAIN, 25));
 		passwordField.setColumns(10);
 
-		JCheckBox managerCheckBox = new JCheckBox(" 관리자일 경우 누르세요");
+		managerCheckBox = new JCheckBox(" 관리자일 경우 누르세요");
 		managerCheckBox.setBounds(238, 300, 300, 50);
 		panel.add(managerCheckBox);
 		managerCheckBox.setForeground(new Color(255, 255, 255));
@@ -116,12 +115,11 @@ public class SignUpPage extends JDialog {
 		NumberFormatter range = new NumberFormatter();
 		range.setValueClass(Integer.class);
 		range.setMinimum(new Integer(1));
-		range.setMaximum(new Integer(150));
+		range.setMaximum(new Integer(100));
 
 		ageField = new JFormattedTextField(range);
 		ageField.setBounds(238, 200, 300, 50);
 		panel.add(ageField);
-		ageField.setText("정수만 입력 가능");
 		ageField.setForeground(new Color(0, 102, 102));
 		ageField.setBackground(Color.WHITE);
 		ageField.setFont(new Font("휴먼모음T", Font.PLAIN, 25));
@@ -134,58 +132,64 @@ public class SignUpPage extends JDialog {
 		signUpBtn.setBackground(new Color(255, 255, 255));
 		signUpBtn.setFont(new Font("휴먼모음T", Font.PLAIN, 25));
 
-		JLabel lblAge_1 = new JLabel("ㅁㄴㅇㄻㄴㅇㄹ");
-		panel.add(lblAge_1);
-		lblAge_1.setBounds(238, 250, 300, 30);
-		lblAge_1.setHorizontalAlignment(SwingConstants.LEFT);
-		lblAge_1.setForeground(new Color(255, 0, 51));
-		lblAge_1.setFont(new Font("휴먼모음T", Font.PLAIN, 20));
+		idToolTipLbl = new JLabel("10글자 이내로 입력하세요");
+		idToolTipLbl.setBounds(238, 50, 300, 30);
+		panel.add(idToolTipLbl);
+		idToolTipLbl.setHorizontalAlignment(SwingConstants.LEFT);
+		idToolTipLbl.setForeground(new Color(255, 0, 51));
+		idToolTipLbl.setFont(new Font("휴먼모음T", Font.PLAIN, 20));
 
-		JLabel lblAge_1_1 = new JLabel("ㅁㄴㅇㄻㄴㅇㄹ");
-		lblAge_1_1.setBounds(238, 50, 300, 30);
-		panel.add(lblAge_1_1);
-		lblAge_1_1.setHorizontalAlignment(SwingConstants.LEFT);
-		lblAge_1_1.setForeground(new Color(255, 0, 51));
-		lblAge_1_1.setFont(new Font("휴먼모음T", Font.PLAIN, 20));
-		
-		JToggleButton tglbtnNewToggleButton = new JToggleButton("New toggle button");
-		tglbtnNewToggleButton.setBounds(546, 12, 136, 28);
-		getContentPane().add(tglbtnNewToggleButton);
+		ageToolTipLbl = new JLabel("1 ~ 100사이의 숫자를 입력하세요");
+		panel.add(ageToolTipLbl);
+		ageToolTipLbl.setBounds(238, 250, 300, 30);
+		ageToolTipLbl.setHorizontalAlignment(SwingConstants.LEFT);
+		ageToolTipLbl.setForeground(new Color(255, 0, 51));
+		ageToolTipLbl.setFont(new Font("휴먼모음T", Font.PLAIN, 20));
 
 		signUpBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					Integer.parseInt(ageField.getText());
-					lblAge_1.setText("");
-				} catch (NumberFormatException f) {
-					lblAge_1.setText("양수를 입력하세요");
+				String id = idField.getText();
+				String pw = new String(passwordField.getPassword());
+				while (true) {
+					try {
+						Integer.parseInt(ageField.getText());
+						ageToolTipLbl.setText("");
+
+						if (!server.containsKey(id)) {
+							server.put(id, pw);
+							showPopUp("회원가입 완료");
+							dispose();
+//							pageInit();
+						} else {
+							idToolTipLbl.setText("이미 등록된 ID 입니다");
+						}
+						break;
+					} catch (NumberFormatException f) {
+						ageToolTipLbl.setText("1 ~ 100사이의 숫자를 입력하세요");
+						break;
+					}
 				}
 			}
 		});
 
 		signUpBtn.addMouseListener(mc);
-		ageField.addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				JTextField src = (JTextField) e.getSource();
-				if (src.getText().equals("")) {
-					src.setText("정수만 입력 가능");
-				}
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				JTextField src = (JTextField) e.getSource();
-				if (src.getText().equals("정수만 입력 가능")) {
-					src.setText("");
-				}
-			}
-		});
-		passwordField.addKeyListener(tl);
-		passwordField.addKeyListener(tl);
-		idField.addFocusListener(tff);
 		idField.addKeyListener(tl);
+		idField.addFocusListener(tff);
+		passwordField.addKeyListener(tl);
 
+	}
+
+	private void showPopUp(String text) {
+		JOptionPane.showMessageDialog(SignUpPage.this, text);
+	}
+
+	private void pageInit() {
+		idField.setText("");
+		passwordField.setText("");
+		ageField.setText("");
+		managerCheckBox.setSelected(false);
+		idToolTipLbl.setText("10글자 이내로 입력하세요");
+		ageToolTipLbl.setText("1 ~ 100사이의 숫자를 입력하세요");
 	}
 }

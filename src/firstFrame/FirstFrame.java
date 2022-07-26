@@ -38,7 +38,6 @@ public class FirstFrame extends JFrame {
 	private JLabel imgLbl03;
 	private MouseCursor mc = new MouseCursor();
 	private TextLimit tl = new TextLimit();
-	private SignUpPage sup = new SignUpPage();
 	private TextFieldFocus tff = new TextFieldFocus();
 
 	public FirstFrame() {
@@ -142,7 +141,7 @@ public class FirstFrame extends JFrame {
 		signUpBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				sup.setVisible(true);
+				new SignUpPage().setVisible(true);
 			}
 		});
 
