@@ -50,11 +50,7 @@ public class UserDaoImpl implements UserDao {
 	// 모든 회원 불러오기
 	@Override
 	public List<User> read() throws SQLException {
-<<<<<<< HEAD
 		String query = "SELECT * FROM USER_COPY ";
-=======
-		String query = "SELECT * FROM USER_copy ";
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 		List<User> list = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -70,7 +66,7 @@ public class UserDaoImpl implements UserDao {
 				list.add(user);
 			}
 		} finally {
-			QuizDBUtil.closeRs(rs);
+			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
@@ -81,11 +77,7 @@ public class UserDaoImpl implements UserDao {
 	// 특정 회원 불러오기
 	@Override
 	public User read(String id) throws SQLException {
-<<<<<<< HEAD
 		String query = "SELECT * FROM USER_COPY WHERE id = ?";
-=======
-		String query = "SELECT * FROM USER_copy WHERE id = ?";
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -103,7 +95,7 @@ public class UserDaoImpl implements UserDao {
 			}
 
 		} finally {
-			QuizDBUtil.closeRs(rs);
+			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
@@ -113,11 +105,7 @@ public class UserDaoImpl implements UserDao {
 	// 회원 정보 수정
 	@Override
 	public int update(String id, String password, boolean manager, int age) throws SQLException {
-<<<<<<< HEAD
 		String query = "UPDATE USER_COPY SET password = ?, manager = ?, age = ? where id = ?";
-=======
-		String query = "UPDATE USER_copy SET password = ?, manager = ?, age = ? where id = ?";
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
@@ -140,11 +128,7 @@ public class UserDaoImpl implements UserDao {
 	// 회원 삭제
 	@Override
 	public int delete(String id) throws SQLException {
-<<<<<<< HEAD
 		String query = "DELETE FROM USER_COPY WHERE id = ?";
-=======
-		String query = "DELETE FROM USER_copy WHERE id = ?";
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
