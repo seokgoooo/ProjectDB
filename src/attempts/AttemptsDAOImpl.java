@@ -86,7 +86,7 @@ public class AttemptsDAOImpl implements AttemptsDAO {
 			}
 
 		} finally {
-			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closeRs(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
