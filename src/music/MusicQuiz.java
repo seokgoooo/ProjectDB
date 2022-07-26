@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,7 +31,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
@@ -41,7 +39,6 @@ import attempts.AttemptsDAOImpl;
 import attempts.AttemptsQuiz;
 import favorite.FavoritesDAO;
 import favorite.FavoritesDAOImpl;
-import favorite.FavoritesQuiz;
 import user.User;
 import user.UserDao;
 import user.UserDaoImpl;

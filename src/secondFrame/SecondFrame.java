@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import fourletters.Main;
+import music.MusicQuiz;
 
 import javax.swing.JButton;
 import java.awt.GridLayout;
@@ -61,6 +62,7 @@ public class SecondFrame extends JFrame implements ActionListener {
 			// 퀴즈 랭킹 열기
 		} else if (click == btn[3]) {
 			// 음악 퀴즈 열기
+			new MusicQuiz().setVisible(true); 
 		} else if (click == btn[4]) {
 			// 월드컵 열기
 		} else if (click == btn[5]) {
