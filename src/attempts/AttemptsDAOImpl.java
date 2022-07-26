@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.co.greenart.quizdbutil.QuizDBUtil;
+import kr.co.greenart.dbutil.QuizDBUtil;
 
 public class AttemptsDAOImpl implements AttemptsDAO {
 
@@ -18,21 +18,21 @@ public class AttemptsDAOImpl implements AttemptsDAO {
 		boolean clear = rs.getBoolean("clear");
 		return new AttemptsQuiz(id, quizNumber, attemptsCount, clear);
 	}
-	
+
 	@Override
 	public int create(String id, int quizNumber) throws SQLException {
 		String query = "INSERT INTO attemptsquiz (id, quizNumber) values (?, ?)";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, id);
 			pstmt.setInt(2, quizNumber);
 			return pstmt.executeUpdate();
-		}finally {
-			QuizDBUtil.closeStmt(pstmt);
+		} finally {
+			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
 	}
@@ -44,24 +44,24 @@ public class AttemptsDAOImpl implements AttemptsDAO {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
+
 		try {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, id);
 			pstmt.setInt(2, quizNumber);
 			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				list.add(resultMapping(rs));
 			}
-			
-		}finally {
+
+		} finally {
 			QuizDBUtil.closeRS(rs);
-			QuizDBUtil.closeStmt(pstmt);
+			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
-		
+
 		return list;
 	}
 
@@ -70,18 +70,18 @@ public class AttemptsDAOImpl implements AttemptsDAO {
 		String query = "DELETE FROM attemptsquiz WHERE id = ? and quizNumber = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, id);
 			pstmt.setInt(2, quizNumber);
 			return pstmt.executeUpdate();
-		}finally {
-			QuizDBUtil.closeStmt(pstmt);
+		} finally {
+			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
-		
+
 	}
 
 	@Override
@@ -89,20 +89,20 @@ public class AttemptsDAOImpl implements AttemptsDAO {
 		String query = "UPDATE attemptsquiz SET attemptsCount = ? WHERE id = ? and quizNUmber = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, attemptsCount);
 			pstmt.setString(2, id);
 			pstmt.setInt(3, quizNumber);
-			
+
 			return pstmt.executeUpdate();
-		}finally {
-			QuizDBUtil.closeStmt(pstmt);
+		} finally {
+			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
-		
+
 	}
 
 }

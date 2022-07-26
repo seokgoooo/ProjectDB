@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.xml.crypto.Data;
 
-import kr.co.greeart.dbutil.DBUtil;
+import kr.co.greenart.dbutil.QuizDBUtil;
 // 관리자 클래스 CRUD 기능 
 
 public class Manager implements CapitalsDao {
@@ -31,7 +31,7 @@ public class Manager implements CapitalsDao {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, number);
 			pstmt.setString(2, question);
@@ -41,8 +41,8 @@ public class Manager implements CapitalsDao {
 			return pstmt.executeUpdate();
 
 		} finally {
-			DBUtil.closeStmt(pstmt);
-			DBUtil.closeconn(conn);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
 	}
 
@@ -57,7 +57,7 @@ public class Manager implements CapitalsDao {
 		List<Capitals> list = new ArrayList<>();
 
 		try {
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(query);
 
@@ -67,9 +67,9 @@ public class Manager implements CapitalsDao {
 			}
 
 		} finally {
-			DBUtil.closeRs(rs);
-			DBUtil.closeStmt(stmt);
-			DBUtil.closeconn(conn);
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(stmt);
+			QuizDBUtil.closeConn(conn);
 		}
 
 		return list;
@@ -83,7 +83,7 @@ public class Manager implements CapitalsDao {
 
 		try {
 
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, question);
 			pstmt.setString(2, answer);
@@ -92,8 +92,8 @@ public class Manager implements CapitalsDao {
 
 			return pstmt.executeUpdate();
 		} finally {
-			DBUtil.closeStmt(pstmt);
-			DBUtil.closeconn(conn);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
 
 	}
@@ -105,15 +105,15 @@ public class Manager implements CapitalsDao {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = DBUtil.getConnection();
+			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, number);
 
 			return pstmt.executeUpdate();
 
 		} finally {
-			DBUtil.closeStmt(pstmt);
-			DBUtil.closeconn(conn);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
 		}
 	}
 
