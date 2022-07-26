@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,10 +20,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -40,6 +43,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private Music prevMusic = null;
 	private Map<Music, Music> map = new HashMap<>();
 
+	private JPanel pnlMain;
 	private JButton confirmBtn;
 	private JTextField answerTf;
 	private List<Music> list = new ArrayList<>();
@@ -60,7 +64,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private boolean prev = false;
 
 	public MusicQuiz() {
-		JPanel pnlMain = new JPanel();
+		pnlMain = new JPanel();
 		JPanel pnlLEFT = new JPanel();
 		JPanel pnlRight = new JPanel();
 
@@ -69,17 +73,24 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		JPanel answerPnl = new JPanel();
 		JPanel questionPnl = new JPanel();
 
+		// question Panel
 		questionPnl.setPreferredSize(new Dimension(700, 600));
 
-		// 오른쪽 하위 Panel
-		JPanel showQuizPnl = new JPanel();
-		JPanel functionPnl = new JPanel();
+		URL lpUrl = MusicQuiz.class.getClassLoader().getResource("spacing out.gif");
+
+		JLabel lpLbl = new JLabel(new ImageIcon(lpUrl));
+		lpLbl.setPreferredSize(new Dimension(600, 350));
+		questionPnl.add(lpLbl);
 
 		try {
 			list = musicDao.read();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		// 오른쪽 하위 Panel
+		JPanel showQuizPnl = new JPanel();
+		JPanel functionPnl = new JPanel();
 
 		// 문제와 정답을 맞출 텍스트 필드들
 		answerTf = new JTextField(20);
@@ -246,11 +257,17 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 	// 확인 버튼 이벤트
 	public void confirmBtnEvent() {
-		if (answerTf.getText().equals(currentMusic.getTitle())) {
-			player.stop();
-			System.out.println("정답");
+		if (play) {
+			if (answerTf.getText().equals(currentMusic.getTitle())) {
+				player.stop();
+				JOptionPane.showMessageDialog(pnlMain, "정답입니다.");
+				confirmBtn.setEnabled(false);
+				timer.cancel();
+			} else {
+				JOptionPane.showMessageDialog(pnlMain, "오답입니다.");
+			}
 		} else {
-			System.out.println("오답");
+			JOptionPane.showMessageDialog(pnlMain, "노래를 먼저 재생해 주세요.");
 		}
 	}
 
