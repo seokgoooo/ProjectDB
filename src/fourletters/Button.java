@@ -20,29 +20,31 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import kr.co.greenart.dbutil.QuizDBUtil;
+import music.Music;
 
 public class Button {
 	Dao dao = new FourlettersDaoImpl();
 //	Font font = new Font("맑은 고딕", Font.BOLD, 50);
 	Random ran = new Random();
-	static List<fourletters> list = new ArrayList<fourletters>();
+	List<fourletters> list = new ArrayList<fourletters>();
 	static ManagerMode mode = new ManagerMode();
+	static FourlettersDaoImpl fld = new FourlettersDaoImpl();
 
 	static int result = 0;
 
 	public void ListAdd() {
 		try {
-			list = dao.read();
-			if (list.size() > 0) {
-				for (fourletters r : list) {
-					System.out.println(r);
-//					count++;
+			dao.read();
+			if (fld.list.size() > 0) {
+				for (fourletters r : fld.list) {
+					
 				}
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		System.out.println(fld.list);
 	}
 
 	public void questionRead(JTextArea ta) {
@@ -81,24 +83,13 @@ public class Button {
 			e.printStackTrace();
 		}
 	}
-
-	// 시작 버튼
-	public void start_button(JButton b, JTextArea ta) {
-
-		ActionListener a = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent a) {
-				int r = (int) (Math.random() * 20);
-				try {
-					System.out.println(r);
-					ta.setText((dao.read(r).toQuestion()));
-
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		};
-		b.addActionListener(a);
+	public void randomQuestion(JTextArea ta) {
+		Random random = new Random();
+		int index = random.nextInt(fld.list.size());
+		System.out.println(index);
+		String s = String.valueOf(fld.list.get(index).toString2());
+		String[] array = s.split(",");
+		ta.setText(array[1]);
 	}
 
 	// 확인버튼
@@ -113,6 +104,7 @@ public class Button {
 						System.out.println("정답");
 						int result = (dao.readst(ta.getText()).toNumber());
 						dao.clearSave(id, result);
+						randomQuestion(ta);
 						tf.setText("");
 					} else {
 						System.out.println("오답");
@@ -128,24 +120,15 @@ public class Button {
 
 	}
 
-	// 다음문제 버튼
+	// 문제보기 버튼
 	public void next_button(JButton b, JTextArea ta) {
 		ActionListener a = new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent a) {
-				int r = (int) (Math.random() * list.size());
-				try {
-					ta.setText(String.valueOf(dao.read(r).toQuestion()));
-				} catch (SQLException e) {
-					e.printStackTrace();
-					System.out.println("문제가없음");
-				}
+				randomQuestion(ta);
 			}
 		};
-
 		b.addActionListener(a);
-
 	}
 
 	// 힌트버튼
@@ -168,20 +151,20 @@ public class Button {
 			}
 		};
 		b.addActionListener(a);
-
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////// 관리자모드///////////////////////////////////////////
 
 	// 문제보기 버튼
-	public void read_button(JRadioButton b, JTextArea ta) {
+	public void read_button(JRadioButton b, JTextArea ta, JTextArea ta2) {
 		ActionListener a = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent a) {
 				try {
 					ta.setText("");
 					ta.setText((dao.read().toString()));
+					ta2.setText("");
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -191,97 +174,67 @@ public class Button {
 		b.addActionListener(a);
 	}
 
-	public void radioButton(JButton jb, JTextField tf, JRadioButton a, JRadioButton b, JRadioButton c) {
-		a.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					ActionListener create = new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent a) {
-							String s = tf.getText();
-							questionCreate(s);
-							String[] array = s.split(",");
-
-							try {
-								int result = (dao.readst(array[0]).toNumber());
-								list.add(dao.read(result));
-							} catch (SQLException e) {
-								e.printStackTrace();
-							}
-							tf.setText("");
-						}
-					};
-					jb.addActionListener(create);
-				}
-			}
-		});
-
-		b.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					ActionListener update = new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent a) {
-							String s = tf.getText();
-							questionUpdate(s);
-							String[] array = s.split(",");
-							try {
-								int result = (dao.readst(array[1]).toNumber());
-								list.add(dao.read(result));
-							} catch (SQLException e) {
-								e.printStackTrace();
-							}
-							System.out.println("니는또 왜?" + tf.getText());
-							tf.setText("");
-						}
-					};
-					jb.addActionListener(update);
-				}
-			}
-		});
-
-		c.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					ActionListener delete = new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							int i = Integer.valueOf(tf.getText());
-							questionDelete(i);
-							try {
-								list.remove(dao.read(i));
-							} catch (SQLException q) {
-								q.printStackTrace();
-							}
-							tf.setText("");
-						}
-					};
-					jb.addActionListener(delete);
-				}
-			}
-		});
-	}
-	public void MMOk_button(JButton jb, JPanel pnlR4, JTextArea ta) {
+	public void MMOk_button(JButton jb, JTextArea ta2, JTextField tf, JRadioButton a, JRadioButton b, JRadioButton c , JPanel pnlR4, JTextArea ta) {
 		jb.addActionListener(new ActionListener() {
 			@Override
+			public void actionPerformed(ActionEvent ae) {
+				if (a.isSelected()) {
+					String s = tf.getText();
+					questionCreate(s);
+					tf.setText("");
+				} else if (b.isSelected()) {
+					String s = tf.getText();
+					questionUpdate(s);
+					tf.setText("");
+					
+				} else if (c.isSelected()) {
+					int i = Integer.valueOf(tf.getText());
+					questionDelete(i);
+					tf.setText("");
+				}
+
+				pnlR4.removeAll();
+				fld.list.removeAll(fld.list);
+//				ListAdd();
+				mode.multipleChoice(pnlR4, ta, tf);
+				pnlR4.revalidate();
+				pnlR4.repaint();					
+			}
+		});
+		
+		a.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("와 안되너");
-				
-//				Button b = new Button();
-//				GridLayout grid = new GridLayout(4, 6);
-//				JButton[] bt = new JButton[b.list.size()];
-//
-//				for (int i = 0; i < b.list.size(); i++) {
-//					String[] array = String.valueOf(b.list.get(i)).split(",");
-//					bt[i] = new JButton(array[0] + "번");
-//					pnlR4.add(bt[i]);
-//				}
-//				grid.setVgap(5); // 격자 사이 수직 간격 5 픽셀
-//				pnlR4.setLayout(grid);
+				ta2.setText("");
+				ta2.setText("추가할 사자성어의 '문제,정답,힌트'를 입력하고 확인을 누르세요.");
+			}
+		});
+		b.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ta2.setText("");
+				ta2.setText("수정할 사자성어의 '번호,문제,정답,힌트'를 입력하고 확인을 누르세요.");
+			}
+		});
+		c.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ta2.setText("");
+				ta2.setText("삭제할 문제의 번호를 입력하고 확인을 누르세요.");
 			}
 		});
 	}
+	
+	
+	public void MMDelete_button(JButton jb, JTextField tf) {
+		jb.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				tf.setText("");
+			}
+		});
+	}
+	
+	
+	
 }
