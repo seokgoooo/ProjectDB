@@ -6,12 +6,19 @@ package secondFrame;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+
+import fourletters.Main;
+
 import javax.swing.JButton;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Font;
 
-public class SecondFrame extends JFrame {
+public class SecondFrame extends JFrame implements ActionListener {
+	private JButton[] btn = new JButton[6];
+
 	public SecondFrame() {
 		super();
 		setTitle("선택");
@@ -19,43 +26,49 @@ public class SecondFrame extends JFrame {
 		getContentPane().setBackground(UIManager.getColor("window"));
 		getContentPane().setLayout(new GridLayout(2, 3, 0, 0));
 
-		JButton btn1 = new JButton("사자성어 퀴즈");
-		getContentPane().add(btn1);
-		btn1.setBackground(new Color(255, 255, 255));
-		btn1.setForeground(new Color(0, 102, 102));
-		btn1.setFont(new Font("한컴산뜻돋움", Font.PLAIN, 30));
+		btn[0] = new JButton("사자성어 퀴즈");
+		btn[1] = new JButton("국가-수도 퀴즈");
+		btn[2] = new JButton("퀴즈 랭킹");
+		btn[3] = new JButton("음악 퀴즈");
+		btn[4] = new JButton("월드컵");
+		btn[5] = new JButton("월드컵 랭킹");
 
-		JButton btn2 = new JButton("국가-수도 퀴즈");
-		getContentPane().add(btn2);
-		btn2.setBackground(new Color(0, 102, 102));
-		btn2.setForeground(new Color(255, 255, 255));
-		btn2.setFont(new Font("한컴산뜻돋움", Font.PLAIN, 30));
+		for (int i = 0; i < btn.length; i++) {
+			getContentPane().add(btn[i]);
+			btn[i].setBackground(new Color(255, 255, 255));
+			btn[i].setForeground(new Color(0, 102, 102));
+			btn[i].setFont(new Font("한컴산뜻돋움", Font.PLAIN, 30));
+			btn[i].addActionListener(this);
 
-		JButton btn3 = new JButton("퀴즈 랭킹");
-		getContentPane().add(btn3);
-		btn3.setBackground(new Color(255, 255, 255));
-		btn3.setForeground(new Color(0, 102, 102));
-		btn3.setFont(new Font("한컴산뜻돋움", Font.PLAIN, 30));
-
-		JButton btn4 = new JButton("음악 퀴즈");
-		getContentPane().add(btn4);
-		btn4.setBackground(new Color(0, 102, 102));
-		btn4.setForeground(new Color(255, 255, 255));
-		btn4.setFont(new Font("한컴산뜻돋움", Font.PLAIN, 30));
-
-		JButton btn5 = new JButton("월드컵");
-		getContentPane().add(btn5);
-		btn5.setBackground(new Color(255, 255, 255));
-		btn5.setForeground(new Color(0, 102, 102));
-		btn5.setFont(new Font("한컴산뜻돋움", Font.PLAIN, 30));
-
-		JButton btn6 = new JButton("월드컵 랭킹");
-		getContentPane().add(btn6);
-		btn6.setBackground(new Color(0, 102, 102));
-		btn6.setForeground(new Color(255, 255, 255));
-		btn6.setFont(new Font("한컴산뜻돋움", Font.PLAIN, 30));
-
+			if (i % 2 == 1) {
+				btn[i].setBackground(new Color(0, 102, 102));
+				btn[i].setForeground(new Color(255, 255, 255));
+			}
+		}
 		setResizable(false);
 		setLocationRelativeTo(null);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object click = e.getSource();
+		if (click == btn[0]) {
+			// 사자성어 퀴즈 열기
+			new Main().setVisible(true);
+		} else if (click == btn[1]) {
+			// 국가-수도 퀴즈 열기
+		} else if (click == btn[2]) {
+			// 퀴즈 랭킹 열기
+		} else if (click == btn[3]) {
+			// 음악 퀴즈 열기
+		} else if (click == btn[4]) {
+			// 월드컵 열기
+		} else if (click == btn[5]) {
+			// 월드컵 랭킹 창 열기
+		}
+	}
+
+	public static void main(String[] args) {
+		new SecondFrame().setVisible(true);
 	}
 }
