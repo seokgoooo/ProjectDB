@@ -6,6 +6,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="//GREEN-424/java/Your Codes/_Free(Team)/5조/jlayer-1.0.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/_DB UTIL"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/QUIZ_DB UTIL"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
