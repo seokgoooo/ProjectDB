@@ -13,6 +13,11 @@ public class AttemptsQuiz {
 		this.clear = clear;
 	}
 
+	public AttemptsQuiz(String id, int quizNumber) {
+		this.id = id;
+		this.quizNumber = quizNumber;
+	}
+
 	public String getId() {
 		return id;
 	}

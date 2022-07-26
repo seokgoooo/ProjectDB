@@ -8,8 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.crypto.Data;
-
 import kr.co.greenart.dbutil.QuizDBUtil;
 // 관리자 클래스 CRUD 기능 
 
@@ -67,7 +65,7 @@ public class Manager implements CapitalsDao {
 			}
 
 		} finally {
-			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closeRs(rs);
 			QuizDBUtil.closePstmt(stmt);
 			QuizDBUtil.closeConn(conn);
 		}

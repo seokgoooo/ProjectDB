@@ -49,7 +49,7 @@ public class FavoritesDAOImpl implements FavoritesDAO {
 				list.add(rs.getInt("quizNumber"));
 			}
 		} finally {
-			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closeRs(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}

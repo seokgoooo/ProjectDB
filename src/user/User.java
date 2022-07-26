@@ -13,6 +13,8 @@ public class User {
 		this.id = id;
 		this.password = password;
 		this.manager = manager;
+		this.favoriteID = id;
+		this.clearID = id;
 		this.age = age;
 	}
 

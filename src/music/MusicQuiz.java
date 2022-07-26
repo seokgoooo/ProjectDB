@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,7 +24,6 @@ import java.util.TimerTask;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -35,6 +36,10 @@ import javax.swing.border.TitledBorder;
 
 import attempts.AttemptsDAO;
 import attempts.AttemptsDAOImpl;
+import attempts.AttemptsQuiz;
+import user.User;
+import user.UserDao;
+import user.UserDaoImpl;
 
 public class MusicQuiz extends JFrame implements ActionListener {
 	private MusicDao musicDao = new MusicDaoImpl();
@@ -42,23 +47,53 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private Music currentMusic = null;
 	private Music prevMusic = null;
 	private Map<Music, Music> map = new HashMap<>();
+	private List<Music> list = new ArrayList<>();
+
+	private UserDao userDao = new UserDaoImpl();
+	private User user = null;
+
+	private AttemptsDAO attemptsDao = new AttemptsDAOImpl();
+	private AttemptsQuiz attemptsQuiz = null;
+	private List<Integer> clearList = new ArrayList<>();
+
+	private MouseAdapter mouseAdapter = new MouseAdapter() {
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			for (int i = 0; i < clearQuizList.length; i++) {
+				if (e.getSource() == clearQuizList[i]) {
+					clickEvent(Integer.valueOf(clearQuizList[i].getText()) - 1);
+				}
+			}
+		}
+
+	};
 
 	private JPanel pnlMain;
 	private JButton confirmBtn;
 	private JTextField answerTf;
-	private List<Music> list = new ArrayList<>();
+
 	private JButton prevBtn;
 	private JButton pauseBtn;
 	private JButton playBtn;
 	private JButton nextBtn;
 	private JButton replayBtn;
-	private JButton[] quizList;
-	private JLabel timeLbl;
+
 	private Timer timer;
+	private JLabel timeLbl;
+	private final int timeOut = 60;
+
+	private JButton[] quizList;
+	private JButton[] clearQuizList;
+
 	private JLabel quizNumberLbl;
 	private JToggleButton favoriteTBtn;
 
-	private final int timeOut = 60;
 	private boolean play = false;
 	private boolean first = true;
 	private boolean prev = false;
@@ -67,6 +102,19 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		pnlMain = new JPanel();
 		JPanel pnlLEFT = new JPanel();
 		JPanel pnlRight = new JPanel();
+
+		try {
+			list = musicDao.read();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			user = userDao.read("LMJ");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println(user);
 
 		// 왼쪽 하위 Panel
 		JPanel leftTopPnl = new JPanel();
@@ -81,12 +129,6 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		JLabel lpLbl = new JLabel(new ImageIcon(lpUrl));
 		lpLbl.setPreferredSize(new Dimension(600, 350));
 		questionPnl.add(lpLbl);
-
-		try {
-			list = musicDao.read();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
 		// 오른쪽 하위 Panel
 		JPanel showQuizPnl = new JPanel();
@@ -124,6 +166,22 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			quizList[i] = new JButton(String.valueOf(i + 1));
 			quizList[i].addActionListener(this);
 			quizAllPnl.add(quizList[i]);
+		}
+
+		// 해결 문제 panel
+		quizClearPnl.setLayout(new GridLayout(5, 5));
+
+		try {
+			clearList = attemptsDao.read(user.getClearID(), true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		clearQuizList = new JButton[clearList.size()];
+		for (int i = 0; i < clearQuizList.length; i++) {
+			clearQuizList[i] = new JButton(String.valueOf((clearList.get(i) - 3000)));
+			clearQuizList[i].addMouseListener(mouseAdapter);
+			quizClearPnl.add(clearQuizList[i]);
 		}
 
 		// 왼쪽 버튼
@@ -214,40 +272,49 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			nextBtnEvent();
 		} else if (e.getSource() == replayBtn) {
 			replayBtnEvent();
+		} else if (e.getSource() == clearQuizList[0]) {
+			System.out.println(e.getWhen());
 		} else {
 			for (int i = 0; i < quizList.length; i++) {
 				if (e.getSource() == quizList[i]) {
-					if (play) {
-						player.end();
-						timer.cancel();
-					}
-
-					pauseBtn.setVisible(false);
-					playBtn.setVisible(true);
-					replayBtn.setVisible(false);
-
-					prevMusic = currentMusic;
-					currentMusic = list.get(i);
-					quizNumberLbl.setText(String.valueOf(i + 1));
-					map.put(currentMusic, prevMusic);
-
-					timeLbl.setText("" + 60);
-
-					first = true;
+					clickEvent(i);
 				}
 			}
 		}
+	}
+
+	public void clickEvent(int i) {
+		if (play) {
+			player.end();
+			timer.cancel();
+		}
+
+		pauseBtn.setVisible(false);
+		playBtn.setVisible(true);
+		replayBtn.setVisible(false);
+
+		prevMusic = currentMusic;
+		currentMusic = list.get(i);
+		quizNumberLbl.setText(String.valueOf(i + 1));
+		map.put(currentMusic, prevMusic);
+
+		timeLbl.setText("" + 60);
+
+		first = true;
 	}
 
 	// 다시 재생 버튼
 	private void replayBtnEvent() {
 		replayBtn.setVisible(false);
 		pauseBtn.setVisible(true);
+		confirmBtn.setEnabled(true);
 		player.play(new File(getURI(currentMusic.getTitle())));
 
 		try {
 			Music music = musicDao.read(currentMusic.getNumber());
 			musicDao.playCountPlus(music.getNumber(), music.getPlayCount());
+			attemptsDao.updateCount(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(),
+					attemptsQuiz.getAttemptsCount());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -258,13 +325,28 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	// 확인 버튼 이벤트
 	public void confirmBtnEvent() {
 		if (play) {
+
 			if (answerTf.getText().equals(currentMusic.getTitle())) {
 				player.stop();
+				playBtn.setVisible(true);
+				pauseBtn.setVisible(false);
+				try {
+					attemptsDao.updateClear(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(), true);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 				JOptionPane.showMessageDialog(pnlMain, "정답입니다.");
 				confirmBtn.setEnabled(false);
+
 				timer.cancel();
 			} else {
 				JOptionPane.showMessageDialog(pnlMain, "오답입니다.");
+			}
+			try {
+				attemptsDao.updateCount(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(),
+						attemptsQuiz.getAttemptsCount());
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 		} else {
 			JOptionPane.showMessageDialog(pnlMain, "노래를 먼저 재생해 주세요.");
@@ -291,23 +373,36 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			URI uri = getURI(currentMusic.getTitle());
 			player.play(new File(uri));
 			prev = false;
+			countDown();
 
 		} else if (first) {
 			URI uri = getURI(currentMusic.getTitle());
 			player.play(new File(uri));
+
 			try {
+
 				Music music = musicDao.read(currentMusic.getNumber());
 				musicDao.playCountPlus(music.getNumber(), music.getPlayCount());
+
+				attemptsQuiz = attemptsDao.read(user.getClearID(), currentMusic.getNumber());
+
+				if (attemptsQuiz == null) {
+					attemptsDao.create(user.getClearID(), currentMusic.getNumber());
+					attemptsQuiz = attemptsDao.read(user.getClearID(), currentMusic.getNumber());
+				} else {
+					attemptsDao.updateCount(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(),
+							attemptsQuiz.getAttemptsCount());
+				}
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
+			countDown();
 			first = false;
 		} else {
 			player.musicRun();
 		}
 
-		countDown();
 		play = true;
 		playBtn.setVisible(false);
 		pauseBtn.setVisible(true);
@@ -331,6 +426,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 					playBtn.setVisible(false);
 					replayBtn.setVisible(true);
 					player.end();
+					confirmBtn.setEnabled(false);
 				}
 			}
 		}, 0, 1000);
