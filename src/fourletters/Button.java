@@ -19,6 +19,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import kr.co.greenart.dbutil.QuizDBUtil;
+
 public class Button {
 	Dao dao = new FourlettersDaoImpl();
 //	Font font = new Font("맑은 고딕", Font.BOLD, 50);
