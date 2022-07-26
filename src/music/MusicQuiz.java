@@ -199,6 +199,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		favoriteCb = new JCheckBox("즐겨찾기");
 		favoriteCb.addActionListener(this);
 
+		
 		leftTopPnl.add(quizNumberLbl, "West");
 		leftTopPnl.add(timeLbl, "Center");
 		timeLbl.setHorizontalAlignment((int) CENTER_ALIGNMENT);
