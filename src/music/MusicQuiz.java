@@ -50,8 +50,8 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private List<Music> list = new ArrayList<>();
 
 	private UserDao userDao = new UserDaoImpl();
-	private User user = null; 
-	
+	private User user = null;
+
 	private AttemptsDAO attemptsDao = new AttemptsDAOImpl();
 	private AttemptsQuiz attemptsQuiz = null;
 	private List<Integer> clearList = new ArrayList<>();
@@ -60,24 +60,24 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-		
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			for(int i = 0;i < clearQuizList.length;i++) {
-				if(e.getSource() == clearQuizList[i]) {
+			for (int i = 0; i < clearQuizList.length; i++) {
+				if (e.getSource() == clearQuizList[i]) {
 					clickEvent(Integer.valueOf(clearQuizList[i].getText()) - 1);
 				}
 			}
 		}
-		
+
 	};
-	
+
 	private JPanel pnlMain;
 	private JButton confirmBtn;
 	private JTextField answerTf;
-	
+
 	private JButton prevBtn;
 	private JButton pauseBtn;
 	private JButton playBtn;
@@ -87,10 +87,10 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private Timer timer;
 	private JLabel timeLbl;
 	private final int timeOut = 60;
-	
+
 	private JButton[] quizList;
 	private JButton[] clearQuizList;
-	
+
 	private JLabel quizNumberLbl;
 	private JToggleButton favoriteTBtn;
 
@@ -129,7 +129,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		JLabel lpLbl = new JLabel(new ImageIcon(lpUrl));
 		lpLbl.setPreferredSize(new Dimension(600, 350));
 		questionPnl.add(lpLbl);
-		
+
 		// 오른쪽 하위 Panel
 		JPanel showQuizPnl = new JPanel();
 		JPanel functionPnl = new JPanel();
@@ -167,18 +167,18 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			quizList[i].addActionListener(this);
 			quizAllPnl.add(quizList[i]);
 		}
-		
+
 		// 해결 문제 panel
 		quizClearPnl.setLayout(new GridLayout(5, 5));
-		
+
 		try {
 			clearList = attemptsDao.read(user.getClearID(), true);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		clearQuizList = new JButton[clearList.size()];
-		for(int i = 0; i < clearQuizList.length;i++) {
+		for (int i = 0; i < clearQuizList.length; i++) {
 			clearQuizList[i] = new JButton(String.valueOf((clearList.get(i) - 3000)));
 			clearQuizList[i].addMouseListener(mouseAdapter);
 			quizClearPnl.add(clearQuizList[i]);
@@ -262,10 +262,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == confirmBtn) {
 			confirmBtnEvent();
-		} else if(e.getSource() == clearQuizList[0]) {
-			System.out.println(e.getWhen());
-		}
-		else if (e.getSource() == pauseBtn) {
+		} else if (e.getSource() == pauseBtn) {
 			pauseBtnEvent();
 		} else if (e.getSource() == playBtn) {
 			playBtnEvent();
@@ -275,6 +272,8 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			nextBtnEvent();
 		} else if (e.getSource() == replayBtn) {
 			replayBtnEvent();
+		} else if (e.getSource() == clearQuizList[0]) {
+			System.out.println(e.getWhen());
 		} else {
 			for (int i = 0; i < quizList.length; i++) {
 				if (e.getSource() == quizList[i]) {
@@ -283,7 +282,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			}
 		}
 	}
-	
+
 	public void clickEvent(int i) {
 		if (play) {
 			player.end();
