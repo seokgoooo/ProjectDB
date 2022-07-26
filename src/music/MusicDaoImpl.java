@@ -66,7 +66,7 @@ public class MusicDaoImpl implements MusicDao {
 			}
 
 		} finally {
-			QuizDBUtil.closeRs(rs);
+			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
@@ -95,7 +95,7 @@ public class MusicDaoImpl implements MusicDao {
 			}
 
 		} finally {
-			QuizDBUtil.closeRs(rs);
+			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 
