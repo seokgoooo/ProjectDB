@@ -19,13 +19,15 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import kr.co.greenart.dbutil.QuizDBUtil;
+
 public class Button {
 	Dao dao = new FourlettersDaoImpl();
 //	Font font = new Font("맑은 고딕", Font.BOLD, 50);
 	Random ran = new Random();
 	static List<fourletters> list = new ArrayList<fourletters>();
 	static ManagerMode mode = new ManagerMode();
-	
+
 	static int result = 0;
 
 	public void ListAdd() {
@@ -82,7 +84,7 @@ public class Button {
 
 	// 시작 버튼
 	public void start_button(JButton b, JTextArea ta) {
-		
+
 		ActionListener a = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent a) {
@@ -90,7 +92,7 @@ public class Button {
 				try {
 					System.out.println(r);
 					ta.setText((dao.read(r).toQuestion()));
-					
+
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -119,11 +121,11 @@ public class Button {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-			
+
 			}
 		};
 		b.addActionListener(a);
-		
+
 	}
 
 	// 다음문제 버튼
@@ -169,8 +171,8 @@ public class Button {
 
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////// 관리자모드///////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////// 관리자모드///////////////////////////////////////////
 
 	// 문제보기 버튼
 	public void read_button(JRadioButton b, JTextArea ta) {
@@ -188,7 +190,7 @@ public class Button {
 
 		b.addActionListener(a);
 	}
-	
+
 	public void radioButton(JButton jb, JTextField tf, JRadioButton a, JRadioButton b, JRadioButton c) {
 		a.addItemListener(new ItemListener() {
 			@Override
@@ -200,7 +202,7 @@ public class Button {
 							String s = tf.getText();
 							questionCreate(s);
 							String[] array = s.split(",");
-							
+
 							try {
 								int result = (dao.readst(array[0]).toNumber());
 								list.add(dao.read(result));
@@ -211,11 +213,10 @@ public class Button {
 						}
 					};
 					jb.addActionListener(create);
-					
 				}
 			}
 		});
-		
+
 		b.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -223,9 +224,15 @@ public class Button {
 					ActionListener update = new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent a) {
-							questionUpdate(tf.getText());
-							
-//							list.add();
+							String s = tf.getText();
+							questionUpdate(s);
+							String[] array = s.split(",");
+							try {
+								int result = (dao.readst(array[1]).toNumber());
+								list.add(dao.read(result));
+							} catch (SQLException e) {
+								e.printStackTrace();
+							}
 							System.out.println("니는또 왜?" + tf.getText());
 							tf.setText("");
 						}
@@ -234,9 +241,7 @@ public class Button {
 				}
 			}
 		});
-		
-		//이거 DB는 수정되는데 list는 수정 안해서 안되는 것일듯
-		//수정해볼것
+
 		c.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -244,34 +249,38 @@ public class Button {
 					ActionListener delete = new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							questionDelete(Integer.valueOf(tf.getText()));
+							int i = Integer.valueOf(tf.getText());
+							questionDelete(i);
+							try {
+								list.remove(dao.read(i));
+							} catch (SQLException q) {
+								q.printStackTrace();
+							}
 							tf.setText("");
 						}
 					};
-					
 					jb.addActionListener(delete);
 				}
 			}
 		});
-		
 	}
-
 	public void MMOk_button(JButton jb, JPanel pnlR4, JTextArea ta) {
 		jb.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("와 안되너");
-				Button b = new Button();
-				GridLayout grid = new GridLayout(4, 6);
-				JButton[] bt = new JButton[b.list.size()];
-
-				for (int i = 0; i < b.list.size(); i++) {
-					String[] array = String.valueOf(b.list.get(i)).split(",");
-					bt[i] = new JButton(array[0] + "번");
-					pnlR4.add(bt[i]);
-				}
-				grid.setVgap(5); // 격자 사이 수직 간격 5 픽셀
-				pnlR4.setLayout(grid);
+				
+//				Button b = new Button();
+//				GridLayout grid = new GridLayout(4, 6);
+//				JButton[] bt = new JButton[b.list.size()];
+//
+//				for (int i = 0; i < b.list.size(); i++) {
+//					String[] array = String.valueOf(b.list.get(i)).split(",");
+//					bt[i] = new JButton(array[0] + "번");
+//					pnlR4.add(bt[i]);
+//				}
+//				grid.setVgap(5); // 격자 사이 수직 간격 5 픽셀
+//				pnlR4.setLayout(grid);
 			}
 		});
 	}
