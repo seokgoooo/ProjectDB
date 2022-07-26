@@ -1,5 +1,5 @@
-// 해야할것 : 로그인 성공 후 secondFrame 실행
-// 완료된것 : GUI 구현
+// 해야할것 : 
+// 완료된것 : GUI 구현, 로그인 성공 후 secondFrame 실행
 
 package firstFrame;
 
@@ -7,7 +7,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedHashMap;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
@@ -22,8 +23,13 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import secondFrame.SecondFrame;
+import user.User;
+import user.UserDao;
+import user.UserDaoImpl;
 
 public class FirstFrame extends JFrame {
+	private UserDao user = new UserDaoImpl();
+	private Map<String, User> server = new HashMap<>();
 	private JPasswordField pwPf = new JPasswordField(10);
 	private JTextField idTf = new JTextField(10);
 	private JPanel bottomPnl;
@@ -38,10 +44,9 @@ public class FirstFrame extends JFrame {
 	private JLabel imgLbl03;
 	private MouseCursor mc = new MouseCursor();
 	private TextLimit tl = new TextLimit();
-	private SignUpPage sup = new SignUpPage();
 	private TextFieldFocus tff = new TextFieldFocus();
 
-	public FirstFrame() {
+	public FirstFrame() throws SQLException {
 		super();
 		setTitle("그대가 들어5조");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -60,11 +65,7 @@ public class FirstFrame extends JFrame {
 	}
 
 //      JFrame 메인프레임 그리기
-	public void makeGui() {
-		// 회원가입 테스트용 Map
-		Map<String, String> server = new LinkedHashMap<>();
-		server.put("sample", "value");
-
+	public void makeGui() throws SQLException {
 		mainPnl = new JPanel();
 		getContentPane().add(mainPnl);
 		mainPnl.setBounds(220, 0, 650, 450);
@@ -142,7 +143,11 @@ public class FirstFrame extends JFrame {
 		signUpBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				sup.setVisible(true);
+				try {
+					new SignUpPage().setVisible(true);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 
@@ -156,10 +161,17 @@ public class FirstFrame extends JFrame {
 		signInBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				try {
+					userMapping();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+
 				String id = new String(idTf.getText());
 				String pw = new String(pwPf.getPassword());
+
 				if (server.containsKey(id)) {
-					if (pw.equals(server.get(id))) {
+					if (pw.equals(server.get(id).getPassword())) {
 						showPopUp("로그인 성공");
 						SecondFrame sf = new SecondFrame();
 						sf.setVisible(true);
@@ -169,7 +181,7 @@ public class FirstFrame extends JFrame {
 				}
 
 				if (!server.containsKey(id)) {
-					showPopUp("먼저 회원가입을 해주세요");
+					showPopUp("회원가입을 해주세요");
 				}
 			}
 		});
@@ -180,5 +192,13 @@ public class FirstFrame extends JFrame {
 
 	private void showPopUp(String text) {
 		JOptionPane.showMessageDialog(FirstFrame.this, text);
+	}
+
+	public void userMapping() throws SQLException {
+		int i = 0;
+		while (i < user.read().size()) {
+			server.put(user.read().get(i).getId(), user.read().get(i));
+			i++;
+		}
 	}
 }

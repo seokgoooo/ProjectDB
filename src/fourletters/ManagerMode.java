@@ -144,7 +144,8 @@ public class ManagerMode extends JFrame {
 
 		// 관리자 모드 기능 버튼
 		bt.read_button(btn0, ta, ta2);
-		setSize(1180, 820);
+//		setSize(1180, 820);
+		setPreferredSize(new Dimension(1180, 820));
 		pnlR1.setPreferredSize(new Dimension(100, 100));
 
 		setLocationRelativeTo(null);

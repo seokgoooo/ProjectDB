@@ -24,7 +24,7 @@ public class UserDaoImpl implements UserDao {
 	// user 생성
 	@Override
 	public int create(String id, String password, boolean manager, int age) throws SQLException {
-		String query = "INSERT INTO USER (id, password, favorites_id, clear_id, age) values (?, ?, ?, ?, ?)";
+		String query = "INSERT INTO USER_COPY (id, password, manager, favorites_id, clear_id, age) values (?, ?, ?, ?, ?, ?)";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
@@ -50,7 +50,7 @@ public class UserDaoImpl implements UserDao {
 	// 모든 회원 불러오기
 	@Override
 	public List<User> read() throws SQLException {
-		String query = "SELECT * FROM USER ";
+		String query = "SELECT * FROM USER_COPY ";
 		List<User> list = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -66,7 +66,7 @@ public class UserDaoImpl implements UserDao {
 				list.add(user);
 			}
 		} finally {
-			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closeRs(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
@@ -77,7 +77,7 @@ public class UserDaoImpl implements UserDao {
 	// 특정 회원 불러오기
 	@Override
 	public User read(String id) throws SQLException {
-		String query = "SELECT * FROM USER WHERE id = ?";
+		String query = "SELECT * FROM USER_COPY WHERE id = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -95,7 +95,7 @@ public class UserDaoImpl implements UserDao {
 			}
 
 		} finally {
-			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closeRs(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
@@ -105,7 +105,7 @@ public class UserDaoImpl implements UserDao {
 	// 회원 정보 수정
 	@Override
 	public int update(String id, String password, boolean manager, int age) throws SQLException {
-		String query = "UPDATE USER SET password = ?, manager = ?, age = ? where id = ?";
+		String query = "UPDATE USER_COPY SET password = ?, manager = ?, age = ? where id = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
@@ -128,7 +128,7 @@ public class UserDaoImpl implements UserDao {
 	// 회원 삭제
 	@Override
 	public int delete(String id) throws SQLException {
-		String query = "DELETE FROM USER WHERE id = ?";
+		String query = "DELETE FROM USER_COPY WHERE id = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 

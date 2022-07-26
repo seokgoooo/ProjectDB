@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -22,7 +26,12 @@ import javax.swing.border.TitledBorder;
 public class ManagerMode extends JFrame implements ActionListener {
 	private List<Music> list = new ArrayList<>();
 	private MusicDao dao = new MusicDaoImpl();
+	private MusicPlayer player = new MusicPlayer();
 	private Music m = null;
+
+	private URI uri = null;
+	private boolean play = false;
+
 	private JButton[] quizNumberBtns;
 	private JRadioButton createRB;
 	private JRadioButton updateRB;
@@ -32,7 +41,10 @@ public class ManagerMode extends JFrame implements ActionListener {
 	private JTextField genreTf;
 	private JTextField yearTf;
 	private JButton confirmBtn;
+	private JButton playBtn;
+	private JButton stopBtn;
 	private JPanel quizNumberPnl;
+	private JPanel allPnl;
 
 	public ManagerMode() {
 		super("관리자 모드");
@@ -43,7 +55,7 @@ public class ManagerMode extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 
-		JPanel allPnl = new JPanel();
+		allPnl = new JPanel();
 
 		JPanel topPnl = new JPanel();
 		JPanel mainPnl = new JPanel();
@@ -69,10 +81,13 @@ public class ManagerMode extends JFrame implements ActionListener {
 		quizNumberPnl.setBorder(new TitledBorder(new LineBorder(Color.green, 3), "문제 번호"));
 		quizNumberPnl.setLayout(new GridLayout(5, 6));
 
-		//CRUD 라디오 버튼 
+		// CRUD 라디오 버튼
 		createRB = new JRadioButton("추가");
+		createRB.addActionListener(this);
 		updateRB = new JRadioButton("수정");
+		updateRB.addActionListener(this);
 		deleteRB = new JRadioButton("삭제");
+		deleteRB.addActionListener(this);
 
 		createRB.setSelected(true);
 
@@ -116,10 +131,22 @@ public class ManagerMode extends JFrame implements ActionListener {
 		mainPnl.add(genrePnl);
 		mainPnl.add(yearPnl);
 
-		// 확인 버튼
+		// 기능 버튼
+		confirmPnl.setLayout(new BoxLayout(confirmPnl, BoxLayout.Y_AXIS));
+
 		confirmBtn = new JButton("확인");
 		confirmBtn.addActionListener(this);
+
+		playBtn = new JButton("재생");
+		playBtn.addActionListener(this);
+
+		stopBtn = new JButton("중지");
+		stopBtn.addActionListener(this);
+		stopBtn.setVisible(false);
+
 		confirmPnl.add(confirmBtn);
+		confirmPnl.add(playBtn);
+		confirmPnl.add(stopBtn);
 
 		// 문제 리스트
 		quizNumberBtns = new JButton[list.size()];
@@ -141,6 +168,7 @@ public class ManagerMode extends JFrame implements ActionListener {
 		add(allPnl);
 
 		setSize(700, 500);
+		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
@@ -148,13 +176,29 @@ public class ManagerMode extends JFrame implements ActionListener {
 		new ManagerMode().setVisible(true);
 	}
 
+	// 버튼 이벤트
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == confirmBtn) {
 			confirmBtnEvent();
+		} else if (e.getSource() == playBtn) {
+			playBtnEvent();
+		} else if (e.getSource() == stopBtn) {
+			stopBtnEvent();
+		} else if (e.getSource() == createRB) {
+			textInit();
+		} else if (e.getSource() == updateRB) {
+			textInit();
+		} else if (e.getSource() == deleteRB) {
+			textInit();
 		} else {
 			for (int i = 0; i < quizNumberBtns.length; i++) {
 				if (e.getSource() == quizNumberBtns[i]) {
+					if(play) {
+						player.end();
+					}
+					playBtn.setVisible(true);
+					stopBtn.setVisible(false);
 					m = list.get(i);
 					titleTf.setText(m.getTitle());
 					singerTf.setText(m.getSinger());
@@ -168,55 +212,121 @@ public class ManagerMode extends JFrame implements ActionListener {
 	// 확인 버튼 이벤트 메소드
 	public void confirmBtnEvent() {
 		if (createRB.isSelected()) {
-			try {
+			createMusic();
+		} else if (updateRB.isSelected()) {
+			updateMusic();
+		} else {
+			deleteMusic();
+		}
+	}
+
+	// 재생 버튼 이벤트 메소드
+	public void playBtnEvent() {
+		try {
+			player.play(new File(getURI(m.getTitle())));
+			play = true;
+			playBtn.setVisible(false);
+			stopBtn.setVisible(true);
+		} catch (NullPointerException e) {
+			JOptionPane.showMessageDialog(allPnl, "선택후 재생해 주세요");
+		}
+
+	}
+
+	// 정지 버튼 이벤트 메소드
+	public void stopBtnEvent() {
+		player.end();
+		stopBtn.setVisible(false);
+		playBtn.setVisible(true);
+	}
+
+	// text 초기화 메소드
+	public void textInit() {
+		m = null;
+		titleTf.setText("");
+		singerTf.setText("");
+		genreTf.setText("");
+		yearTf.setText("");
+	}
+
+	// music 생성 메소드
+	public void createMusic() {
+		try {
+			uri = getURI(titleTf.getText());
+			if (uri != null) {
 				dao.create(titleTf.getText(), singerTf.getText(), genreTf.getText(), Integer.valueOf(yearTf.getText()));
 				list = dao.read();
-
-				quizNumberPnl.removeAll();
-				quizNumberBtns = new JButton[list.size()];
-
-				for (int i = 0; i < list.size(); i++) {
-					quizNumberBtns[i] = new JButton(i + 1 + "");
-					quizNumberBtns[i].addActionListener(this);
-					quizNumberPnl.add(quizNumberBtns[i]);
-				}
-
-				quizNumberPnl.revalidate();
-				quizNumberPnl.repaint();
-
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
+				repaint();
 			}
-		} else if (updateRB.isSelected()) {
-			try {
+			uri = null;
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(allPnl, "해당 필드 값이 올바른지 확인하세요.");
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(allPnl, "같은 이름의 곡은 등록 할 수 없습니다.");
+		}
+	}
+
+	// music 수정 메소드
+	public void updateMusic() {
+		try {
+			uri = getURI(titleTf.getText());
+			if (uri != null) {
 				dao.update(m.getNumber(), titleTf.getText(), singerTf.getText(), genreTf.getText(),
 						Integer.valueOf(yearTf.getText()));
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		} else {
-			try {
-				dao.delete(m.getNumber());
 				list = dao.read();
-
-				quizNumberPnl.removeAll();
-				quizNumberBtns = new JButton[list.size()];
-
-				for (int i = 0; i < list.size(); i++) {
-					quizNumberBtns[i] = new JButton(i + 1 + "");
-					quizNumberBtns[i].addActionListener(this);
-					quizNumberPnl.add(quizNumberBtns[i]);
-				}
-
-				quizNumberPnl.revalidate();
-				quizNumberPnl.repaint();
-			} catch (SQLException e) {
-				e.printStackTrace();
+				repaint();
 			}
+			uri = null;
+		} catch (NullPointerException e) {
+			JOptionPane.showMessageDialog(allPnl, "선택후 수정해 주세요");
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(allPnl, "해당 필드 값이 올바른지 확인하세요");
+		} catch (SQLException e) {
+
 		}
+	}
+
+	// music 삭제 메소드
+	public void deleteMusic() {
+		try {
+			dao.delete(m.getNumber());
+			list = dao.read();
+			textInit();
+			repaint();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// URI 가져오는 메소드
+	public URI getURI(String title) {
+		title += ".mp3";
+		URI uri = null;
+		try {
+			uri = MusicQuiz.class.getClassLoader().getResource(title).toURI();
+		} catch (NullPointerException e) {
+			JOptionPane.showMessageDialog(allPnl, "해당 제목의 mp3파일이 있는지 확인하세요");
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+			System.out.println("뭘까");
+		}
+
+		return uri;
+	}
+
+	// quizNumberPnl 다시 그리기
+	@Override
+	public void repaint() {
+		quizNumberPnl.removeAll();
+		quizNumberBtns = new JButton[list.size()];
+
+		for (int i = 0; i < list.size(); i++) {
+			quizNumberBtns[i] = new JButton(i + 1 + "");
+			quizNumberBtns[i].addActionListener(this);
+			quizNumberPnl.add(quizNumberBtns[i]);
+		}
+
+		quizNumberPnl.revalidate();
+		quizNumberPnl.repaint();
 	}
 }

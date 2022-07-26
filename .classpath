@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="resources"/>
+	<classpathentry excluding="**|resources/|resources/|resources/music/" kind="src" path=""/>
 	<classpathentry kind="src" path="src"/>
+<<<<<<< HEAD
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+=======
+	<classpathentry excluding="music/" kind="src" path="resources"/>
+	<classpathentry kind="src" path="resources/music"/>
+>>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 	<classpathentry combineaccessrules="false" kind="src" path="/QUIZ_DB UTIL"/>
+	<classpathentry kind="lib" path="//GREEN-424/Java/Your Codes/_Free(Team)/5조/mysql-connector-java-8.0.20.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="//GREEN-424/java/Your Codes/_Free(Team)/5조/jlayer-1.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -18,13 +18,6 @@ public class User {
 		this.age = age;
 	}
 
-	public User(String id, String password, int age) {
-		super();
-		this.id = id;
-		this.password = password;
-		this.age = age;
-	}
-
 	public String getId() {
 		return id;
 	}
