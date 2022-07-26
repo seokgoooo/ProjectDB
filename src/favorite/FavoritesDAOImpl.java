@@ -14,7 +14,7 @@ public class FavoritesDAOImpl implements FavoritesDAO {
 	// 즐찾에 추가
 	@Override
 	public int create(String id, int quizNumber) throws SQLException {
-		String query = "INSERT INTO favoritesquiz (id, quiznumber) values (?, ?)";
+		String query = "INSERT INTO favoritesquiz_copy (id, quiznumber) values (?, ?)";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
@@ -33,7 +33,7 @@ public class FavoritesDAOImpl implements FavoritesDAO {
 	// 특정 ID 즐찾 목록
 	@Override
 	public List<Integer> read(String id) throws SQLException {
-		String query = "SELECT * FROM favoritesquiz WHERE id = ?";
+		String query = "SELECT quiznumber FROM favoritesquiz_copy WHERE id = ?";
 		List<Integer> list = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -59,7 +59,7 @@ public class FavoritesDAOImpl implements FavoritesDAO {
 	// 특정 ID 즐찾 목록 삭제
 	@Override
 	public int delete(String id, int quizNumber) throws SQLException {
-		String query = "DELETE FROM favoritesquiz where id = ? and quiznumber = ?";
+		String query = "DELETE FROM favoritesquiz_copy where id = ? and quiznumber = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
