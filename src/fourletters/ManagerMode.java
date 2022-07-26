@@ -136,7 +136,7 @@ public class ManagerMode extends JFrame {
 
 		// --오른쪽[3]
 		bt.ListAdd();
-		multipleChoice(pnlR4, ta);
+		multipleChoice(pnlR4, ta, tf);
 		bt.MMOk_button(bt1, pnlR4, ta);
 		inputButton(pnlR2, bt1, bt2, user);
 		manager(pnlR3, btn0, btn1, btn2, btn3, user);
@@ -188,7 +188,7 @@ public class ManagerMode extends JFrame {
 	}
 
 	// 객관식보기 버튼
-	public void multipleChoice(JPanel p, JTextArea ta) {
+	public void multipleChoice(JPanel p, JTextArea ta, JTextField tf) {
 		Button b = new Button();
 		GridLayout grid = new GridLayout(4, 6);
 		JButton[] bt = new JButton[b.list.size()];
@@ -198,21 +198,21 @@ public class ManagerMode extends JFrame {
 			bt[i] = new JButton(array[0] + "번");
 			p.add(bt[i]);
 
-//			bt[i].addActionListener(new ActionListener() {
-//				@Override
-//				public void actionPerformed(ActionEvent a) {
-//					try {
-//						ta.setText((dao.read(Integer.valueOf((array[0]))).toString()));
-//					} catch (SQLException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			});
+			bt[i].addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent a) {
+					try {
+						ta.setText((dao.read(Integer.valueOf((array[0]))).toString()));
+						tf.setText((dao.read(Integer.valueOf((array[0]))).toString()));
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		}
 
 		grid.setVgap(5); // 격자 사이 수직 간격 5 픽셀
 		p.setLayout(grid);
-
 	}
 
 	public static void main(String[] args) {
