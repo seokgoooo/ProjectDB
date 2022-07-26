@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="music/|music/" kind="src" path="resources"/>
+	<classpathentry excluding="**|resources/|resources/" kind="src" path=""/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="resources/music"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" path="resources"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/QUIZ_DB UTIL"/>
-	<classpathentry kind="lib" path="//GREEN-424/java/Your Codes/_Free(Team)/5조/jlayer-1.0.1.jar"/>
+	<classpathentry kind="lib" path="//GREEN-424/Java/Your Codes/_Free(Team)/5조/mysql-connector-java-8.0.20.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

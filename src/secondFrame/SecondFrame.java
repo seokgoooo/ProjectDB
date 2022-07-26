@@ -19,13 +19,13 @@ public class SecondFrame extends JFrame {
 		getContentPane().setBackground(UIManager.getColor("window"));
 		getContentPane().setLayout(new GridLayout(2, 3, 0, 0));
 
-		JButton btn1 = new JButton("사자성어 맞추기");
+		JButton btn1 = new JButton("사자성어 퀴즈");
 		getContentPane().add(btn1);
 		btn1.setBackground(new Color(255, 255, 255));
 		btn1.setForeground(new Color(0, 102, 102));
 		btn1.setFont(new Font("한컴산뜻돋움", Font.PLAIN, 30));
 
-		JButton btn2 = new JButton("국가 - 수도 맞추기");
+		JButton btn2 = new JButton("국가-수도 퀴즈");
 		getContentPane().add(btn2);
 		btn2.setBackground(new Color(0, 102, 102));
 		btn2.setForeground(new Color(255, 255, 255));
@@ -37,7 +37,7 @@ public class SecondFrame extends JFrame {
 		btn3.setForeground(new Color(0, 102, 102));
 		btn3.setFont(new Font("한컴산뜻돋움", Font.PLAIN, 30));
 
-		JButton btn4 = new JButton("음악듣고 제목 맞추기");
+		JButton btn4 = new JButton("음악 퀴즈");
 		getContentPane().add(btn4);
 		btn4.setBackground(new Color(0, 102, 102));
 		btn4.setForeground(new Color(255, 255, 255));
