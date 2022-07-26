@@ -1,5 +1,5 @@
-// 해야할일 : ID 중복체크 표현, age 숫자만 입력하게 제한
-// 완료 : GUI 구현, age 정수 체크 구현해봤는데 이슈 생김
+// 해야할일 : 회원가입 후 DB에 user INSERT
+// 완료 : GUI 구현, age 정수 체크 구현해봤는데 이슈 생김, ID 중복체크 표현, age 숫자만 입력하게 제한
 
 package firstFrame;
 
@@ -11,13 +11,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.LinkedHashMap;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.SwingConstants;
 import javax.swing.text.NumberFormatter;
+
+import user.User;
+import user.UserDao;
+import user.UserDaoImpl;
+
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JFormattedTextField;
@@ -35,12 +39,13 @@ public class SignUpPage extends JDialog {
 	private TextFieldFocus tff = new TextFieldFocus();
 	private JLabel idToolTipLbl;
 	private JLabel ageToolTipLbl;
+	private UserDao user = new UserDaoImpl();
+	private Map<String, User> server = new HashMap<>();
 
-	public SignUpPage() {
+	public SignUpPage() throws SQLException {
 		super();
 		// 회원가입 테스트용 Map
-		Map<String, String> server = new LinkedHashMap<>();
-		server.put("sample", "value");
+		userMapping();
 
 		setType(Type.POPUP);
 		setResizable(false);
@@ -151,16 +156,20 @@ public class SignUpPage extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				String id = idField.getText();
 				String pw = new String(passwordField.getPassword());
+				boolean manager = managerCheckBox.isSelected();
+				int age = Integer.parseInt(ageField.getText());
+
 				while (true) {
 					try {
 						Integer.parseInt(ageField.getText());
 						ageToolTipLbl.setText("");
 
 						if (!server.containsKey(id)) {
-							server.put(id, pw);
+							server.put(id, new User(id, pw, manager, age));
+							user.create(id, pw, manager, age);
 							showPopUp("회원가입 완료");
 							dispose();
-//							pageInit();
+
 						} else {
 							idToolTipLbl.setText("이미 등록된 ID 입니다");
 						}
@@ -168,6 +177,8 @@ public class SignUpPage extends JDialog {
 					} catch (NumberFormatException f) {
 						ageToolTipLbl.setText("1 ~ 100사이의 숫자를 입력하세요");
 						break;
+					} catch (SQLException e1) {
+						e1.printStackTrace();
 					}
 				}
 			}
@@ -177,19 +188,17 @@ public class SignUpPage extends JDialog {
 		idField.addKeyListener(tl);
 		idField.addFocusListener(tff);
 		passwordField.addKeyListener(tl);
-
 	}
 
 	private void showPopUp(String text) {
 		JOptionPane.showMessageDialog(SignUpPage.this, text);
 	}
 
-	private void pageInit() {
-		idField.setText("");
-		passwordField.setText("");
-		ageField.setText("");
-		managerCheckBox.setSelected(false);
-		idToolTipLbl.setText("10글자 이내로 입력하세요");
-		ageToolTipLbl.setText("1 ~ 100사이의 숫자를 입력하세요");
+	public void userMapping() throws SQLException {
+		int i = 0;
+		while (i < user.read().size()) {
+			server.put(user.read().get(i).getId(), user.read().get(i));
+			i++;
+		}
 	}
 }
