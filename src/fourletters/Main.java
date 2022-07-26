@@ -3,10 +3,14 @@ package fourletters;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -38,9 +42,8 @@ public class Main extends JFrame {
 		ta2.setFont(font2);
 
 		// 왼쪽 버튼
-		JButton btn0 = new JButton("시작");
 		JButton btn1 = new JButton("확인");
-		JButton btn2 = new JButton("다음 문제");
+		JButton btn2 = new JButton("문제보기");
 		JButton btn3 = new JButton("힌트");
 
 		// 오른쪽 버튼
@@ -92,21 +95,11 @@ public class Main extends JFrame {
 		pnlLEFT.add(pnlL2);
 
 		// --왼쪽[1]
-		pnlL1.add(btn0);
 		pnlL1.add(tf);
 		pnlL1.add(btn1);
 		pnlL1.add(btn2);
 		pnlL1.add(btn3);
-		bt.start_button(btn0, ta);
-		bt.OK_button(btn1, ta, tf, du.getId(), pnlL2);
-		bt.next_button(btn2, ta);
-		bt.hint_button(btn3, ta, ta2);
-
-		// --왼쪽[2]
-//		for (int i = 0; i < bt.length; i++) {
-//			bt[i] = new JButton((i+1) + "번");
-//			pnlL2.add(bt[i]);
-//		}
+//		bt.question_button(btn3, ta);
 
 		// 오른쪽
 		pnlRight.add(pnlR1);
@@ -121,21 +114,16 @@ public class Main extends JFrame {
 		pnlR2.add(btn5);
 		pnlR2.add(btn6);
 
-		// --오른쪽[3]
-
+		// 버튼 기능 메소드들 
+		bt.OK_button(btn1, ta, tf, du.getId(), pnlL2);
+		bt.next_button(btn2, ta);
+		bt.hint_button(btn3, ta, ta2);
 		multipleChoice(pnlL2);
 
-		// 생성
-//		bt.questionCreate("새로,만든,사자성어");
-		// 읽기
-//		bt.questionRead(ja);
-		// 삭제
-//		bt.questionDelete(1);
-		// 수정
-//		bt.questionUpdate(2,"인생,무상,아 인생이여");
 		bt.ListAdd();
+//		btn2.doClick();
 		pnlR3.setVisible(false);
-		manager(pnlR3, user);
+//		manager(pnlR3, user);
 
 		setSize(1180, 820);
 
@@ -144,22 +132,22 @@ public class Main extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-//	// 관리자 (user = 1 일경우 관리자 켜짐)
-	public void manager(JPanel p, int user) {
-		JButton btn4 = new JButton("문제추가");
-		JButton btn5 = new JButton("문제삭제");
-		JButton btn6 = new JButton("문제수정");
-		JButton btn7 = new JButton("문제보기");
-
-		p.add(btn4);
-		p.add(btn5);
-		p.add(btn6);
-		p.add(btn7);
-
-		if (user == 1) {
-			p.setVisible(true);
-		}
-	}
+	// 관리자 (user = 1 일경우 관리자 켜짐)
+//	public void manager(JPanel p, int user) {
+//		JButton btn4 = new JButton("문제추가");
+//		JButton btn5 = new JButton("문제삭제");
+//		JButton btn6 = new JButton("문제수정");
+//		JButton btn7 = new JButton("문제보기");
+//
+//		p.add(btn4);
+//		p.add(btn5);
+//		p.add(btn6);
+//		p.add(btn7);
+//
+//		if (user == 1) {
+//			p.setVisible(true);
+//		}
+//	}
 
 	// 객관식보기 버튼
 	public void multipleChoice(JPanel p) {
@@ -173,5 +161,9 @@ public class Main extends JFrame {
 		}
 		grid.setVgap(5); // 격자 사이 수직 간격 5 픽셀
 		p.setLayout(grid);
+	}
+
+	public static void main(String[] args) {
+		new Main().setVisible(true);
 	}
 }

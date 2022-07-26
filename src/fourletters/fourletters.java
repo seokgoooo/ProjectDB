@@ -64,6 +64,10 @@ public class fourletters {
 				+ "\n";
 
 	}
+	
+	public String toString2() {
+		return number + "," + question + "," +  awnser + "," + hint;
+	}
 
 	public int toNumber() {
 		return number;

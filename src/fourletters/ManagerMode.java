@@ -36,18 +36,16 @@ public class ManagerMode extends JFrame {
 
 		new JFrame("관리자 모드");
 		JPanel pnlMain = new JPanel();
-//		JPanel pnlLEFT = new JPanel();
 		JPanel pnlRight = new JPanel();
 
 		// 문제와 정답을 맞출 텍스트 필드들
 		JTextArea ta = new JTextArea();
 		JTextArea ta2 = new JTextArea();
-		JTextArea ta3 = new JTextArea();
 		JTextField tf = new JTextField(40);
 
 		// 폰트
 		Font font = new Font("맑은 고딕", Font.BOLD, 15);
-		Font font2 = new Font("맑은 고딕", Font.BOLD, 15);
+		Font font2 = new Font("맑은 고딕", Font.BOLD, 20);
 		Font font3 = new Font("맑은 고딕", Font.BOLD, 15);
 		ta.setFont(font);
 		ta2.setFont(font2);
@@ -66,18 +64,12 @@ public class ManagerMode extends JFrame {
 		group.add(btn2);
 		group.add(btn3);
 
-		// 왼쪽 객관식 버튼
-//			JButton[] bt = new JButton[4];
-//		JButton[] bt2 = new JButton[4];
-
 		// 왼,오 하위 Panel
 		JPanel pnlL1 = new JPanel();
 		JPanel pnlL2 = new JPanel();
-		JPanel pnlL3 = new JPanel();
 		JPanel pnlR1 = new JPanel();
 		JPanel pnlR2 = new JPanel();
 		JPanel pnlR3 = new JPanel();
-		JPanel pnlR4 = new JPanel();
 
 		// 프레임에 추가
 		pnlL1.setLayout(new BorderLayout());
@@ -96,17 +88,16 @@ public class ManagerMode extends JFrame {
 		pnlR1.setLayout(new BoxLayout(pnlR1, BoxLayout.Y_AXIS));
 
 		// 테두리
-		pnlRight.setBorder(new TitledBorder(new LineBorder(Color.pink, 3), " "));
+		pnlRight.setBorder(new TitledBorder(new LineBorder(Color.pink, 3), "관리자모드"));
 		pnlL1.setBorder(new TitledBorder(new LineBorder(Color.green, 3), "문제"));
 		pnlL2.setBorder(new TitledBorder(new LineBorder(Color.green, 3), "설명"));
 
 		pnlR1.setBorder(new TitledBorder(new LineBorder(Color.CYAN, 3), "입력"));
-		pnlR3.setBorder(new TitledBorder(new LineBorder(Color.yellow, 3), "기능"));
-		pnlR4.setBorder(new TitledBorder(new LineBorder(Color.MAGENTA, 3), "번호"));
+		pnlR2.setBorder(new TitledBorder(new LineBorder(Color.yellow, 3), "기능"));
+		pnlR3.setBorder(new TitledBorder(new LineBorder(Color.MAGENTA, 3), "번호"));
 
 		// 메인
 		setContentPane(pnlMain);
-//		pnlMain.add(pnlLEFT);
 		pnlMain.add(pnlRight);
 
 		// 왼쪽
@@ -121,32 +112,40 @@ public class ManagerMode extends JFrame {
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollSingle.setPreferredSize(new Dimension(1100, 230));
 		pnlL1.add(scrollSingle);
+		
+//		pnlR3.setLayout(new GridBagLayout());
+//		JScrollPane scrollSingle2 = new JScrollPane(pnlR3, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+//				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+////		scrollSingle2.setPreferredSize(new Dimension(1100, 230));
+//		pnlR3.add(scrollSingle2);
 
 		// --왼쪽[2]
 		pnlL2.add(ta2);
 
 		// 오른쪽
 		pnlRight.add(pnlR1);
+		pnlRight.add(pnlR2);
 		pnlRight.add(pnlR3);
-		pnlRight.add(pnlR4);
 
 		// --오른쪽[1]
 		pnlR1.add(tf);
 		pnlR1.add(pnlR2);
 
 		// --오른쪽[3]
-		bt.ListAdd();
-		multipleChoice(pnlR4, ta, tf);
-		bt.MMOk_button(bt1, pnlR4, ta);
+		multipleChoice(pnlR3, ta, tf);
+//		bt.ListAdd();
+		bt.MMOk_button(bt1, ta2, tf, btn1, btn2, btn3 , pnlR3, ta);
+		bt.MMDelete_button(bt2, tf);
 		inputButton(pnlR2, bt1, bt2, user);
-		manager(pnlR3, btn0, btn1, btn2, btn3, user);
+		manager(pnlR2, btn0, btn1, btn2, btn3, user);
 
 		// 관리자 모드 입력 버튼
-		bt.radioButton(bt1, tf, btn1, btn2, btn3);
+//		bt.radioButton(bt1, tf, btn1, btn2, btn3);
 
 		// 관리자 모드 기능 버튼
-		bt.read_button(btn0, ta);
-		setSize(1180, 820);
+		bt.read_button(btn0, ta, ta2);
+//		setSize(1180, 820);
+		setPreferredSize(new Dimension(1180, 820));
 		pnlR1.setPreferredSize(new Dimension(100, 100));
 
 		setLocationRelativeTo(null);
@@ -189,12 +188,13 @@ public class ManagerMode extends JFrame {
 
 	// 객관식보기 버튼
 	public void multipleChoice(JPanel p, JTextArea ta, JTextField tf) {
-		Button b = new Button();
-		GridLayout grid = new GridLayout(4, 6);
-		JButton[] bt = new JButton[b.list.size()];
+		FourlettersDaoImpl fld = new FourlettersDaoImpl();
+		GridLayout grid = new GridLayout(5, 6);
+		System.out.println(fld.list.size());
+		JButton[] bt = new JButton[fld.list.size()];
 
-		for (int i = 0; i < b.list.size(); i++) {
-			String[] array = String.valueOf(b.list.get(i)).split(",");
+		for (int i = 0; i < fld.list.size(); i++) {
+			String[] array = String.valueOf(fld.list.get(i)).split(",");
 			bt[i] = new JButton(array[0] + "번");
 			p.add(bt[i]);
 
@@ -202,8 +202,8 @@ public class ManagerMode extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent a) {
 					try {
-						ta.setText((dao.read(Integer.valueOf((array[0]))).toString()));
-						tf.setText((dao.read(Integer.valueOf((array[0]))).toString()));
+//						ta.setText(dao.read(Integer.valueOf((array[0]))).toString());
+						tf.setText(dao.read(Integer.valueOf((array[0]))).toString2());
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}

@@ -10,7 +10,7 @@ import java.util.List;
 import kr.co.greenart.dbutil.QuizDBUtil;
 
 public class FourlettersDaoImpl implements Dao {
-	List<fourletters> list = new ArrayList<fourletters>();
+	static List<fourletters> list = new ArrayList<fourletters>();
 
 	// 한 행을 볼수 있게
 	private fourletters resultMapping(ResultSet rs) throws SQLException {
