@@ -8,7 +8,11 @@ public interface FavoritesDAO {
 	int create(String id, int quizNumber) throws SQLException;
 
 	// 특정 인물 즐찾 목록
-	List<Integer> read(String id) throws SQLException;
+	List<Integer> musicRead(String id) throws SQLException;
+	
+	List<Integer> fourRead(String id) throws SQLException;
+	
+	List<Integer> capitalRead(String id) throws SQLException;
 
 	// 삭제
 	int delete(String id,int quizNumber) throws SQLException;

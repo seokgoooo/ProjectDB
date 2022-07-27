@@ -1,7 +1,10 @@
 package fourletters;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,23 +12,29 @@ import java.sql.SQLException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import kr.co.greenart.dbutil.QuizDBUtil;
+import user.User;
+import user.UserDao;
 
 public class Main extends JFrame {
-	int user = 1;
+	static dummyUser du = new dummyUser("ASH");
+	Dao dao = new FourlettersDaoImpl();
+	private User user;
 
-	public Main() {
+	public Main(User user) {
+		this.user = user;
 		Button bt = new Button();
 
-		dummyUser du = new dummyUser("abc");
 		JPanel pnlMain = new JPanel();
 		JPanel pnlLEFT = new JPanel();
 		JPanel pnlRight = new JPanel();
@@ -33,7 +42,7 @@ public class Main extends JFrame {
 		// 문제와 정답을 맞출 텍스트 필드들
 		JTextArea ta = new JTextArea(50, 20);
 		JTextField tf = new JTextField(20);
-		JTextArea ta2 = new JTextArea(20, 30);
+		JTextArea ta2 = new JTextArea(2, 20);
 
 		// 폰트
 		Font font = new Font("맑은 고딕", Font.BOLD, 32);
@@ -45,6 +54,7 @@ public class Main extends JFrame {
 		JButton btn1 = new JButton("확인");
 		JButton btn2 = new JButton("문제보기");
 		JButton btn3 = new JButton("힌트");
+		JCheckBox cb1 = new JCheckBox("즐겨찾기");
 
 		// 오른쪽 버튼
 		JButton btn4 = new JButton("힌트");
@@ -62,7 +72,7 @@ public class Main extends JFrame {
 		// 왼,오 하위 Panel
 		JPanel pnlL1 = new JPanel();
 		JPanel pnlL2 = new JPanel();
-		JPanel pnlL3 = new JPanel();
+
 		JPanel pnlR1 = new JPanel();
 		JPanel pnlR2 = new JPanel();
 		JPanel pnlR3 = new JPanel();
@@ -77,14 +87,16 @@ public class Main extends JFrame {
 		pnlRight.setBorder(new TitledBorder(new LineBorder(Color.pink, 3), "기타"));
 
 		pnlL1.setBorder(new TitledBorder(new LineBorder(Color.green, 3), "주관식 "));
-		pnlL2.setBorder(new TitledBorder(new LineBorder(Color.green, 3), "객관식 "));
+		pnlL2.setBorder(new TitledBorder(new LineBorder(Color.green, 3), "힌트"));
 //		pnlL3.setBorder(new TitledBorder(new LineBorder(Color.PINK, 3), "문제 보기"));
 
-		pnlR1.setBorder(new TitledBorder(new LineBorder(Color.CYAN, 3), "힌트"));
+		pnlR1.setBorder(new TitledBorder(new LineBorder(Color.CYAN, 3), "메뉴"));
 		pnlR2.setBorder(new TitledBorder(new LineBorder(Color.yellow, 3), "기능"));
 		pnlR3.setBorder(new TitledBorder(new LineBorder(Color.MAGENTA, 3), "관리자"));
 
 		// 메인
+		GridLayout grid = new GridLayout(1, 2);
+		pnlMain.setLayout(grid);
 		setContentPane(pnlMain);
 		pnlMain.add(pnlLEFT);
 		pnlMain.add(pnlRight);
@@ -99,71 +111,100 @@ public class Main extends JFrame {
 		pnlL1.add(btn1);
 		pnlL1.add(btn2);
 		pnlL1.add(btn3);
-//		bt.question_button(btn3, ta);
+		pnlL1.add(cb1);
+
+		// 왼쪽[2]
+		pnlL2.add(ta2);
+
+		// 왼쪽 ta2 위치 설정
+		BorderLayout fl = new BorderLayout();
+		pnlL2.setLayout(fl);
+		pnlL2.add(ta2, BorderLayout.CENTER);
 
 		// 오른쪽
 		pnlRight.add(pnlR1);
 		pnlRight.add(pnlR2);
 		pnlRight.add(pnlR3);
 
-		// --오른쪽[1]
-		pnlR1.add(ta2);
+		// tap 메뉴
+		JTabbedPane showQuizTab = new JTabbedPane();
+		JPanel quizAllPnl = new JPanel();
+		JPanel quizFavoritePnl = new JPanel();
+
+		showQuizTab.addTab("전체 문제", quizAllPnl);
+		showQuizTab.addTab("즐겨 찾기", quizFavoritePnl);
+
+		pnlR1.add(showQuizTab);
+
+		showQuizTab.setPreferredSize(new Dimension(500, 600));
 
 		// --오른쪽[2]
 		pnlR2.add(btn4);
 		pnlR2.add(btn5);
 		pnlR2.add(btn6);
 
+<<<<<<< HEAD
 		// 버튼 기능 메소드들
 		bt.OK_button(btn1, ta, tf, du.getId(), pnlL2);
 		bt.next_button(btn2, ta);
+=======
+		// 시작시 랜덤 문제 출제
+		bt.randomQuestion(ta);
+
+		// 버튼 기능 메소드들
+		bt.OK_button(btn1, ta, tf, user.getId(), pnlL2, cb1);
+		bt.next_button(btn2, ta, cb1, ta2);
+>>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 		bt.hint_button(btn3, ta, ta2);
-		multipleChoice(pnlL2);
+		bt.favoriteCheck(quizFavoritePnl, cb1, ta, tf, user.getId());
+		multipleChoice(quizFavoritePnl, ta, cb1);
 
-		bt.ListAdd();
-//		btn2.doClick();
+//		bt.ListAdd("ASH");
 		pnlR3.setVisible(false);
-//		manager(pnlR3, user);
-
+		ta2.setPreferredSize(new Dimension(500, 200));
+//		ta2.setLayout();
 		setSize(1180, 820);
-
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	// 관리자 (user = 1 일경우 관리자 켜짐)
-//	public void manager(JPanel p, int user) {
-//		JButton btn4 = new JButton("문제추가");
-//		JButton btn5 = new JButton("문제삭제");
-//		JButton btn6 = new JButton("문제수정");
-//		JButton btn7 = new JButton("문제보기");
-//
-//		p.add(btn4);
-//		p.add(btn5);
-//		p.add(btn6);
-//		p.add(btn7);
-//
-//		if (user == 1) {
-//			p.setVisible(true);
-//		}
-//	}
-
 	// 객관식보기 버튼
-	public void multipleChoice(JPanel p) {
-		GridLayout grid = new GridLayout(2, 2);
-		JButton[] bt = new JButton[4];
+	public void multipleChoice(JPanel p, JTextArea ta, JCheckBox cb1) {
+		FourlettersDaoImpl fld = new FourlettersDaoImpl();
+		GridLayout grid = new GridLayout(5, 6);
+		System.out.println(fld.favlist.size());
+		JButton[] bt = new JButton[fld.favlist.size()];
 
-		for (int i = 0; i < bt.length; i++) {
-			bt[i] = new JButton((i + 1) + "번");
+		for (int i = 0; i < fld.favlist.size(); i++) {
+			String[] array = String.valueOf(fld.favlist.get(i)).split(",");
+			bt[i] = new JButton(Integer.valueOf(array[0]) - 2000 + "번");
 			p.add(bt[i]);
-			p.add(new JTextField(""));
+
+			bt[i].addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent a) {
+					try {
+						ta.setText(dao.read(Integer.valueOf((array[0]))).toQuestion());
+						int result = (dao.readst(ta.getText()).toNumber());
+						if (fld.favlist.contains(result)) {
+							System.out.println(result);
+							cb1.setSelected(true);
+						} else {
+							cb1.setSelected(false);
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		}
+
 		grid.setVgap(5); // 격자 사이 수직 간격 5 픽셀
 		p.setLayout(grid);
 	}
 
-	public static void main(String[] args) {
-		new Main().setVisible(true);
-	}
+//	public static void main(String[] args) {
+//		new Main().setVisible(true);
+//	}
 }

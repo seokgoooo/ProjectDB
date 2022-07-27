@@ -25,13 +25,16 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+
+import user.User;
+
 import javax.swing.JScrollBar;
 
 public class ManagerMode extends JFrame {
-	int user = 1;
+	private User user;
 	Dao dao = new FourlettersDaoImpl();
-
-	public ManagerMode() {
+	public ManagerMode(User user) {
+		this.user = user;
 		Button bt = new Button();
 
 		new JFrame("관리자 모드");
@@ -42,7 +45,7 @@ public class ManagerMode extends JFrame {
 		JTextArea ta = new JTextArea();
 		JTextArea ta2 = new JTextArea();
 		JTextField tf = new JTextField(40);
-
+		
 		// 폰트
 		Font font = new Font("맑은 고딕", Font.BOLD, 15);
 		Font font2 = new Font("맑은 고딕", Font.BOLD, 20);
@@ -50,7 +53,8 @@ public class ManagerMode extends JFrame {
 		ta.setFont(font);
 		ta2.setFont(font2);
 		tf.setFont(font3);
-
+		
+		// 최종
 		JButton bt1 = new JButton(" 확   인 ");
 		JButton bt2 = new JButton("전체삭제");
 		JRadioButton btn0 = new JRadioButton("문제보기");
@@ -70,6 +74,7 @@ public class ManagerMode extends JFrame {
 		JPanel pnlR1 = new JPanel();
 		JPanel pnlR2 = new JPanel();
 		JPanel pnlR3 = new JPanel();
+		JPanel pnlR0 = new JPanel();
 
 		// 프레임에 추가
 		pnlL1.setLayout(new BorderLayout());
@@ -116,7 +121,7 @@ public class ManagerMode extends JFrame {
 //		pnlR3.setLayout(new GridBagLayout());
 //		JScrollPane scrollSingle2 = new JScrollPane(pnlR3, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 //				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-////		scrollSingle2.setPreferredSize(new Dimension(1100, 230));
+//		scrollSingle2.setPreferredSize(new Dimension(1000, 230));
 //		pnlR3.add(scrollSingle2);
 
 		// --왼쪽[2]
@@ -129,25 +134,27 @@ public class ManagerMode extends JFrame {
 
 		// --오른쪽[1]
 		pnlR1.add(tf);
-		pnlR1.add(pnlR2);
+		pnlR1.add(pnlR0);
 
-		// --오른쪽[3]
+		// 버튼들 구현
 		multipleChoice(pnlR3, ta, tf);
+<<<<<<< HEAD
 //		bt.ListAdd();
 		bt.MMOk_button(bt1, ta2, tf, btn1, btn2, btn3, pnlR3, ta);
+=======
+		bt.ListAdd(user.getId());
+		bt.favListAdd(user.getId());
+		bt.MMOk_button(bt1, ta2, tf, btn1, btn2, btn3, pnlR3, ta, "ASH");
+>>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 		bt.MMDelete_button(bt2, tf);
-		inputButton(pnlR2, bt1, bt2, user);
-		manager(pnlR2, btn0, btn1, btn2, btn3, user);
-
-		// 관리자 모드 입력 버튼
-//		bt.radioButton(bt1, tf, btn1, btn2, btn3);
+		inputButton(pnlR0, bt1, bt2, 1);
+		manager(pnlR2, btn0, btn1, btn2, btn3, 1);
 
 		// 관리자 모드 기능 버튼
 		bt.read_button(btn0, ta, ta2);
-//		setSize(1180, 820);
+		setSize(1180, 820);
 		setPreferredSize(new Dimension(1180, 820));
 		pnlR1.setPreferredSize(new Dimension(100, 100));
-
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setResizable(false);
@@ -195,7 +202,7 @@ public class ManagerMode extends JFrame {
 
 		for (int i = 0; i < fld.list.size(); i++) {
 			String[] array = String.valueOf(fld.list.get(i)).split(",");
-			bt[i] = new JButton(array[0] + "번");
+			bt[i] = new JButton(Integer.valueOf(array[0]) - 2000 + "번");
 			p.add(bt[i]);
 
 			bt[i].addActionListener(new ActionListener() {
@@ -215,8 +222,8 @@ public class ManagerMode extends JFrame {
 		p.setLayout(grid);
 	}
 
-	public static void main(String[] args) {
-		ManagerMode m = new ManagerMode();
-		m.setVisible(true);
-	}
+//	public static void main(String[] args) {
+//		ManagerMode m = new ManagerMode();
+//		m.setVisible(true);
+//	}
 }

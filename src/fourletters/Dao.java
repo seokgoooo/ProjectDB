@@ -16,6 +16,12 @@ public interface Dao {
 	int delete(int number) throws SQLException;
 
 	int clearSave(String id, int quizNum) throws SQLException;
+	
+	List<Integer> favread(String id) throws SQLException;
+	int readque(int number) throws SQLException;
+	int favoriteUpdate(String id, int number) throws SQLException;
+	int favoriteDelete(String id, int number) throws SQLException;
+	int favoriteSerch(int number) throws SQLException;
 
 }
 

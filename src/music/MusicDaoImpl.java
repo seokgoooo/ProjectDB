@@ -22,7 +22,7 @@ public class MusicDaoImpl implements MusicDao {
 
 		return new Music(n, title, singer, genre, year, playCount);
 	}
-
+	
 	// 음악을 DB에 추가
 	@Override
 	public int create(String title, String singer, String genre, int year) throws SQLException {

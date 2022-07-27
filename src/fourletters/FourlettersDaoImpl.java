@@ -11,6 +11,7 @@ import kr.co.greenart.dbutil.QuizDBUtil;
 
 public class FourlettersDaoImpl implements Dao {
 	static List<fourletters> list = new ArrayList<fourletters>();
+	static List<Integer> favlist = new ArrayList<>();
 
 	// 한 행을 볼수 있게
 	private fourletters resultMapping(ResultSet rs) throws SQLException {
@@ -19,6 +20,17 @@ public class FourlettersDaoImpl implements Dao {
 		String awnser = rs.getString("awnser");
 		String hint = rs.getString("hint");
 		return new fourletters(number, question, awnser, hint);
+	}
+
+	private Integer favMapping(ResultSet rs) throws SQLException {
+//		String id = rs.getString("id");
+		int number = rs.getInt("quiznumber");
+		return number;
+	}
+	private favorites favInputMapping(ResultSet rs) throws SQLException {
+		String id = rs.getString("id");
+		int number = rs.getInt("quiznumber");
+		return new favorites(id, number);
 	}
 
 	// 문제 불러오기
@@ -138,7 +150,6 @@ public class FourlettersDaoImpl implements Dao {
 			QuizDBUtil.closeConn(conn);
 		}
 		return list;
-
 	}
 
 	// 번호로 문제 불러오기
@@ -282,6 +293,127 @@ public class FourlettersDaoImpl implements Dao {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			// 준비과정을 set으로
+			pstmt.setInt(1, number);
+
+			return pstmt.executeUpdate();
+		} finally {
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
+		}
+	}
+
+	///////////////////////////////////////////////////////////////
+	// 즐겨찾기 메소드
+	@Override
+	public List<Integer> favread(String id) throws SQLException {
+		String query = "SELECT quiznumber FROM favoritesquiz_copy where id = ?";
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+
+			// 리스트에 번호만 넣지만 회원 정보도 필요하면
+			// favMapping 수정 필요
+			while (rs.next()) {
+				favlist.add(favMapping(rs));
+			}
+		} finally {
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
+		}
+		return favlist;
+	}
+	// 번호로 문제 불러 오기
+
+	@Override
+	public int readque(int number) throws SQLException {
+//		String query = "select question from fourletters AS a\r\n" + 
+//				"inner join favoritesquiz_copy AS b ON a.? = b.quiznumber";
+//
+//		Connection conn = null;
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+//
+//		try {
+//			conn = QuizDBUtil.getConnection();
+//			pstmt = conn.prepareStatement(query);
+//			pstmt.setInt(1, number);
+//			rs = pstmt.executeQuery();
+//
+//			if (rs.next()) {
+//				return favMapping(rs);
+//			}
+//		} finally {
+//			QuizDBUtil.closeRS(rs);
+//			QuizDBUtil.closePstmt(pstmt);
+//			QuizDBUtil.closeConn(conn);
+//		}
+		return 1;
+	}
+
+	@Override
+	public int favoriteUpdate(String id, int number) throws SQLException {
+		String query = "INSERT INTO favoritesquiz_copy (id, quiznumber) VALUES (?, ?)";
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, id);
+			pstmt.setInt(2, number);
+			
+//			while (rs.next()) {
+//				favlist.add(favMapping(rs));
+//			}
+			return pstmt.executeUpdate();
+		} finally {
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
+		}
+	}
+
+	@Override
+	public int favoriteDelete(String id, int number) throws SQLException {
+		String query = "DELETE FROM favoritesquiz_copy WHERE quiznumber = ?";
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, number);
+			
+//			favlist.remove(favMapping(rs));
+			
+			return pstmt.executeUpdate();
+		} finally {
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
+		}
+	}
+
+	@Override
+	public int favoriteSerch(int number) throws SQLException {
+		String query = "SELECT quiznumber FROM favoritesquiz_copy GROUP BY ? HAVING COUNT (quiznumber) > 1";
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, number);
 
 			return pstmt.executeUpdate();

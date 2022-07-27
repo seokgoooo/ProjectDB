@@ -7,6 +7,7 @@ public class fourletters {
 	String question;
 	String awnser;
 	String hint;
+	String id;
 
 	public fourletters(int number, String question, String awnser, String hint) {
 		super();
@@ -14,6 +15,20 @@ public class fourletters {
 		this.question = question;
 		this.awnser = awnser;
 		this.hint = hint;
+	}
+	
+	public fourletters(String id, int number) {
+		super();
+		this.id = id;
+		this.number = number;
+	}
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public fourletters(int number) {
