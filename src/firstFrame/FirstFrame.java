@@ -7,6 +7,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+import music.MusicPlayer;
 import secondFrame.SecondFrame;
 import user.User;
 import user.UserDao;
@@ -45,13 +49,23 @@ public class FirstFrame extends JFrame {
 	private MouseCursor mc = new MouseCursor();
 	private TextLimit tl = new TextLimit();
 	private TextFieldFocus tff = new TextFieldFocus();
-
+	private MusicPlayer player = new MusicPlayer();
+	private URI uri = null;
+	
 	public FirstFrame() throws SQLException {
 		super();
 		setTitle("그대가 들어5조");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		makeFrame();
 		makeGui();
+		
+		try {
+			uri = FirstFrame.class.getClassLoader().getResource("사랑해도 될까요.mp3").toURI();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
+		player.play(new File(uri));
 	}
 
 //      JFrame 기본틀
