@@ -7,28 +7,21 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-<<<<<<< HEAD
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-=======
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
@@ -38,13 +31,8 @@ import user.User;
 import user.UserDao;
 import user.UserDaoImpl;
 
-<<<<<<< HEAD
-public class FirstFrame extends JFrame implements ActionListener {
-	private User login = null;
-=======
 public class FirstFrame extends JFrame {
 	private User user1;
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 	private UserDao user = new UserDaoImpl();
 	private Map<String, User> server = new HashMap<>();
 	private JPasswordField pwPf = new JPasswordField(10);
@@ -85,7 +73,7 @@ public class FirstFrame extends JFrame {
 	public void makeFrame() {
 		setSize(1180, 820);
 		setVisible(true);
-		getContentPane().setBackground(Color.WHITE);
+		getContentPane().setBackground(UIManager.getColor("window"));
 		getContentPane().setLayout(null);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -138,8 +126,6 @@ public class FirstFrame extends JFrame {
 		idTf.setText("10글자 이내로 입력");
 		idTf.addKeyListener(tl);
 		idTf.addFocusListener(tff);
-		idTf.registerKeyboardAction(this, "login", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
-				JComponent.WHEN_FOCUSED);
 
 		bottomPnl.add(pwPf);
 		pwPf.setBounds(250, 75, 400, 50);
@@ -147,8 +133,6 @@ public class FirstFrame extends JFrame {
 		pwPf.setForeground(new Color(255, 255, 255));
 		pwPf.setBackground(new Color(68, 148, 148));
 		pwPf.addKeyListener(tl);
-		pwPf.registerKeyboardAction(this, "login", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
-				JComponent.WHEN_FOCUSED);
 
 		lblId = new JLabel("ID");
 		bottomPnl.add(lblId);
@@ -177,6 +161,7 @@ public class FirstFrame extends JFrame {
 				try {
 					new SignUpPage().setVisible(true);
 				} catch (SQLException e1) {
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -187,10 +172,6 @@ public class FirstFrame extends JFrame {
 		signInBtn.setBackground(new Color(255, 255, 255));
 		signInBtn.setForeground(new Color(0, 102, 102));
 		signInBtn.setFont(new Font("한컴산뜻돋움", Font.PLAIN, 30));
-<<<<<<< HEAD
-		signInBtn.setActionCommand("login");
-		signInBtn.addActionListener(this);
-=======
 
 		signInBtn.addActionListener(new ActionListener() {
 			@Override
@@ -226,7 +207,6 @@ public class FirstFrame extends JFrame {
 				}
 			}
 		});
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 
 		signUpBtn.addMouseListener(mc);
 		signInBtn.addMouseListener(mc);
@@ -241,48 +221,6 @@ public class FirstFrame extends JFrame {
 		while (i < user.read().size()) {
 			server.put(user.read().get(i).getId(), user.read().get(i));
 			i++;
-		}
-	}
-
-	public User getLoginUser(String id) {
-		return server.get(id);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand() == "login") {
-			loginClick();
-		}
-	}
-
-	private void loginClick() {
-		try {
-			userMapping();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-
-		String id = new String(idTf.getText());
-		String pw = new String(pwPf.getPassword());
-
-		if (server.containsKey(id)) {
-			if (pw.equals(getLoginUser(id).getPassword())) {
-				showPopUp("로그인 성공");
-				try {
-					login = user.read(id);
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-				SecondFrame sf = new SecondFrame();
-				sf.setLogin(login);
-				sf.setVisible(true);
-			} else {
-				showPopUp("비밀번호가 달라요");
-			}
-		}
-
-		if (!server.containsKey(id)) {
-			showPopUp("회원가입을 해주세요");
 		}
 	}
 }
