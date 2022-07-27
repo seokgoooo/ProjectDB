@@ -24,17 +24,19 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import kr.co.greenart.dbutil.QuizDBUtil;
+import user.User;
 //import music.Music;
 
 public class Button {
 	Dao dao = new FourlettersDaoImpl();
+	private User user;
 //	Font font = new Font("맑은 고딕", Font.BOLD, 50);
 	Random ran = new Random();
 //	List<fourletters> list = new ArrayList<fourletters>();
-	List<Integer> listIn = new ArrayList<Integer>();
-	static ManagerMode mode = new ManagerMode();
-	static Main main = new Main();
-	static FourlettersDaoImpl fld = new FourlettersDaoImpl();
+	List<Integer> listIn = new ArrayList<Integer>();	
+	private ManagerMode mode = new ManagerMode(user);
+	private Main main = new Main(user);
+	private FourlettersDaoImpl fld = new FourlettersDaoImpl();
 
 	static int result = 0;
 

@@ -69,7 +69,7 @@ public class SecondFrame extends JFrame implements ActionListener {
 		Object click = e.getSource();
 		if (click == btn[0]) {
 			// 사자성어 퀴즈 열기
-			new Main().setVisible(true);
+			new Main(user).setVisible(true);
 		} else if (click == btn[1]) {
 			// 국가-수도 퀴즈 열기
 		} else if (click == btn[2]) {

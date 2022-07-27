@@ -23,13 +23,16 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import kr.co.greenart.dbutil.QuizDBUtil;
+import user.User;
+import user.UserDao;
 
 public class Main extends JFrame {
-	int user = 1;
 	static dummyUser du = new dummyUser("ASH");
 	Dao dao = new FourlettersDaoImpl();
+	private User user;
 
-	public Main() {
+	public Main(User user) {
+		this.user = user;
 		Button bt = new Button();
 
 		JPanel pnlMain = new JPanel();
@@ -144,10 +147,10 @@ public class Main extends JFrame {
 		bt.randomQuestion(ta);
 
 		// 버튼 기능 메소드들
-		bt.OK_button(btn1, ta, tf, du.getId(), pnlL2, cb1);
+		bt.OK_button(btn1, ta, tf, user.getId(), pnlL2, cb1);
 		bt.next_button(btn2, ta, cb1, ta2);
 		bt.hint_button(btn3, ta, ta2);
-		bt.favoriteCheck(quizFavoritePnl, cb1, ta, tf, "ASH");
+		bt.favoriteCheck(quizFavoritePnl, cb1, ta, tf, user.getId());
 		multipleChoice(quizFavoritePnl, ta, cb1);
 
 //		bt.ListAdd("ASH");
@@ -159,23 +162,6 @@ public class Main extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-
-	// 관리자 (user = 1 일경우 관리자 켜짐)
-//	public void manager(JPanel p, int user) {
-//		JButton btn4 = new JButton("문제추가");
-//		JButton btn5 = new JButton("문제삭제");
-//		JButton btn6 = new JButton("문제수정");
-//		JButton btn7 = new JButton("문제보기");
-//
-//		p.add(btn4);
-//		p.add(btn5);
-//		p.add(btn6);
-//		p.add(btn7);
-//
-//		if (user == 1) {
-//			p.setVisible(true);
-//		}
-//	}
 
 	// 객관식보기 버튼
 	public void multipleChoice(JPanel p, JTextArea ta, JCheckBox cb1) {
@@ -212,7 +198,7 @@ public class Main extends JFrame {
 		p.setLayout(grid);
 	}
 
-	public static void main(String[] args) {
-		new Main().setVisible(true);
-	}
+//	public static void main(String[] args) {
+//		new Main().setVisible(true);
+//	}
 }

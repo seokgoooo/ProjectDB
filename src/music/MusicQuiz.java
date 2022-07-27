@@ -60,6 +60,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private FavoritesDAO favoriteDao = new FavoritesDAOImpl();
 	private List<Integer> favoriteList = new ArrayList<>();
 
+	// 즐겨찾기에 있는 번호 누를때
 	private MouseAdapter mouseAdapter = new MouseAdapter() {
 
 		@Override
@@ -72,6 +73,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		}
 	};
 
+	// 해결 문제에 있는 번호 누를때
 	private MouseAdapter mouseAdapter2 = new MouseAdapter() {
 		@Override
 		public void mouseReleased(MouseEvent e) {

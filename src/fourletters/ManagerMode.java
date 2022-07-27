@@ -25,12 +25,16 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+
+import user.User;
+
 import javax.swing.JScrollBar;
 
 public class ManagerMode extends JFrame {
-	int user = 1;
+	private User user;
 	Dao dao = new FourlettersDaoImpl();
-	public ManagerMode() {
+	public ManagerMode(User user) {
+		this.user = user;
 		Button bt = new Button();
 
 		new JFrame("관리자 모드");
@@ -134,12 +138,12 @@ public class ManagerMode extends JFrame {
 
 		// 버튼들 구현
 		multipleChoice(pnlR3, ta, tf);
-		bt.ListAdd("ASH");
-		bt.favListAdd("ASH");
+		bt.ListAdd(user.getId());
+		bt.favListAdd(user.getId());
 		bt.MMOk_button(bt1, ta2, tf, btn1, btn2, btn3, pnlR3, ta, "ASH");
 		bt.MMDelete_button(bt2, tf);
-		inputButton(pnlR0, bt1, bt2, user);
-		manager(pnlR2, btn0, btn1, btn2, btn3, user);
+		inputButton(pnlR0, bt1, bt2, 1);
+		manager(pnlR2, btn0, btn1, btn2, btn3, 1);
 
 		// 관리자 모드 기능 버튼
 		bt.read_button(btn0, ta, ta2);
@@ -213,8 +217,8 @@ public class ManagerMode extends JFrame {
 		p.setLayout(grid);
 	}
 
-	public static void main(String[] args) {
-		ManagerMode m = new ManagerMode();
-		m.setVisible(true);
-	}
+//	public static void main(String[] args) {
+//		ManagerMode m = new ManagerMode();
+//		m.setVisible(true);
+//	}
 }
