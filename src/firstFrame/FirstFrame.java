@@ -53,19 +53,20 @@ public class FirstFrame extends JFrame {
 	private MusicPlayer player = new MusicPlayer();
 	private URI uri = null;
 	private SecondFrame sf = new SecondFrame();
+
 	public FirstFrame() throws SQLException {
 		super();
 		setTitle("그대가 들어5조");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		makeFrame();
 		makeGui();
-		
+
 		try {
 			uri = FirstFrame.class.getClassLoader().getResource("사랑해도 될까요.mp3").toURI();
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		
+
 		player.play(new File(uri));
 	}
 
@@ -194,7 +195,7 @@ public class FirstFrame extends JFrame {
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						}
-												
+
 						sf.setUser(user1);
 						sf.setVisible(true);
 					} else {
@@ -224,3 +225,4 @@ public class FirstFrame extends JFrame {
 		}
 	}
 }
+
