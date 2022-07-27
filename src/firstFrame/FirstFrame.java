@@ -32,6 +32,7 @@ import user.UserDao;
 import user.UserDaoImpl;
 
 public class FirstFrame extends JFrame {
+	private User user1;
 	private UserDao user = new UserDaoImpl();
 	private Map<String, User> server = new HashMap<>();
 	private JPasswordField pwPf = new JPasswordField(10);
@@ -51,7 +52,7 @@ public class FirstFrame extends JFrame {
 	private TextFieldFocus tff = new TextFieldFocus();
 	private MusicPlayer player = new MusicPlayer();
 	private URI uri = null;
-	
+	private SecondFrame sf = new SecondFrame();
 	public FirstFrame() throws SQLException {
 		super();
 		setTitle("그대가 들어5조");
@@ -187,7 +188,14 @@ public class FirstFrame extends JFrame {
 				if (server.containsKey(id)) {
 					if (pw.equals(server.get(id).getPassword())) {
 						showPopUp("로그인 성공");
-						SecondFrame sf = new SecondFrame();
+						player.end();
+						try {
+							user1 = user.read(id);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
+												
+						sf.setUser(user1);
 						sf.setVisible(true);
 					} else {
 						showPopUp("비밀번호가 달라요");
