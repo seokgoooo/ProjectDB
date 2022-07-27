@@ -40,8 +40,6 @@ import attempts.AttemptsQuiz;
 import favorite.FavoritesDAO;
 import favorite.FavoritesDAOImpl;
 import user.User;
-import user.UserDao;
-import user.UserDaoImpl;
 
 public class MusicQuiz extends JFrame implements ActionListener {
 	private MusicDao musicDao = new MusicDaoImpl();
@@ -51,8 +49,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private Map<Music, Music> map = new HashMap<>();
 	private List<Music> list = new ArrayList<>();
 
-	private UserDao userDao = new UserDaoImpl();
-	private User user = null;
+	private User user;
 
 	private AttemptsDAO attemptsDao = new AttemptsDAOImpl();
 	private AttemptsQuiz attemptsQuiz = null;
@@ -110,23 +107,15 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private JPanel quizClearPnl;
 	private JPanel quizFavoritePnl;
 
-	public void setUser(User user) {
+	public MusicQuiz(User user) {
 		this.user = user;
-	}
-
-	public MusicQuiz() {
+		
 		pnlMain = new JPanel();
 		JPanel pnlLEFT = new JPanel();
 		JPanel pnlRight = new JPanel();
 
 		try {
 			list = musicDao.read();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			user = userDao.read("LMJ");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -185,11 +174,30 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 		// 해결 문제 panel
 		quizClearPnl.setLayout(new GridLayout(5, 5));
-		clearPnlRepaint();
+		
+		try {
+			clearList = attemptsDao.read(user.getId(), true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(clearList.size() != 0) {
+			clearPnlRepaint();
+		}
 
 		// 즐찾 문제 panel
 		quizFavoritePnl.setLayout(new GridLayout(5, 5));
-		favoritePnlRepaint();
+		
+		try {
+			favoriteList = favoriteDao.read(user.getId());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(favoriteList.size() != 0) {
+			favoritePnlRepaint();
+		}
 
 		// 왼쪽 버튼
 		leftTopPnl.setLayout(new BorderLayout());
@@ -258,11 +266,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		getMusic(list);
 		setSize(1180, 820);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
-	public static void main(String[] args) {
-		new MusicQuiz().setVisible(true);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 
 	// 버튼 이벤트
@@ -517,7 +521,9 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		quizClearPnl.removeAll();
 
 		try {
-			clearList = attemptsDao.read(user.getClearID(), true);
+			if(attemptsDao.read(user.getClearID(), true).size() != 0) {
+				clearList = attemptsDao.read(user.getClearID(), true);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -532,7 +538,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
+
 			clearQuiz[i] = new JButton("" + (list.indexOf(m) + 1));
 			clearQuiz[i].addMouseListener(mouseAdapter);
 			quizClearPnl.add(clearQuiz[i]);
@@ -541,8 +547,6 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		quizClearPnl.revalidate();
 		quizClearPnl.repaint();
 	}
-
-	// 즐찾 문제 그리기
 
 	// 즐찾 문제 그리기
 	public void favoritePnlRepaint() {
@@ -572,8 +576,6 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		quizFavoritePnl.revalidate();
 		quizFavoritePnl.repaint();
 	}
-
-	// URI 가져오기
 
 	// URI 가져오는 메소드
 	public URI getURI(String title) {
