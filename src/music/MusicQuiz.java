@@ -114,6 +114,10 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private boolean prev = false;
 	private JPanel quizClearPnl;
 	private JPanel quizFavoritePnl;
+	private JLabel infoLbl;
+	private JLabel singerLbl;
+	private JLabel genreLbl;
+	private JLabel yearLbl;
 
 	public MusicQuiz(User user) {
 		this.user = user;
@@ -132,7 +136,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		JPanel leftTopPnl = new JPanel();
 		JPanel answerPnl = new JPanel();
 		JPanel questionPnl = new JPanel();
-
+		
 		// question Panel
 		questionPnl.setPreferredSize(new Dimension(700, 600));
 
@@ -140,7 +144,12 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 		JLabel lpLbl = new JLabel(new ImageIcon(lpUrl));
 		lpLbl.setPreferredSize(new Dimension(600, 350));
+		
+		infoLbl = new JLabel();
+		
 		questionPnl.add(lpLbl);
+		questionPnl.add(infoLbl);
+		
 
 		// 오른쪽 하위 Panel
 		JPanel showQuizPnl = new JPanel();
@@ -272,6 +281,8 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		pnlRight.add(functionPnl);
 
 		getMusic(list);
+		clearTrue(currentMusic);
+		
 		setSize(1180, 820);
 		setResizable(false);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -281,7 +292,9 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				dispose();
-				player.end();
+				if(play) {
+					player.end();
+				}
 			}
 			
 		});
@@ -319,13 +332,15 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			player.end();
 			timer.cancel();
 		}
-
+		
+		infoLbl.setText("");
 		pauseBtn.setVisible(false);
 		playBtn.setVisible(true);
 		replayBtn.setVisible(false);
 
 		prevMusic = currentMusic;
 		currentMusic = list.get(i);
+		clearTrue(currentMusic);
 		favoriteCheck(currentMusic);
 		quizNumberLbl.setText(String.valueOf(i + 1));
 		map.put(currentMusic, prevMusic);
@@ -418,7 +433,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 				}
 				JOptionPane.showMessageDialog(pnlMain, "정답입니다.");
 				confirmBtn.setEnabled(false);
-
+				infoLbl.setText(String.valueOf(currentMusic));
 				timer.cancel();
 				clearPnlRepaint();
 			} else {
@@ -465,7 +480,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			player.end();
 			timer.cancel();
 		}
-
+		infoLbl.setText("");
 		timeLbl.setText("" + timeOut);
 
 		pauseBtn.setVisible(false);
@@ -479,7 +494,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		if (prevMusic == null) {
 			prevBtn.setEnabled(false);
 		}
-
+		clearTrue(currentMusic);
 		favoriteCheck(currentMusic);
 
 		quizNumberLbl.setText("" + (list.indexOf(currentMusic) + 1));
@@ -494,15 +509,17 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			player.end();
 			timer.cancel();
 		}
+		
+		infoLbl.setText("");
 		timeLbl.setText("" + timeOut);
 		getMusic(list);
-
 		prevBtn.setEnabled(true);
 		pauseBtn.setVisible(false);
 		playBtn.setVisible(true);
 		replayBtn.setVisible(false);
 
 		answerTf.setText("");
+		clearTrue(currentMusic);
 		favoriteCheck(currentMusic);
 		first = true;
 	}
@@ -534,6 +551,15 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		}
 	}
 
+	public void clearTrue(Music music) {
+		if(clearList.indexOf(music.getNumber()) != -1) {
+			infoLbl.setText(String.valueOf(music));
+			confirmBtn.setEnabled(false);
+		} else {
+			confirmBtn.setEnabled(true);
+		}
+	}
+	
 	// 해결 문제 그리기
 	public void clearPnlRepaint() {
 		quizClearPnl.removeAll();
