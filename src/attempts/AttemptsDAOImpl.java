@@ -66,38 +66,6 @@ public class AttemptsDAOImpl implements AttemptsDAO {
 	}
 	
 	@Override
-	public List<Integer> read(String id, boolean clear) throws SQLException {
-		String query = "SELECT quiznumber FROM attemptsquiz WHERE id = ? and clear = ?";
-		List<Integer> list = new ArrayList<>();
-		
-		System.out.println(list);
-		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
-		try {
-			conn = QuizDBUtil.getConnection();
-			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, id);
-			pstmt.setBoolean(2, true);
-			
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				list.add(rs.getInt("quiznumber"));
-			}
-
-		} finally {
-			QuizDBUtil.closeRS(rs);
-			QuizDBUtil.closePstmt(pstmt);
-			QuizDBUtil.closeConn(conn);
-		}
-
-		return list;
-	}
-
-	@Override
 	public int delete(String id, int quizNumber) throws SQLException {
 		String query = "DELETE FROM attemptsquiz WHERE id = ? and quizNumber = ?";
 		Connection conn = null;
@@ -156,6 +124,102 @@ public class AttemptsDAOImpl implements AttemptsDAO {
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
+	}
+
+	@Override
+	public List<Integer> MusicClearRead(String id, boolean clear) throws SQLException {
+		String query = "SELECT quiznumber FROM attemptsquiz WHERE (id = ? and clear = ?) and quiznumber between 3000 and 4000 ";
+		List<Integer> list = new ArrayList<>();
+		
+		System.out.println(list);
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, id);
+			pstmt.setBoolean(2, true);
+			
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				list.add(rs.getInt("quiznumber"));
+			}
+
+		} finally {
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
+		}
+
+		return list;
+	}
+
+	@Override
+	public List<Integer> fourClearRead(String id, boolean clear) throws SQLException {
+		String query = "SELECT quiznumber FROM attemptsquiz WHERE (id = ? and clear = ?) and quiznumber between 2000 and 2999 ";
+		List<Integer> list = new ArrayList<>();
+		
+		System.out.println(list);
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, id);
+			pstmt.setBoolean(2, true);
+			
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				list.add(rs.getInt("quiznumber"));
+			}
+
+		} finally {
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
+		}
+
+		return list;
+	}
+
+	@Override
+	public List<Integer> capitalClearRead(String id, boolean clear) throws SQLException {
+		String query = "SELECT quiznumber FROM attemptsquiz WHERE (id = ? and clear = ?) and quiznumber between 1000 and 1999 ";
+		List<Integer> list = new ArrayList<>();
+		
+		System.out.println(list);
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, id);
+			pstmt.setBoolean(2, true);
+			
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				list.add(rs.getInt("quiznumber"));
+			}
+
+		} finally {
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
+		}
+
+		return list;
 	}
 
 	

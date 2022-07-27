@@ -190,7 +190,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		quizClearPnl.setLayout(new GridLayout(5, 5));
 
 		try {
-			clearList = attemptsDao.read(user.getId(), true);
+			clearList = attemptsDao.MusicClearRead(user.getId(), true);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -203,7 +203,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		quizFavoritePnl.setLayout(new GridLayout(5, 5));
 
 		try {
-			favoriteList = favoriteDao.read(user.getId());
+			favoriteList = favoriteDao.musicRead(user.getId());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -544,7 +544,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 	// 즐겨찾기 표시
 	public void favoriteCheck(Music music) {
-		if (favoriteList.indexOf(music.getNumber()) != -1) {
+		if (favoriteList.contains(music.getNumber())) {
 			favoriteCb.setSelected(true);
 		} else {
 			favoriteCb.setSelected(false);
@@ -566,7 +566,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		quizClearPnl.removeAll();
 
 		try {
-			clearList = attemptsDao.read(user.getClearID(), true);
+			clearList = attemptsDao.MusicClearRead(user.getClearID(), true);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -593,7 +593,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	public void favoritePnlRepaint() {
 		quizFavoritePnl.removeAll();
 		try {
-			favoriteList = favoriteDao.read(user.getFavoriteID());
+			favoriteList = favoriteDao.musicRead(user.getFavoriteID());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

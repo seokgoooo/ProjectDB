@@ -11,7 +11,11 @@ public interface AttemptsDAO {
 	AttemptsQuiz read(String id,int quizNumber) throws SQLException;
 	
 	// 클리어한 문제만 불러오게
-	List<Integer> read(String id, boolean clear) throws SQLException;
+	List<Integer> MusicClearRead(String id, boolean clear) throws SQLException;
+	
+	List<Integer> fourClearRead(String id, boolean clear) throws SQLException;
+	
+	List<Integer> capitalClearRead(String id, boolean clear) throws SQLException;
 
 	// 횟수 변경
 	int updateCount(String id, int quizNumber, int attemptsCount) throws SQLException;
