@@ -143,12 +143,18 @@ public class Main extends JFrame {
 		pnlR2.add(btn5);
 		pnlR2.add(btn6);
 
+<<<<<<< HEAD
+		// 버튼 기능 메소드들
+		bt.OK_button(btn1, ta, tf, du.getId(), pnlL2);
+		bt.next_button(btn2, ta);
+=======
 		// 시작시 랜덤 문제 출제
 		bt.randomQuestion(ta);
 
 		// 버튼 기능 메소드들
 		bt.OK_button(btn1, ta, tf, user.getId(), pnlL2, cb1);
 		bt.next_button(btn2, ta, cb1, ta2);
+>>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 		bt.hint_button(btn3, ta, ta2);
 		bt.favoriteCheck(quizFavoritePnl, cb1, ta, tf, user.getId());
 		multipleChoice(quizFavoritePnl, ta, cb1);

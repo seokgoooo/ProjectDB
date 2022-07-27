@@ -23,7 +23,10 @@ import javax.swing.border.TitledBorder;
 
 import java.util.List;
 import java.util.Vector;
+<<<<<<< HEAD
+=======
 
+>>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 import javax.swing.JPanel;
 
 public class CrudFrame extends JFrame {
@@ -61,8 +64,6 @@ public class CrudFrame extends JFrame {
 
 		String body[][] = new String[list.size()][4];
 		for (int i = 0; i < list.size(); i++) {
-//			bodyS = list.get(i);
-//			body[i] = bodyS;
 			String[] bodyS = new String[header.length];
 			bodyS[0] = "" + list.get(i).getNumber();
 			bodyS[1] = list.get(i).getQuestion();
@@ -72,7 +73,27 @@ public class CrudFrame extends JFrame {
 			body[i] = bodyS;
 		}
 
+<<<<<<< HEAD
+		frame.getContentPane().setLayout(null);
+
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 22, 402, 250);
+		frame.getContentPane().add(panel);
+		panel.setLayout(null);
+
+		JTable table = new JTable(body, header);
+		table.setBackground(new Color(255, 222, 173));
+
+		JScrollPane sp = new JScrollPane(table);
+		sp.setBounds(0, 0, 402, 250);
+		panel.add(sp);
+		sp.setBorder(new TitledBorder(new LineBorder(new Color(255, 215, 0), 4), "\uBB38\uC81C \uBAA9\uB85D",
+				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+
+		JTextField jf = new JTextField(20);
+=======
 		jf = new JTextField(20);
+>>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 		jf.setBounds(176, 329, 226, 23);
 		frame.getContentPane().add(jf);
 
@@ -123,11 +144,13 @@ public class CrudFrame extends JFrame {
 		// 문제 추가 버튼
 
 		btn1.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btn1) {
+<<<<<<< HEAD
+=======
 
+>>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 					try {
 						mg.create(Integer.valueOf(jf.getText()), jt1.getText(), jt2.getText(), jt3.getText());
 						JOptionPane.showMessageDialog(CrudFrame.this, "추가 되었습니다.");
@@ -162,6 +185,8 @@ public class CrudFrame extends JFrame {
 
 					}
 				}
+<<<<<<< HEAD
+=======
 				textReset();
 
 			}
@@ -202,6 +227,7 @@ public class CrudFrame extends JFrame {
 				jt2.setText(list.get(number).getAnswer());
 				jt3.setText(list.get(number).getContinent());
 
+>>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 			}
 		});
 

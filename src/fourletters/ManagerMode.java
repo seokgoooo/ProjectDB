@@ -138,9 +138,14 @@ public class ManagerMode extends JFrame {
 
 		// 버튼들 구현
 		multipleChoice(pnlR3, ta, tf);
+<<<<<<< HEAD
+//		bt.ListAdd();
+		bt.MMOk_button(bt1, ta2, tf, btn1, btn2, btn3, pnlR3, ta);
+=======
 		bt.ListAdd(user.getId());
 		bt.favListAdd(user.getId());
 		bt.MMOk_button(bt1, ta2, tf, btn1, btn2, btn3, pnlR3, ta, "ASH");
+>>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 		bt.MMDelete_button(bt2, tf);
 		inputButton(pnlR0, bt1, bt2, 1);
 		manager(pnlR2, btn0, btn1, btn2, btn3, 1);

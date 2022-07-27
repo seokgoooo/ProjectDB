@@ -8,10 +8,6 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Canvas;
 import java.awt.Panel;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -84,14 +80,42 @@ public class MainRank extends JFrame {
 		choice.add("힌트본 문제 TOP 5");
 		pnl.add(choice);
 
-		choice.addItemListener(new ItemListener() {
-
+		choice.addMouseListener(new MouseAdapter() {
 			@Override
-			public void itemStateChanged(ItemEvent e) {
-				
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				int x = choice.getSelectedIndex();
+				System.out.println(choice.getItem(0));
+				System.out.println(choice.getItem(1));
+				System.out.println(choice.getItem(2));
+				System.out.println(choice.getItem(3));
+				System.out.println(choice.toString());
+				System.out.println(x);
+				switch (x) {
+				case 0:
+					System.out.println(choice.getSelectedIndex());
+					titleLbl.setText("정답률 TOP 5");
+					break;
 
-				titleLbl.setText(choice.getSelectedItem());
+				case 1:
+					System.out.println(choice.getSelectedIndex());
+					titleLbl.setText("오답률 TOP 5");
+					break;
 
+				case 2:
+					System.out.println(choice.getSelectedIndex());
+					titleLbl.setText("즐겨찾기한 문제 TOP 5");
+					break;
+
+				case 3:
+					System.out.println(choice.getSelectedIndex());
+					titleLbl.setText("힌트본 문제 TOP 5");
+					break;
+
+				default:
+
+					break;
+				}
 			}
 		});
 
