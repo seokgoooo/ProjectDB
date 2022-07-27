@@ -89,8 +89,6 @@ public class Music {
 			return false;
 		if (number != other.number)
 			return false;
-		if (playCount != other.playCount)
-			return false;
 		if (singer == null) {
 			if (other.singer != null)
 				return false;

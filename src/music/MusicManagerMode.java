@@ -23,7 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-public class ManagerMode extends JFrame implements ActionListener {
+public class MusicManagerMode extends JFrame implements ActionListener {
 	private List<Music> list = new ArrayList<>();
 	private MusicDao dao = new MusicDaoImpl();
 	private MusicPlayer player = new MusicPlayer();
@@ -46,7 +46,7 @@ public class ManagerMode extends JFrame implements ActionListener {
 	private JPanel quizNumberPnl;
 	private JPanel allPnl;
 
-	public ManagerMode() {
+	public MusicManagerMode() {
 		super("관리자 모드");
 
 		try {
@@ -172,10 +172,6 @@ public class ManagerMode extends JFrame implements ActionListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
-	public static void main(String[] args) {
-		new ManagerMode().setVisible(true);
-	}
-
 	// 버튼 이벤트
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -194,7 +190,7 @@ public class ManagerMode extends JFrame implements ActionListener {
 		} else {
 			for (int i = 0; i < quizNumberBtns.length; i++) {
 				if (e.getSource() == quizNumberBtns[i]) {
-					if(play) {
+					if (play) {
 						player.end();
 					}
 					playBtn.setVisible(true);

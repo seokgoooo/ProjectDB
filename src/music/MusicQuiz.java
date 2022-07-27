@@ -68,16 +68,22 @@ public class MusicQuiz extends JFrame implements ActionListener {
 				}
 			}
 		}
+	};
 
+	private MouseAdapter mouseAdapter2 = new MouseAdapter() {
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			for (int i = 0; i < clearQuiz.length; i++) {
-				if (e.getSource() == clearQuiz[i]) {
-					clickEvent(Integer.valueOf(clearQuiz[i].getText()) - 1);
+			try {
+				for (int i = 0; i < clearQuiz.length; i++) {
+					if (e.getSource() == clearQuiz[i]) {
+						clickEvent(Integer.valueOf(clearQuiz[i].getText()) - 1);
+					}
 				}
+
+			} catch (NullPointerException e1) {
+				System.out.println("뭐가 문제일까");
 			}
 		}
-
 	};
 
 	private JPanel pnlMain;
@@ -109,7 +115,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 	public MusicQuiz(User user) {
 		this.user = user;
-		
+
 		pnlMain = new JPanel();
 		JPanel pnlLEFT = new JPanel();
 		JPanel pnlRight = new JPanel();
@@ -174,28 +180,28 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 		// 해결 문제 panel
 		quizClearPnl.setLayout(new GridLayout(5, 5));
-		
+
 		try {
 			clearList = attemptsDao.read(user.getId(), true);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		if(clearList.size() != 0) {
+
+		if (clearList.size() != 0) {
 			clearPnlRepaint();
 		}
 
 		// 즐찾 문제 panel
 		quizFavoritePnl.setLayout(new GridLayout(5, 5));
-		
+
 		try {
 			favoriteList = favoriteDao.read(user.getId());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		if(favoriteList.size() != 0) {
+
+		if (favoriteList.size() != 0) {
 			favoritePnlRepaint();
 		}
 
@@ -521,15 +527,12 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		quizClearPnl.removeAll();
 
 		try {
-			if(attemptsDao.read(user.getClearID(), true).size() != 0) {
-				clearList = attemptsDao.read(user.getClearID(), true);
-			}
+			clearList = attemptsDao.read(user.getClearID(), true);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
 		clearQuiz = new JButton[clearList.size()];
-
 		for (int i = 0; i < clearQuiz.length; i++) {
 			Music m = null;
 
@@ -538,9 +541,8 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
 			clearQuiz[i] = new JButton("" + (list.indexOf(m) + 1));
-			clearQuiz[i].addMouseListener(mouseAdapter);
+			clearQuiz[i].addMouseListener(mouseAdapter2);
 			quizClearPnl.add(clearQuiz[i]);
 		}
 
