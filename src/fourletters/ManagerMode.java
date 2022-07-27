@@ -112,7 +112,7 @@ public class ManagerMode extends JFrame {
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollSingle.setPreferredSize(new Dimension(1100, 230));
 		pnlL1.add(scrollSingle);
-		
+
 //		pnlR3.setLayout(new GridBagLayout());
 //		JScrollPane scrollSingle2 = new JScrollPane(pnlR3, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 //				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -134,7 +134,7 @@ public class ManagerMode extends JFrame {
 		// --오른쪽[3]
 		multipleChoice(pnlR3, ta, tf);
 //		bt.ListAdd();
-		bt.MMOk_button(bt1, ta2, tf, btn1, btn2, btn3 , pnlR3, ta);
+		bt.MMOk_button(bt1, ta2, tf, btn1, btn2, btn3, pnlR3, ta);
 		bt.MMDelete_button(bt2, tf);
 		inputButton(pnlR2, bt1, bt2, user);
 		manager(pnlR2, btn0, btn1, btn2, btn3, user);

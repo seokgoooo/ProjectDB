@@ -114,7 +114,7 @@ public class Main extends JFrame {
 		pnlR2.add(btn5);
 		pnlR2.add(btn6);
 
-		// 버튼 기능 메소드들 
+		// 버튼 기능 메소드들
 		bt.OK_button(btn1, ta, tf, du.getId(), pnlL2);
 		bt.next_button(btn2, ta);
 		bt.hint_button(btn3, ta, ta2);

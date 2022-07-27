@@ -113,7 +113,7 @@ public class SignUpPage extends JDialog {
 		managerCheckBox = new JCheckBox(" 관리자일 경우 누르세요");
 		managerCheckBox.setBounds(238, 300, 300, 50);
 		panel.add(managerCheckBox);
-		managerCheckBox.setForeground(new Color(255, 255, 255));
+		managerCheckBox.setForeground(Color.DARK_GRAY);
 		managerCheckBox.setBackground(new Color(0, 0, 0));
 		managerCheckBox.setFont(new Font("휴먼모음T", Font.PLAIN, 25));
 
@@ -154,32 +154,27 @@ public class SignUpPage extends JDialog {
 		signUpBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String id = idField.getText();
-				String pw = new String(passwordField.getPassword());
-				boolean manager = managerCheckBox.isSelected();
-				int age = Integer.parseInt(ageField.getText());
+				try {
+					String id = idField.getText();
+					String pw = new String(passwordField.getPassword());
+					boolean manager = managerCheckBox.isSelected();
+					int age = Integer.parseInt(ageField.getText());
+					ageToolTipLbl.setText("");
 
-				while (true) {
-					try {
-						Integer.parseInt(ageField.getText());
-						ageToolTipLbl.setText("");
+					if (!server.containsKey(id)) {
+						server.put(id, new User(id, pw, manager, age));
+						user.create(id, pw, manager, age);
+						showPopUp("회원가입 완료");
+						dispose();
 
-						if (!server.containsKey(id)) {
-							server.put(id, new User(id, pw, manager, age));
-							user.create(id, pw, manager, age);
-							showPopUp("회원가입 완료");
-							dispose();
-
-						} else {
-							idToolTipLbl.setText("이미 등록된 ID 입니다");
-						}
-						break;
-					} catch (NumberFormatException f) {
-						ageToolTipLbl.setText("1 ~ 100사이의 숫자를 입력하세요");
-						break;
-					} catch (SQLException e1) {
-						e1.printStackTrace();
+					} else {
+						idToolTipLbl.setText("이미 등록된 ID 입니다");
 					}
+				} catch (NumberFormatException f) {
+					ageToolTipLbl.setText("1 ~ 100사이의 숫자를 입력하세요");
+					ageField.setText("");
+				} catch (SQLException e1) {
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -188,6 +183,7 @@ public class SignUpPage extends JDialog {
 		idField.addKeyListener(tl);
 		idField.addFocusListener(tff);
 		passwordField.addKeyListener(tl);
+
 	}
 
 	private void showPopUp(String text) {

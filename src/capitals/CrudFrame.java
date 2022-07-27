@@ -23,13 +23,13 @@ import javax.swing.text.TabableView;
 
 import java.util.List;
 import java.util.Vector;
-
-
+import javax.swing.JPanel;
 
 public class CrudFrame extends JFrame {
 	public void setTable() {
-		
+
 	}
+
 	public CrudFrame() {
 		CapitalsDao dao = new Manager();
 
@@ -53,14 +53,8 @@ public class CrudFrame extends JFrame {
 
 		String header[] = { "number", "힌트(나라)", "정답", "대륙" };
 
-//		for(int i = 0; i < list.size(); i++) {
-//			list.get(i);
-//		}
-
 		String body[][] = new String[list.size()][4];
 		for (int i = 0; i < list.size(); i++) {
-//			bodyS = list.get(i);
-//			body[i] = bodyS;
 			String[] bodyS = new String[header.length];
 			bodyS[0] = "" + list.get(i).getNumber();
 			bodyS[1] = list.get(i).getQuestion();
@@ -69,21 +63,22 @@ public class CrudFrame extends JFrame {
 
 			body[i] = bodyS;
 		}
-//		for (String[] S : body) {
-//
-//			System.out.println(Arrays.toString(S));
-//		}
 
 		frame.getContentPane().setLayout(null);
+
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 22, 402, 250);
+		frame.getContentPane().add(panel);
+		panel.setLayout(null);
 
 		JTable table = new JTable(body, header);
 		table.setBackground(new Color(255, 222, 173));
 
 		JScrollPane sp = new JScrollPane(table);
+		sp.setBounds(0, 0, 402, 250);
+		panel.add(sp);
 		sp.setBorder(new TitledBorder(new LineBorder(new Color(255, 215, 0), 4), "\uBB38\uC81C \uBAA9\uB85D",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		sp.setBounds(0, 22, 402, 250);
-		frame.getContentPane().add(sp);
 
 		JTextField jf = new JTextField(20);
 		jf.setBounds(176, 329, 226, 23);
@@ -136,14 +131,9 @@ public class CrudFrame extends JFrame {
 		// 문제 추가 버튼
 
 		btn1.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btn1) {
-//					String data = jf.getText();
-//					String question = jt1.getText();
-//					String answer = jt2.getText();
-//					String continent = jt3.getText();
 					try {
 						mg.create(Integer.valueOf(jf.getText()), jt1.getText(), jt2.getText(), jt3.getText());
 						JOptionPane.showMessageDialog(CrudFrame.this, "추가 되었습니다.");
@@ -160,12 +150,6 @@ public class CrudFrame extends JFrame {
 				} else {
 					JOptionPane.showMessageDialog(CrudFrame.this, "제대로해라");
 				}
-//				table.remove((Component)e.getSource());
-//				table.revalidate();
-//				table.repaint();
-//				table.setVisible(true);
-				
-
 			}
 		});
 
