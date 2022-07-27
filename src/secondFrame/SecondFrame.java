@@ -5,6 +5,7 @@
 package secondFrame;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
 
 import fourletters.Main;
 import music.MusicManagerMode;
@@ -21,8 +22,10 @@ import java.awt.Font;
 public class SecondFrame extends JFrame implements ActionListener {
 	private JButton[] btn = new JButton[6];
 	private User user;
+	
 	MusicManagerMode musicManager = new MusicManagerMode();
-
+	
+	
 	public User getUser() {
 		return user;
 	}
@@ -35,6 +38,7 @@ public class SecondFrame extends JFrame implements ActionListener {
 		super();
 		setTitle("선택");
 		setSize(1180, 820);
+		getContentPane().setBackground(UIManager.getColor("window"));
 		getContentPane().setLayout(new GridLayout(2, 3, 0, 0));
 
 		btn[0] = new JButton("사자성어 퀴즈");
@@ -72,13 +76,13 @@ public class SecondFrame extends JFrame implements ActionListener {
 			// 퀴즈 랭킹 열기
 		} else if (click == btn[3]) {
 			// 음악 퀴즈 열기
-			if (user.isManager()) {
+			if(user.isManager()) {
 				musicManager.setVisible(true);
 			} else {
 				MusicQuiz musicQuiz = new MusicQuiz(user);
 				musicQuiz.setVisible(true);
 			}
-
+				
 		} else if (click == btn[4]) {
 			// 월드컵 열기
 		} else if (click == btn[5]) {
