@@ -279,7 +279,7 @@ public class Button {
 				}
 				pnlR4.removeAll();
 				fld.list.removeAll(fld.list);
-//				ListAdd(id);
+				ListAdd(id);
 				mode.multipleChoice(pnlR4, ta, tf);
 				pnlR4.revalidate();
 				pnlR4.repaint();
