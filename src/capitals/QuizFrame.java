@@ -139,7 +139,7 @@ public class QuizFrame {
 				
 				
 				// 라벨이미지
-				URL ImageUrl = QuizFrame.class.getClassLoader().getResource("number1.png");
+				URL ImageUrl = QuizFrame.class.getClassLoader().getResource("qno1.png");
 				JLabel imagelbl = new JLabel(new ImageIcon(ImageUrl));
 				
 				imagelbl.setBounds(12, 39, 544, 550);
