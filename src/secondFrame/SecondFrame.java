@@ -89,8 +89,4 @@ public class SecondFrame extends JFrame implements ActionListener {
 			// 월드컵 랭킹 창 열기
 		}
 	}
-
-	public static void main(String[] args) {
-		new SecondFrame().setVisible(true);
-	}
 }

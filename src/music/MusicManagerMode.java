@@ -169,7 +169,7 @@ public class MusicManagerMode extends JFrame implements ActionListener {
 
 		setSize(700, 500);
 		setResizable(false);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 
 	// 버튼 이벤트
