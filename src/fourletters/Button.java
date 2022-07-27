@@ -9,53 +9,60 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import kr.co.greenart.dbutil.QuizDBUtil;
-import music.Music;
+//import music.Music;
 
 public class Button {
 	Dao dao = new FourlettersDaoImpl();
 //	Font font = new Font("맑은 고딕", Font.BOLD, 50);
 	Random ran = new Random();
-	List<fourletters> list = new ArrayList<fourletters>();
+//	List<fourletters> list = new ArrayList<fourletters>();
+	List<Integer> listIn = new ArrayList<Integer>();
 	static ManagerMode mode = new ManagerMode();
+	static Main main = new Main();
 	static FourlettersDaoImpl fld = new FourlettersDaoImpl();
 
 	static int result = 0;
 
-	public void ListAdd() {
+	public void ListAdd(String id) {
 		try {
 			dao.read();
-			if (fld.list.size() > 0) {
-				for (fourletters r : fld.list) {
-					
-				}
-			}
-
+//			dao.favread(id);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println(fld.list);
 	}
-
-	public void questionRead(JTextArea ta) {
-
+	
+	public void favListAdd(String id) {
 		try {
-			ta.append(String.valueOf(dao.read()) + "\n");
-
+			dao.favread(id);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+
+//	public void questionRead(JTextArea ta) {
+//		try {
+//			ta.append(String.valueOf(dao.read()) + "\n");
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	public void questionDelete(int number) {
 		try {
@@ -83,26 +90,26 @@ public class Button {
 			e.printStackTrace();
 		}
 	}
+
 	public void randomQuestion(JTextArea ta) {
 		Random random = new Random();
 		int index = random.nextInt(fld.list.size());
-		System.out.println(index);
 		String s = String.valueOf(fld.list.get(index).toString2());
 		String[] array = s.split(",");
 		ta.setText(array[1]);
 	}
 
 	// 확인버튼
-	public void OK_button(JButton b, JTextArea ta, JTextField tf, String id, JPanel pnlR4) {
+	public void OK_button(JButton b, JTextArea ta, JTextField tf, String id, JPanel pnlR4, JCheckBox cb1) {
 		ActionListener a = new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent a) {
 				try {
 					String s = String.valueOf(dao.readan(ta.getText()).toQuestion());
+					int result = (dao.readst(ta.getText()).toNumber());
 					if (s.equals(tf.getText())) {
 						System.out.println("정답");
-						int result = (dao.readst(ta.getText()).toNumber());
 						dao.clearSave(id, result);
 						randomQuestion(ta);
 						tf.setText("");
@@ -110,10 +117,15 @@ public class Button {
 						System.out.println("오답");
 						tf.setText("");
 					}
+					if (dao.favoriteSerch(result) == 1) {
+						cb1.setSelected(true);
+					} else {
+						cb1.setSelected(false);
+					}
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-
+				// 즐겨찾기 체크 박스 체크 여부
 			}
 		};
 		b.addActionListener(a);
@@ -121,11 +133,23 @@ public class Button {
 	}
 
 	// 문제보기 버튼
-	public void next_button(JButton b, JTextArea ta) {
+	public void next_button(JButton b, JTextArea ta, JCheckBox cb1 , JTextArea ta2) {
 		ActionListener a = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent a) {
 				randomQuestion(ta);
+				ta2.setText("");
+				try {
+					int result = (dao.readst(ta.getText()).toNumber());
+					if (fld.favlist.contains(result)) {
+						System.out.println(result);
+						cb1.setSelected(true);
+					} else {
+						cb1.setSelected(false);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		};
 		b.addActionListener(a);
@@ -153,18 +177,73 @@ public class Button {
 		b.addActionListener(a);
 	}
 
+	public void favoriteButton(JPanel p, JTextArea ta, JTextField tf) {
+		FourlettersDaoImpl fld = new FourlettersDaoImpl();
+		GridLayout grid = new GridLayout(5, 6);
+		JButton[] bt = new JButton[fld.list.size()];
+
+		for (int i = 0; i < fld.list.size(); i++) {
+			String[] array = String.valueOf(fld.list.get(i)).split(",");
+			bt[i] = new JButton(array[0] + "번");
+			p.add(bt[i]);
+
+			bt[i].addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent a) {
+					try {
+						tf.setText(dao.read(Integer.valueOf((array[0]))).toString2());
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+	}
+	
+	public void favoriteCheck(JPanel jp, JCheckBox cb, JTextArea ta, JTextField tf, String id) {
+		cb.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (cb.isSelected()) {
+					try {
+						int result = dao.readst(ta.getText()).toNumber();
+						System.out.println(id);
+						System.out.println(result);
+						dao.favoriteUpdate(id, result);
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+
+				} else {
+					try {
+						int result = dao.readst(ta.getText()).toNumber();
+						dao.favoriteDelete(id, result);
+						System.out.println(result + " 즐겨찾기 해제");
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+				jp.removeAll();
+				fld.favlist.removeAll(fld.favlist);
+				favListAdd(id);
+				main.multipleChoice(jp, ta, cb);
+				jp.revalidate();
+				jp.repaint();
+			}
+		});
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////// 관리자모드///////////////////////////////////////////
 
-	// 문제보기 버튼
+	// 관리자 문제보기 버튼
 	public void read_button(JRadioButton b, JTextArea ta, JTextArea ta2) {
 		ActionListener a = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent a) {
 				try {
-					ta.setText("");
+					ta.removeAll();
 					ta.setText((dao.read().toString()));
-					ta2.setText("");
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -174,7 +253,8 @@ public class Button {
 		b.addActionListener(a);
 	}
 
-	public void MMOk_button(JButton jb, JTextArea ta2, JTextField tf, JRadioButton a, JRadioButton b, JRadioButton c , JPanel pnlR4, JTextArea ta) {
+	public void MMOk_button(JButton jb, JTextArea ta2, JTextField tf, JRadioButton a, JRadioButton b, JRadioButton c,
+			JPanel pnlR4, JTextArea ta, String id) {
 		jb.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
@@ -186,22 +266,26 @@ public class Button {
 					String s = tf.getText();
 					questionUpdate(s);
 					tf.setText("");
-					
+
 				} else if (c.isSelected()) {
 					int i = Integer.valueOf(tf.getText());
 					questionDelete(i);
+					try {
+						dao.favoriteDelete(id, i);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 					tf.setText("");
 				}
-
 				pnlR4.removeAll();
 				fld.list.removeAll(fld.list);
-//				ListAdd();
+//				ListAdd(id);
 				mode.multipleChoice(pnlR4, ta, tf);
 				pnlR4.revalidate();
-				pnlR4.repaint();					
+				pnlR4.repaint();
 			}
 		});
-		
+
 		a.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -224,8 +308,7 @@ public class Button {
 			}
 		});
 	}
-	
-	
+
 	public void MMDelete_button(JButton jb, JTextField tf) {
 		jb.addActionListener(new ActionListener() {
 			@Override
@@ -234,7 +317,4 @@ public class Button {
 			}
 		});
 	}
-	
-	
-	
 }
