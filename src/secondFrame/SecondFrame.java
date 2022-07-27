@@ -7,41 +7,20 @@ package secondFrame;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import firstFrame.FirstFrame;
 import fourletters.Main;
 import music.MusicManagerMode;
 import music.MusicQuiz;
 import user.User;
-<<<<<<< HEAD
-import user.UserDao;
-import user.UserDaoImpl;
-=======
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 
 import javax.swing.JButton;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.awt.Color;
 import java.awt.Font;
 
 public class SecondFrame extends JFrame implements ActionListener {
 	private JButton[] btn = new JButton[6];
-<<<<<<< HEAD
-	private User login;
-	private UserDao user = new UserDaoImpl();
-	private Map<String, User> server = new HashMap<>();
-
-	public User getLogin() {
-		return login;
-	}
-
-	public void setLogin(User login) {
-		this.login = login;
-=======
 	private User user;
 	
 	MusicManagerMode musicManager = new MusicManagerMode();
@@ -53,7 +32,6 @@ public class SecondFrame extends JFrame implements ActionListener {
 
 	public void setUser(User user) {
 		this.user = user;
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 	}
 
 	public SecondFrame() {
@@ -63,12 +41,6 @@ public class SecondFrame extends JFrame implements ActionListener {
 		getContentPane().setBackground(UIManager.getColor("window"));
 		getContentPane().setLayout(new GridLayout(2, 3, 0, 0));
 
-		makeGUI();
-		setResizable(false);
-		setLocationRelativeTo(null);
-	}
-
-	private void makeGUI() {
 		btn[0] = new JButton("사자성어 퀴즈");
 		btn[1] = new JButton("국가-수도 퀴즈");
 		btn[2] = new JButton("퀴즈 랭킹");
@@ -88,6 +60,8 @@ public class SecondFrame extends JFrame implements ActionListener {
 				btn[i].setForeground(new Color(255, 255, 255));
 			}
 		}
+		setResizable(false);
+		setLocationRelativeTo(null);
 	}
 
 	@Override
@@ -95,35 +69,12 @@ public class SecondFrame extends JFrame implements ActionListener {
 		Object click = e.getSource();
 		if (click == btn[0]) {
 			// 사자성어 퀴즈 열기
-<<<<<<< HEAD
-			if (login.isManager()) {
-				// 관리자모드
-			} else {
-				// 사용자모드
-				new Main().setVisible(true);
-			}
-=======
-			new Main(user).setVisible(true);
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 		} else if (click == btn[1]) {
 			// 국가-수도 퀴즈 열기
-			if (login.isManager()) {
-
-			} else {
-
-			}
 		} else if (click == btn[2]) {
 			// 퀴즈 랭킹 열기
-
 		} else if (click == btn[3]) {
 			// 음악 퀴즈 열기
-<<<<<<< HEAD
-			if (login.isManager()) {
-
-			} else {
-				new MusicQuiz().setVisible(true);
-			}
-=======
 			if(user.isManager()) {
 				musicManager.setVisible(true);
 			} else {
@@ -131,25 +82,14 @@ public class SecondFrame extends JFrame implements ActionListener {
 				musicQuiz.setVisible(true);
 			}
 				
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
 		} else if (click == btn[4]) {
 			// 월드컵 열기
-
 		} else if (click == btn[5]) {
 			// 월드컵 랭킹 창 열기
-
 		}
 	}
-<<<<<<< HEAD
 
-	public void userMapping() throws SQLException {
-		int i = 0;
-		while (i < user.read().size()) {
-			server.put(user.read().get(i).getId(), user.read().get(i));
-			i++;
-		}
+	public static void main(String[] args) {
+		new SecondFrame().setVisible(true);
 	}
 }
-=======
-}
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectDB.git
