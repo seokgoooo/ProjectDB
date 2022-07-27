@@ -115,9 +115,6 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private JPanel quizClearPnl;
 	private JPanel quizFavoritePnl;
 	private JLabel infoLbl;
-	private JLabel singerLbl;
-	private JLabel genreLbl;
-	private JLabel yearLbl;
 
 	public MusicQuiz(User user) {
 		this.user = user;
@@ -334,14 +331,17 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		}
 		
 		infoLbl.setText("");
+		answerTf.setText("");
 		pauseBtn.setVisible(false);
 		playBtn.setVisible(true);
 		replayBtn.setVisible(false);
 
 		prevMusic = currentMusic;
 		currentMusic = list.get(i);
+		
 		clearTrue(currentMusic);
 		favoriteCheck(currentMusic);
+		
 		quizNumberLbl.setText(String.valueOf(i + 1));
 		map.put(currentMusic, prevMusic);
 
@@ -551,6 +551,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		}
 	}
 
+	// 해결한 문제인지 check 메소드
 	public void clearTrue(Music music) {
 		if(clearList.indexOf(music.getNumber()) != -1) {
 			infoLbl.setText(String.valueOf(music));
