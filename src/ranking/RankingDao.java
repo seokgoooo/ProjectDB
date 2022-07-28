@@ -10,4 +10,6 @@ public interface RankingDao {
 	List<Ranking> incorrectRatio(String table) throws SQLException;
 	
 	List<Ranking> favoriteTop(String table) throws SQLException;
+	
+	List<Ranking> maxTest(String table) throws SQLException;
 }
