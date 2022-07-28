@@ -30,7 +30,7 @@ public class SecondFrame extends JFrame implements ActionListener {
 	private JButton[] btn = new JButton[6];
 	private User user;
 
-	ManagerMode fourlettersManager = new ManagerMode(getUser());
+	
 	MusicManagerMode musicManager = new MusicManagerMode();
 	CrudFrame capitalsManager = new CrudFrame();
 
@@ -78,6 +78,7 @@ public class SecondFrame extends JFrame implements ActionListener {
 		if (click == btn[0]) {
 			// 사자성어 퀴즈 열기
 			if (user.isManager()) {
+				ManagerMode fourlettersManager = new ManagerMode(user);
 				fourlettersManager.setVisible(true);
 			} else {
 				Main fourlettersUser = new Main(user);
