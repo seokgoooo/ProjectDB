@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.SQLException;
 import java.awt.Color;
 import java.awt.Font;
 
@@ -30,7 +31,6 @@ public class SecondFrame extends JFrame implements ActionListener {
 	private JButton[] btn = new JButton[6];
 	private User user;
 
-	
 	MusicManagerMode musicManager = new MusicManagerMode();
 	CrudFrame capitalsManager = new CrudFrame();
 
@@ -129,9 +129,13 @@ public class SecondFrame extends JFrame implements ActionListener {
 			}
 		} else if (click == btn[2]) {
 			// 퀴즈 랭킹 열기
-			MainRank rank = new MainRank();
-			rank.setVisible(true);
-
+			MainRank rank;
+			try {
+				rank = new MainRank();
+				rank.setVisible(true);
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		} else if (click == btn[3]) {
 			// 음악 퀴즈 열기
 			if (user.isManager()) {
