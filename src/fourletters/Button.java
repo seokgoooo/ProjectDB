@@ -16,6 +16,7 @@ import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
@@ -118,9 +119,9 @@ public class Button {
 						tf.setText("");
 						ta.setText("");
 						randomQuestion(ta);
-						System.out.println("정답");
+						JOptionPane.showMessageDialog(pnlR4, "정답입니다.");
 					} else {
-						System.out.println("오답");
+						JOptionPane.showMessageDialog(pnlR4, "오답입니다.");
 						tf.setText("");
 					}
 					if (fld.favlist.contains(result)) {
