@@ -30,9 +30,15 @@ public class MainRank extends JFrame implements ActionListener {
 	private JProgressBar[] progressBar = new JProgressBar[5];
 	private JLabel[] percentLbl = new JLabel[5];
 
-	private JPanel bottomPnl = new JPanel();
-	private JComboBox<String> comboBox = null;
-	private JButton openBtn = null;
+	private JPanel bottomPnl_1 = new JPanel();
+	private JPanel bottomPnl_2 = new JPanel();
+	private JPanel bottomPnl_3 = new JPanel();
+	private JComboBox<String> comboBox_1 = new JComboBox<String>();
+	private JComboBox<String> comboBox_2 = new JComboBox<String>();
+	private JComboBox<String> comboBox_3 = new JComboBox<String>();
+	private JButton openBtn_1 = null;
+	private JButton openBtn_2 = null;
+	private JButton openBtn_3 = null;
 
 	public MainRank() {
 		super();
@@ -71,8 +77,6 @@ public class MainRank extends JFrame implements ActionListener {
 			y += length;
 			test += 10;
 		}
-
-		makeBottomGUI();
 	}
 
 	private void test(Panel pnl) {
@@ -101,50 +105,47 @@ public class MainRank extends JFrame implements ActionListener {
 		tabbedPane.addTab("사자성어", null, fourlettersPnl, null);
 		tabbedPane.addTab("국가수도", null, capitalsPnl, null);
 		tabbedPane.addTab("음악", null, musicsPnl, null);
-	}
 
-	private void makeBottomGUI() {
-		bottomPnl.setBackground(Color.WHITE);
-		bottomPnl.setBounds(750, 700, 390, 35);
-		fourlettersPnl.add(bottomPnl);
-		bottomPnl.setLayout(null);
+		bottomPnl_1.setBackground(Color.WHITE);
+		bottomPnl_1.setBounds(750, 700, 390, 35);
+		bottomPnl_1.setLayout(null);
+		fourlettersPnl.add(bottomPnl_1);
 
-		comboBox = new JComboBox<>();
-		comboBox.setBackground(new Color(0, 102, 102));
-		comboBox.setBounds(0, 0, 300, 35);
-		bottomPnl.add(comboBox);
-		comboBox.setModel(new DefaultComboBoxModel<String>(
+		comboBox_1.setBounds(0, 0, 300, 35);
+		comboBox_1.setBackground(new Color(0, 102, 102));
+		comboBox_1.setForeground(new Color(255, 255, 255));
+		comboBox_1.setFont(new Font("휴먼모음T", Font.PLAIN, 22));
+		comboBox_1.setModel(new DefaultComboBoxModel<String>(
 				new String[] { "정답률 TOP 5", "오답률 TOP 5", "즐겨찾기한 문제 TOP 5", "힌트본 문제 TOP 5" }));
-		comboBox.setForeground(new Color(255, 255, 255));
-		comboBox.setFont(new Font("휴먼모음T", Font.PLAIN, 22));
+		bottomPnl_1.add(comboBox_1);
 
-		openBtn = new JButton("보기");
-		openBtn.setForeground(new Color(255, 255, 255));
-		openBtn.setBackground(new Color(0, 102, 102));
-		openBtn.setFont(new Font("휴먼모음T", Font.PLAIN, 22));
-		openBtn.setBounds(300, 0, 90, 35);
-		bottomPnl.add(openBtn);
-		openBtn.addActionListener(this);
+		openBtn_1 = new JButton("보기");
+		openBtn_1.setBounds(300, 0, 90, 35);
+		openBtn_1.setBackground(new Color(0, 102, 102));
+		openBtn_1.setForeground(new Color(255, 255, 255));
+		openBtn_1.setFont(new Font("휴먼모음T", Font.PLAIN, 22));
+		openBtn_1.addActionListener(this);
+		bottomPnl_1.add(openBtn_1);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int select = comboBox.getSelectedIndex();
+		int select = comboBox_1.getSelectedIndex();
 		switch (select) {
 		case 0:
-			titleLbl.setText(comboBox.getSelectedItem().toString());
+			titleLbl.setText(comboBox_1.getSelectedItem().toString());
 			break;
 
 		case 1:
-			titleLbl.setText(comboBox.getSelectedItem().toString());
+			titleLbl.setText(comboBox_1.getSelectedItem().toString());
 			break;
 
 		case 2:
-			titleLbl.setText(comboBox.getSelectedItem().toString());
+			titleLbl.setText(comboBox_1.getSelectedItem().toString());
 			break;
 
 		case 3:
-			titleLbl.setText(comboBox.getSelectedItem().toString());
+			titleLbl.setText(comboBox_1.getSelectedItem().toString());
 			break;
 
 		default:
