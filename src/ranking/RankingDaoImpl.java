@@ -10,7 +10,7 @@ import java.util.List;
 import kr.co.greenart.dbutil.QuizDBUtil;
 
 public class RankingDaoImpl implements RankingDao {
-	
+
 	private Ranking resultMapping(ResultSet rs) throws SQLException {
 		String title = rs.getString("question");
 		int ratio = rs.getInt("ratio");
@@ -19,11 +19,11 @@ public class RankingDaoImpl implements RankingDao {
 
 	@Override
 	public List<Ranking> correctRatio(String table) throws SQLException {
-		int low,high;
-		if(table.equals("music")) {
+		int low, high;
+		if (table.equals("music")) {
 			low = 3000;
 			high = 3999;
-		} else if(table.equals("fourletters")) {
+		} else if (table.equals("fourletters")) {
 			low = 2000;
 			high = 2999;
 		} else {
@@ -35,7 +35,7 @@ public class RankingDaoImpl implements RankingDao {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
+
 		try {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
@@ -43,27 +43,27 @@ public class RankingDaoImpl implements RankingDao {
 			pstmt.setInt(2, high);
 			pstmt.setString(3, table);
 			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				list.add(resultMapping(rs));
 			}
-			
-		}finally {
+
+		} finally {
 			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
-		
+
 		return list;
 	}
 
 	@Override
 	public List<Ranking> incorrectRatio(String table) throws SQLException {
-		int low,high;
-		if(table.equals("music")) {
+		int low, high;
+		if (table.equals("music")) {
 			low = 3000;
 			high = 3999;
-		} else if(table.equals("fourletters")) {
+		} else if (table.equals("fourletters")) {
 			low = 2000;
 			high = 2999;
 		} else {
@@ -75,7 +75,7 @@ public class RankingDaoImpl implements RankingDao {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
+
 		try {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
@@ -83,17 +83,17 @@ public class RankingDaoImpl implements RankingDao {
 			pstmt.setInt(2, high);
 			pstmt.setString(3, table);
 			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				list.add(resultMapping(rs));
 			}
-			
-		}finally {
+
+		} finally {
 			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
-		
+
 		return list;
 	}
 
@@ -104,34 +104,34 @@ public class RankingDaoImpl implements RankingDao {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
+
 		try {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, table);
-			
+
 			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				list.add(resultMapping(rs));
 			}
-			
-		}finally {
+
+		} finally {
 			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
-		
+
 		return list;
 	}
 
 	@Override
 	public List<Ranking> maxTest(String table) throws SQLException {
-		int low,high;
-		if(table.equals("music")) {
+		int low, high;
+		if (table.equals("music")) {
 			low = 3000;
 			high = 3999;
-		} else if(table.equals("fourletters")) {
+		} else if (table.equals("fourletters")) {
 			low = 2000;
 			high = 2999;
 		} else {
@@ -143,7 +143,7 @@ public class RankingDaoImpl implements RankingDao {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
+
 		try {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
@@ -151,18 +151,16 @@ public class RankingDaoImpl implements RankingDao {
 			pstmt.setInt(2, high);
 			pstmt.setString(3, table);
 			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				list.add(resultMapping(rs));
 			}
-			
-		}finally {
+
+		} finally {
 			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
 			QuizDBUtil.closeConn(conn);
 		}
-		
 		return list;
 	}
-
 }
