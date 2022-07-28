@@ -6,6 +6,8 @@ import java.awt.HeadlessException;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -55,6 +57,9 @@ public class QuizFrame extends JFrame implements ActionListener  {
 	private JButton confirmBtn;
 	private AttemptsQuiz attemptsQuiz;
 	private JPanel clearPnl;
+	private JButton[] clearQuiz;
+	private JButton[] favoriteQuiz;
+	private CapitalsDao capitalsDao;
 		
 
 	
@@ -161,8 +166,7 @@ public class QuizFrame extends JFrame implements ActionListener  {
 					clearPnl.repaint();
 				}
 				
-				// 즐겨 찾기 panel
-				JPanel favoritePnl = new JPanel();
+				favoritePnl = new JPanel();
 				tabbedPane.addTab("즐겨찾기", null, favoritePnl, null);
 				favoritePnl.setLayout(new GridLayout(5, 5));
 				
@@ -303,6 +307,90 @@ public class QuizFrame extends JFrame implements ActionListener  {
 					JOptionPane.showMessageDialog(QuizFrame.this, "오답입니다.");
 				}
 			}
+		}
+		
+		// 즐겨찾기에 있는 번호 누를때
+		private MouseAdapter mouseAdapter = new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				for (int i = 0; i < favoriteQuiz.length; i++) {
+					if (e.getSource() == favoriteQuiz[i]) {
+					}
+				}
+			}
+		};
+
+		// 해결 문제에 있는 번호 누를때
+		private MouseAdapter mouseAdapter2 = new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				try {
+					for (int i = 0; i < clearQuiz.length; i++) {
+						if (e.getSource() == clearQuiz[i]) {
+						}
+					}
+
+				} catch (NullPointerException e1) {
+				}
+			}
+		};
+		private JPanel favoritePnl;
+		
+		// 해결 문제 그리기
+		public void clearPnlRepaint() {
+			clearPnl.removeAll();
+
+			try {
+				clearList = attemptsDao.MusicClearRead(user.getClearID(), true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			clearQuiz = new JButton[clearList.size()];
+			for (int i = 0; i < clearQuiz.length; i++) {
+				Capitals c = null;
+
+				try {
+					c = capitalsDao.read(clearList.get(i));
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				clearQuiz[i] = new JButton(String.format("%02d", (list.indexOf(c) + 1)));
+				clearQuiz[i].addMouseListener(mouseAdapter2);
+				clearPnl.add(clearQuiz[i]);
+			}
+
+			clearPnl.revalidate();
+			clearPnl.repaint();
+		}
+		// 즐찾 문제 그리기
+		public void favoritePnlRepaint() {
+			favorite.removeAll();
+			try {
+				favoriteList = favoriteDao.musicRead(user.getFavoriteID());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			favoriteQuiz = new JButton[favoriteList.size()];
+
+			for (int i = 0; i < favoriteQuiz.length; i++) {
+				Capitals c = null;
+
+				try {
+					c = capitalsDao.read(favoriteList.get(i));
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				favoriteQuiz[i] = new JButton(String.format("%02d", (list.indexOf(c) + 1)));
+				favoriteQuiz[i].addMouseListener(mouseAdapter);
+				favorite.add(favoriteQuiz[i]);
+			}
+
+			favoritePnl.revalidate();
+			favoritePnl.repaint();
 		}
 }
 
