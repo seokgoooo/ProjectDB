@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface MusicDao {
 
-	int create(String title, String singer, String genre, int year) throws SQLException;
+	void create(String title, String singer, String genre, int year) throws SQLException;
 
 	public List<Music> read() throws SQLException;
 	

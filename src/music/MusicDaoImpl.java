@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.omg.CORBA.TRANSACTION_MODE;
+
 import kr.co.greenart.dbutil.QuizDBUtil;
 
 public class MusicDaoImpl implements MusicDao {
@@ -25,23 +27,55 @@ public class MusicDaoImpl implements MusicDao {
 
 	// 음악을 DB에 추가
 	@Override
-	public int create(String title, String singer, String genre, int year) throws SQLException {
-		String query = "Insert Into music (question, singer, genre, year) values (?, ?, ?, ?)";
-
+	public void create(String title, String singer, String genre, int year) throws SQLException {
+		String query = "Insert Into music (number,question, singer, genre, year) values (?, ?, ?, ?, ?)";
+		String mediumQuery = "Insert Into mediumtable (quizType, quiznumber) values (?,?)";
+		String select = "SELECT number from music order by number desc limit 1";
+		
 		Connection conn = null;
-		PreparedStatement pstmt = null;
-
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;
+		PreparedStatement pstmt3 = null;
+		ResultSet rs = null;
+		
 		try {
 			conn = QuizDBUtil.getConnection();
-			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, title);
-			pstmt.setString(2, singer);
-			pstmt.setString(3, genre);
-			pstmt.setInt(4, year);
-
-			return pstmt.executeUpdate();
+			conn.setAutoCommit(false);
+		
+			pstmt3 = conn.prepareStatement(select);
+			rs = pstmt3.executeQuery();
+			
+			int number = 0;
+			
+			if(rs.next()) {
+				number = rs.getInt("number");
+				number++;
+				System.out.println(number);
+				
+				pstmt1 = conn.prepareStatement(mediumQuery);
+				pstmt1.setString(1, "music");
+				pstmt1.setInt(2, number);
+				pstmt1.executeUpdate();
+				
+				pstmt2 = conn.prepareStatement(query);
+				pstmt2.setInt(1, number);
+				pstmt2.setString(2, title);
+				pstmt2.setString(3, singer);
+				pstmt2.setString(4, genre);
+				pstmt2.setInt(5, year);
+				pstmt2.executeUpdate();
+				
+				conn.commit();
+			}
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+			conn.rollback();
 		} finally {
-			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt1);
+			QuizDBUtil.closePstmt(pstmt2);
+			QuizDBUtil.closePstmt(pstmt3);
 			QuizDBUtil.closeConn(conn);
 		}
 
@@ -130,7 +164,7 @@ public class MusicDaoImpl implements MusicDao {
 	// 음악 삭제
 	@Override
 	public int delete(int number) throws SQLException {
-		String query = "DELETE FROM music where number = ?";
+		String query = "DELETE FROM mediumtable where quiznumber = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
