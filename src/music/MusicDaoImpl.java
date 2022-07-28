@@ -14,7 +14,7 @@ public class MusicDaoImpl implements MusicDao {
 	// 음악 매핑
 	private Music resultMapping(ResultSet rs) throws SQLException {
 		int n = rs.getInt("number");
-		String title = rs.getString("title");
+		String title = rs.getString("question");
 		String singer = rs.getString("singer");
 		String genre = rs.getString("genre");
 		int year = rs.getInt("year");
@@ -26,7 +26,7 @@ public class MusicDaoImpl implements MusicDao {
 	// 음악을 DB에 추가
 	@Override
 	public int create(String title, String singer, String genre, int year) throws SQLException {
-		String query = "Insert Into music (title, singer, genre, year) values (?, ?, ?, ?)";
+		String query = "Insert Into music (question, singer, genre, year) values (?, ?, ?, ?)";
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -106,7 +106,7 @@ public class MusicDaoImpl implements MusicDao {
 	// 음악 수정
 	@Override
 	public int update(int number, String title, String singer, String genre, int year) throws SQLException {
-		String query = "Update music Set title = ?, singer = ?, genre = ?, year = ? where number = ?";
+		String query = "Update music Set question = ?, singer = ?, genre = ?, year = ? where number = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
