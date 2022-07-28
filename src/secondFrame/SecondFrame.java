@@ -18,16 +18,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.Color;
 import java.awt.Font;
 
 public class SecondFrame extends JFrame implements ActionListener {
 	private JButton[] btn = new JButton[6];
 	private User user;
-	
+
 	MusicManagerMode musicManager = new MusicManagerMode();
-	
-	
+
 	public User getUser() {
 		return user;
 	}
@@ -78,12 +78,22 @@ public class SecondFrame extends JFrame implements ActionListener {
 			// 퀴즈 랭킹 열기
 		} else if (click == btn[3]) {
 			// 음악 퀴즈 열기
-			if(user.isManager()) {
+			if (user.isManager()) {
 				musicManager.setVisible(true);
 			} else {
 				MusicQuiz musicQuiz = new MusicQuiz(user);
 				musicQuiz.setVisible(true);
 				setVisible(false);
+
+				musicQuiz.getHomeBtn().addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+						setVisible(true);
+					}
+				});
+
 				musicQuiz.addWindowListener(new WindowAdapter() {
 
 					@Override
@@ -91,14 +101,16 @@ public class SecondFrame extends JFrame implements ActionListener {
 						dispose();
 						setVisible(true);
 					}
-					
+
 				});
 			}
-				
+
 		} else if (click == btn[4]) {
 			// 월드컵 열기
 		} else if (click == btn[5]) {
 			// 월드컵 랭킹 창 열기
 		}
 	}
+
+	
 }
