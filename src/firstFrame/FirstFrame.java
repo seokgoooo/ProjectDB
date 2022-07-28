@@ -16,14 +16,15 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 
 import music.MusicPlayer;
 import secondFrame.SecondFrame;
@@ -31,8 +32,8 @@ import user.User;
 import user.UserDao;
 import user.UserDaoImpl;
 
-public class FirstFrame extends JFrame {
-	private User user1;
+public class FirstFrame extends JFrame implements ActionListener {
+	private User login;
 	private UserDao user = new UserDaoImpl();
 	private Map<String, User> server = new HashMap<>();
 	private JPasswordField pwPf = new JPasswordField(10);
@@ -74,7 +75,7 @@ public class FirstFrame extends JFrame {
 	public void makeFrame() {
 		setSize(1180, 820);
 		setVisible(true);
-		getContentPane().setBackground(UIManager.getColor("window"));
+		getContentPane().setBackground(Color.WHITE);
 		getContentPane().setLayout(null);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -127,6 +128,8 @@ public class FirstFrame extends JFrame {
 		idTf.setText("10글자 이내로 입력");
 		idTf.addKeyListener(tl);
 		idTf.addFocusListener(tff);
+		idTf.registerKeyboardAction(this, "login", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+				JComponent.WHEN_FOCUSED);
 
 		bottomPnl.add(pwPf);
 		pwPf.setBounds(250, 75, 400, 50);
@@ -134,6 +137,8 @@ public class FirstFrame extends JFrame {
 		pwPf.setForeground(new Color(255, 255, 255));
 		pwPf.setBackground(new Color(68, 148, 148));
 		pwPf.addKeyListener(tl);
+		pwPf.registerKeyboardAction(this, "login", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+				JComponent.WHEN_FOCUSED);
 
 		lblId = new JLabel("ID");
 		bottomPnl.add(lblId);
@@ -191,12 +196,12 @@ public class FirstFrame extends JFrame {
 						showPopUp("로그인 성공");
 						player.end();
 						try {
-							user1 = user.read(id);
+							login = user.read(id);
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						}
 
-						sf.setUser(user1);
+						sf.setUser(login);
 						sf.setVisible(true);
 					} else {
 						showPopUp("비밀번호가 달라요");
@@ -224,7 +229,6 @@ public class FirstFrame extends JFrame {
 			i++;
 		}
 	}
-<<<<<<< HEAD
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -265,7 +269,4 @@ public class FirstFrame extends JFrame {
 			showPopUp("회원가입을 해주세요");
 		}
 	}
-=======
->>>>>>> refs/remotes/origin/main
 }
-
