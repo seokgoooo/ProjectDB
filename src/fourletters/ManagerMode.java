@@ -33,6 +33,7 @@ import javax.swing.JScrollBar;
 public class ManagerMode extends JFrame {
 	private User user;
 	Dao dao = new FourlettersDaoImpl();
+
 	public ManagerMode(User user) {
 		this.user = user;
 		Button bt = new Button();
@@ -45,7 +46,7 @@ public class ManagerMode extends JFrame {
 		JTextArea ta = new JTextArea();
 		JTextArea ta2 = new JTextArea();
 		JTextField tf = new JTextField(40);
-		
+
 		// 폰트
 		Font font = new Font("맑은 고딕", Font.BOLD, 15);
 		Font font2 = new Font("맑은 고딕", Font.BOLD, 20);
@@ -53,7 +54,7 @@ public class ManagerMode extends JFrame {
 		ta.setFont(font);
 		ta2.setFont(font2);
 		tf.setFont(font3);
-		
+
 		// 최종
 		JButton bt1 = new JButton(" 확   인 ");
 		JButton bt2 = new JButton("전체삭제");

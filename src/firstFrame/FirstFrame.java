@@ -34,7 +34,7 @@ import user.UserDao;
 import user.UserDaoImpl;
 
 public class FirstFrame extends JFrame implements ActionListener {
-	private User login;
+	private User loginUser;
 	private UserDao user = new UserDaoImpl();
 	private Map<String, User> server = new HashMap<>();
 	private JPasswordField pwPf = new JPasswordField(10);
@@ -86,14 +86,14 @@ public class FirstFrame extends JFrame implements ActionListener {
 	public void makeGui() throws SQLException {
 		mainPnl = new JPanel();
 		getContentPane().add(mainPnl);
-		mainPnl.setBounds(220, 0, 650, 450);
+		mainPnl.setBounds(262, 0, 650, 450);
 		mainPnl.setBackground(new Color(255, 255, 255));
 		mainPnl.setLayout(null);
 
 		bottomPnl = new JPanel();
 		getContentPane().add(bottomPnl);
 		bottomPnl.setBackground(new Color(255, 255, 255));
-		bottomPnl.setBounds(220, 450, 650, 200);
+		bottomPnl.setBounds(262, 450, 650, 200);
 		bottomPnl.setLayout(null);
 
 		titleLbl = new JLabel("그대가 들어5조 Quiz");
@@ -220,12 +220,12 @@ public class FirstFrame extends JFrame implements ActionListener {
 				showPopUp("로그인 성공");
 				player.end();
 				try {
-					login = user.read(id);
+					loginUser = user.read(id);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
 
-				sf.setUser(login);
+				sf.setUser(loginUser);
 				sf.setVisible(true);
 				setVisible(false);
 			} else {

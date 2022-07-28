@@ -148,14 +148,13 @@ public class Main extends JFrame {
 
 		// 버튼 기능 메소드들
 		bt.randomQuestion(ta);
-		bt.OK_button(btn1, ta, tf, user.getId(),pnlL2, cb1);
+		bt.OK_button(btn1, ta, tf, user.getId(), pnlL2, cb1);
 		bt.next_button(btn2, ta, cb1, ta2);
 		bt.hint_button(btn3, ta, ta2);
 		bt.favoriteButton(quizFavoritePnl, ta2, tf);
 		bt.favoriteCheck(quizFavoritePnl, cb1, ta, tf, this, user.getId());
 		multipleChoice(quizFavoritePnl, ta, cb1);
 
-		
 		pnlR3.setVisible(false);
 		ta2.setPreferredSize(new Dimension(500, 200));
 //		ta2.setLayout();

@@ -10,8 +10,10 @@ import javax.swing.UIManager;
 import capitals.CrudFrame;
 import capitals.QuizFrame;
 import fourletters.Main;
+import fourletters.ManagerMode;
 import music.MusicManagerMode;
 import music.MusicQuiz;
+import ranking.MainRank;
 import user.User;
 
 import javax.swing.JButton;
@@ -28,8 +30,9 @@ public class SecondFrame extends JFrame implements ActionListener {
 	private JButton[] btn = new JButton[6];
 	private User user;
 
+	ManagerMode fourlettersManager = new ManagerMode(getUser());
 	MusicManagerMode musicManager = new MusicManagerMode();
-	private CrudFrame capitalsManager;
+	CrudFrame capitalsManager = new CrudFrame();
 
 	public User getUser() {
 		return user;
@@ -74,12 +77,33 @@ public class SecondFrame extends JFrame implements ActionListener {
 		Object click = e.getSource();
 		if (click == btn[0]) {
 			// 사자성어 퀴즈 열기
-			new Main(user).setVisible(true);
+			if (user.isManager()) {
+				fourlettersManager.setVisible(true);
+			} else {
+				Main fourlettersUser = new Main(user);
+				fourlettersUser.setVisible(true);
+				setVisible(false);
+
+//				fourlettersMain.getHomeBtn().addActionListener(new ActionListener() {
+//					@Override
+//					public void actionPerformed(ActionEvent e) {
+//						dispose();
+//						setVisible(true);
+//					}
+//				});
+
+				fourlettersUser.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {
+						dispose();
+						setVisible(true);
+					}
+				});
+			}
+
 		} else if (click == btn[1]) {
 			// 국가-수도 퀴즈 열기
-
 			if (user.isManager()) {
-				capitalsManager = new CrudFrame();
 				capitalsManager.setVisible(true);
 			} else {
 				QuizFrame capitalsUser = new QuizFrame(user);
@@ -104,22 +128,27 @@ public class SecondFrame extends JFrame implements ActionListener {
 			}
 		} else if (click == btn[2]) {
 			// 퀴즈 랭킹 열기
+			MainRank rank = new MainRank();
+			rank.setVisible(true);
+
 		} else if (click == btn[3]) {
 			// 음악 퀴즈 열기
 			if (user.isManager()) {
 				musicManager.setVisible(true);
 			} else {
-				MusicQuiz musicQuiz = new MusicQuiz(user);
-				musicQuiz.setVisible(true);
+				MusicQuiz musicUser = new MusicQuiz(user);
+				musicUser.setVisible(true);
 				setVisible(false);
-				musicQuiz.getHomeBtn().addActionListener(new ActionListener() {
+
+				musicUser.getHomeBtn().addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						dispose();
 						setVisible(true);
 					}
 				});
-				musicQuiz.addWindowListener(new WindowAdapter() {
+
+				musicUser.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosing(WindowEvent e) {
 						dispose();
@@ -130,9 +159,9 @@ public class SecondFrame extends JFrame implements ActionListener {
 
 		} else if (click == btn[4]) {
 			// 월드컵 열기
+
 		} else if (click == btn[5]) {
 			// 월드컵 랭킹 창 열기
 		}
 	}
-
 }

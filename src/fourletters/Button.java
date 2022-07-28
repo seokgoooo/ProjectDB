@@ -38,7 +38,7 @@ public class Button {
 	AttemptsQuiz attemptsQuiz = null;
 	User user;
 	fourletters currentfourletters = null;
-	
+
 	static int result = 0;
 
 	public void ListAdd(String id) {
@@ -50,7 +50,7 @@ public class Button {
 	}
 
 	public void favListAdd(String id) {
-		try {			
+		try {
 			dao.favread(id);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -112,8 +112,7 @@ public class Button {
 							adao.create(id, quizNumber);
 							attemptsQuiz = adao.read(id, quizNumber);
 						} else {
-							adao.updateCount(id, quizNumber,
-									attemptsQuiz.getAttemptsCount());
+							adao.updateCount(id, quizNumber, attemptsQuiz.getAttemptsCount());
 						}
 						adao.updateClear(id, quizNumber, true);
 						tf.setText("");
@@ -183,7 +182,7 @@ public class Button {
 		};
 		b.addActionListener(a);
 	}
-	
+
 	// 즐겨찾기 버튼
 	public void favoriteButton(JPanel p, JTextArea ta, JTextField tf) {
 		FourlettersDaoImpl fld = new FourlettersDaoImpl();
