@@ -12,7 +12,7 @@ import kr.co.greenart.dbutil.QuizDBUtil;
 public class RankingDaoImpl implements RankingDao {
 	
 	private Ranking resultMapping(ResultSet rs) throws SQLException {
-		String title = rs.getString("title");
+		String title = rs.getString("question");
 		int ratio = rs.getInt("ratio");
 		return new Ranking(title, ratio);
 	}
