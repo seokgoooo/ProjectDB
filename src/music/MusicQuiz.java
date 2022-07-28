@@ -378,7 +378,6 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 	public void homeBtnEvent() {
 		dispose();
-
 	}
 
 	// 재생 버튼 이벤트
