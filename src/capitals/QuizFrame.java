@@ -219,29 +219,29 @@ public class QuizFrame extends JFrame implements ActionListener {
 			}
 		}
 
-		if (e.getSource() == confirmBtn) {
-			System.out.println(currentNumber);
-			if (answertf.getText().equals(list.get(currentNumber).getAnswer())) {
-
-				try {
-					attemptsDao.updateClear(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(), true);
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-				JOptionPane.showMessageDialog(QuizFrame.this, "정답입니다.");
-				confirmBtn.setEnabled(false);
-				clearPnl.repaint();
-			} else {
-				JOptionPane.showMessageDialog(QuizFrame.this, "오답입니다.");
-			}
-			
-//			if(ja.getText().equals(list.get(0).getContinent())) {
-//				answertf.getText().equals(list.get(0).getAnswer());
-//				answertf.addActionListener(this);
-//				JOptionPane.showMessageDialog(QuizFrame.this, "정답");
-//				
+//		if (e.getSource() == confirmBtn) {
+//			System.out.println(currentNumber);
+//			if (answertf.getText().equals(list.get(currentNumber).getAnswer())) {
+//
+//				try {
+//					attemptsDao.updateClear(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(), true);
+//				} catch (SQLException e1) {
+//					e1.printStackTrace();
+//				}
+//				JOptionPane.showMessageDialog(QuizFrame.this, "정답입니다.");
+//				confirmBtn.setEnabled(false);
+//				clearPnl.repaint();
+//			} else {
+//				JOptionPane.showMessageDialog(QuizFrame.this, "오답입니다.");
 //			}
-		}
+//			
+////			if(ja.getText().equals(list.get(0).getContinent())) {
+////				answertf.getText().equals(list.get(0).getAnswer());
+////				answertf.addActionListener(this);
+////				JOptionPane.showMessageDialog(QuizFrame.this, "정답");
+////				
+////			}
+//		}
 		
 		confirmBtn.addActionListener(new ActionListener() {
 			
