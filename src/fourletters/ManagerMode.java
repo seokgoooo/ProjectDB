@@ -140,7 +140,7 @@ public class ManagerMode extends JFrame {
 		multipleChoice(pnlR3, ta, tf);
 		bt.ListAdd(user.getId());
 		bt.favListAdd(user.getId());
-		bt.MMOk_button(bt1, ta2, tf, btn1, btn2, btn3, pnlR3, ta, "ASH");
+		bt.MMOk_button(bt1, ta2, tf, btn1, btn2, btn3, pnlR3, ta, "ASH", this);
 		bt.MMDelete_button(bt2, tf);
 		inputButton(pnlR0, bt1, bt2, 1);
 		manager(pnlR2, btn0, btn1, btn2, btn3, 1);
@@ -192,7 +192,6 @@ public class ManagerMode extends JFrame {
 	public void multipleChoice(JPanel p, JTextArea ta, JTextField tf) {
 		FourlettersDaoImpl fld = new FourlettersDaoImpl();
 		GridLayout grid = new GridLayout(5, 6);
-		System.out.println(fld.list.size());
 		JButton[] bt = new JButton[fld.list.size()];
 
 		for (int i = 0; i < fld.list.size(); i++) {
