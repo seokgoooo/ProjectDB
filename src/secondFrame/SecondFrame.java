@@ -7,6 +7,8 @@ package secondFrame;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
+import capitals.CrudFrame;
+import capitals.QuizFrame;
 import fourletters.Main;
 import music.MusicManagerMode;
 import music.MusicQuiz;
@@ -27,6 +29,7 @@ public class SecondFrame extends JFrame implements ActionListener {
 	private User user;
 
 	MusicManagerMode musicManager = new MusicManagerMode();
+	private CrudFrame capitalsManager;
 
 	public User getUser() {
 		return user;
@@ -74,6 +77,31 @@ public class SecondFrame extends JFrame implements ActionListener {
 			new Main(user).setVisible(true);
 		} else if (click == btn[1]) {
 			// 국가-수도 퀴즈 열기
+
+			if (user.isManager()) {
+				capitalsManager = new CrudFrame();
+				capitalsManager.setVisible(true);
+			} else {
+				QuizFrame capitalsUser = new QuizFrame(user);
+				capitalsUser.setVisible(true);
+				setVisible(false);
+
+//				capitalsUser.getHomeBtn().addActionListener(new ActionListener() {
+//					@Override
+//					public void actionPerformed(ActionEvent e) {
+//						dispose();
+//						setVisible(true);
+//					}
+//				});
+
+				capitalsUser.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {
+						dispose();
+						setVisible(true);
+					}
+				});
+			}
 		} else if (click == btn[2]) {
 			// 퀴즈 랭킹 열기
 		} else if (click == btn[3]) {
@@ -84,24 +112,19 @@ public class SecondFrame extends JFrame implements ActionListener {
 				MusicQuiz musicQuiz = new MusicQuiz(user);
 				musicQuiz.setVisible(true);
 				setVisible(false);
-
 				musicQuiz.getHomeBtn().addActionListener(new ActionListener() {
-
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						dispose();
 						setVisible(true);
 					}
 				});
-
 				musicQuiz.addWindowListener(new WindowAdapter() {
-
 					@Override
 					public void windowClosing(WindowEvent e) {
 						dispose();
 						setVisible(true);
 					}
-
 				});
 			}
 

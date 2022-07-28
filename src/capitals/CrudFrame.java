@@ -31,7 +31,6 @@ public class CrudFrame extends JFrame {
 	private JScrollPane sp;
 	private List<Capitals> list;
 	private CapitalsDao dao;
-	private JFrame frame;
 	private JPanel panel;
 	private JTextField jf;
 	private JTextField jt1;
@@ -47,9 +46,9 @@ public class CrudFrame extends JFrame {
 
 		Dimension dim = new Dimension(600, 520); // 단순 2차원값 입력을 위한 클래스
 
-		frame = new JFrame("관리자 창");
-		frame.setLocation(0, 0);
-		frame.setPreferredSize(dim);
+		setTitle("수도 관리자 창");
+		setLocation(0, 0);
+		setPreferredSize(dim);
 
 		list = new ArrayList<>();
 
@@ -74,50 +73,50 @@ public class CrudFrame extends JFrame {
 
 		jf = new JTextField(20);
 		jf.setBounds(176, 329, 226, 23);
-		frame.getContentPane().add(jf);
+		getContentPane().add(jf);
 
 		JButton btn1 = new JButton("문제 추가");
 		btn1.setBounds(10, 282, 111, 23);
-		frame.getContentPane().add(btn1);
+		getContentPane().add(btn1);
 
 		JButton btn2 = new JButton("문제 수정");
 		btn2.setBounds(156, 282, 111, 23);
-		frame.getContentPane().add(btn2);
+		getContentPane().add(btn2);
 
 		JButton btn3 = new JButton("문제 삭제");
 		btn3.setBounds(291, 282, 111, 23);
-		frame.getContentPane().add(btn3);
+		getContentPane().add(btn3);
 
 		jt1 = new JTextField();
 		jt1.setBounds(176, 372, 226, 21);
-		frame.getContentPane().add(jt1);
+		getContentPane().add(jt1);
 		jt1.setColumns(10);
 
 		jt2 = new JTextField();
 		jt2.setBounds(176, 414, 226, 21);
-		frame.getContentPane().add(jt2);
+		getContentPane().add(jt2);
 		jt2.setColumns(10);
 
 		jt3 = new JTextField();
 		jt3.setBounds(176, 450, 226, 21);
-		frame.getContentPane().add(jt3);
+		getContentPane().add(jt3);
 		jt3.setColumns(10);
 
 		JLabel lbl1 = new JLabel("number");
 		lbl1.setBounds(75, 333, 85, 15);
-		frame.getContentPane().add(lbl1);
+		getContentPane().add(lbl1);
 
 		JLabel lbl2 = new JLabel("힌트(나라)");
 		lbl2.setBounds(75, 375, 85, 15);
-		frame.getContentPane().add(lbl2);
+		getContentPane().add(lbl2);
 
 		JLabel lbl3 = new JLabel("정답");
 		lbl3.setBounds(75, 417, 85, 15);
-		frame.getContentPane().add(lbl3);
+		getContentPane().add(lbl3);
 
 		JLabel lbl4 = new JLabel("대륙");
 		lbl4.setBounds(75, 453, 85, 15);
-		frame.getContentPane().add(lbl4);
+		getContentPane().add(lbl4);
 
 		// 버튼 구현
 		// 문제 추가 버튼
@@ -140,7 +139,7 @@ public class CrudFrame extends JFrame {
 						e1.printStackTrace();
 					}
 
-				} 
+				}
 				textReset();
 
 			}
@@ -205,15 +204,8 @@ public class CrudFrame extends JFrame {
 			}
 		});
 
-		frame.pack();
-		frame.setVisible(true);
+		setVisible(true);
 		setSize(1180, 820);
-		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
-
-	public static void main(String[] args) {
-		new CrudFrame();
-
 	}
 
 //갱신 메소드
@@ -241,10 +233,10 @@ public class CrudFrame extends JFrame {
 			body[i] = bodyS;
 		}
 
-		frame.getContentPane().setLayout(null);
+		getContentPane().setLayout(null);
 
 		panel.setBounds(0, 22, 402, 250);
-		frame.getContentPane().add(panel);
+		getContentPane().add(panel);
 		panel.setLayout(null);
 
 		table = new JTable(body, header);
@@ -262,7 +254,7 @@ public class CrudFrame extends JFrame {
 
 			}
 		});
-		
+
 		sp = new JScrollPane(table);
 		sp.setBounds(0, 0, 402, 250);
 		panel.add(sp);
