@@ -234,6 +234,7 @@ public class FirstFrame extends JFrame implements ActionListener {
 
 				sf.setUser(login);
 				sf.setVisible(true);
+				setVisible(false);
 			} else {
 				showPopUp("비밀번호가 달라요");
 			}

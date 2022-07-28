@@ -135,7 +135,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		JPanel leftTopPnl = new JPanel();
 		JPanel answerPnl = new JPanel();
 		JPanel questionPnl = new JPanel();
-		
+
 		// question Panel
 		questionPnl.setPreferredSize(new Dimension(700, 600));
 
@@ -143,12 +143,11 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 		JLabel lpLbl = new JLabel(new ImageIcon(lpUrl));
 		lpLbl.setPreferredSize(new Dimension(600, 350));
-		
+
 		infoLbl = new JLabel();
-		
+
 		questionPnl.add(lpLbl);
 		questionPnl.add(infoLbl);
-		
 
 		// 오른쪽 하위 Panel
 		JPanel showQuizPnl = new JPanel();
@@ -281,21 +280,21 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 		getMusic(list);
 		clearTrue(currentMusic);
-		
+
 		setSize(1180, 820);
 		setResizable(false);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		
+
 		addWindowListener(new WindowAdapter() {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
 				dispose();
-				if(play) {
+				if (play) {
 					player.end();
 				}
 			}
-			
+
 		});
 	}
 
@@ -331,7 +330,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			player.end();
 			timer.cancel();
 		}
-		
+
 		infoLbl.setText("");
 		answerTf.setText("");
 		pauseBtn.setVisible(false);
@@ -340,10 +339,10 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 		prevMusic = currentMusic;
 		currentMusic = list.get(i);
-		
+
 		clearTrue(currentMusic);
 		favoriteCheck(currentMusic);
-		
+
 		quizNumberLbl.setText(String.valueOf(i + 1));
 		map.put(currentMusic, prevMusic);
 
@@ -511,7 +510,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			player.end();
 			timer.cancel();
 		}
-		
+
 		infoLbl.setText("");
 		timeLbl.setText("" + timeOut);
 		getMusic(list);
@@ -555,14 +554,14 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 	// 해결한 문제인지 check 메소드
 	public void clearTrue(Music music) {
-		if(clearList.indexOf(music.getNumber()) != -1) {
+		if (clearList.indexOf(music.getNumber()) != -1) {
 			infoLbl.setText(String.valueOf(music));
 			confirmBtn.setEnabled(false);
 		} else {
 			confirmBtn.setEnabled(true);
 		}
 	}
-	
+
 	// 해결 문제 그리기
 	public void clearPnlRepaint() {
 		quizClearPnl.removeAll();
