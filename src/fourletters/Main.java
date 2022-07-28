@@ -27,13 +27,14 @@ import user.User;
 import user.UserDao;
 
 public class Main extends JFrame {
-	static dummyUser du = new dummyUser("ASH");
 	Dao dao = new FourlettersDaoImpl();
 	private User user;
 
 	public Main(User user) {
 		this.user = user;
 		Button bt = new Button();
+		bt.favListAdd(user.getId());
+		bt.ListAdd(user.getId());
 
 		JPanel pnlMain = new JPanel();
 		JPanel pnlLEFT = new JPanel();
@@ -144,16 +145,17 @@ public class Main extends JFrame {
 		pnlR2.add(btn6);
 
 		// 시작시 랜덤 문제 출제
-		bt.randomQuestion(ta);
 
 		// 버튼 기능 메소드들
-		bt.OK_button(btn1, ta, tf, user.getId(), pnlL2, cb1);
+		bt.randomQuestion(ta);
+		bt.OK_button(btn1, ta, tf, user.getId(),pnlL2, cb1);
 		bt.next_button(btn2, ta, cb1, ta2);
 		bt.hint_button(btn3, ta, ta2);
-		bt.favoriteCheck(quizFavoritePnl, cb1, ta, tf, user.getId());
+		bt.favoriteButton(quizFavoritePnl, ta2, tf);
+		bt.favoriteCheck(quizFavoritePnl, cb1, ta, tf, this, user.getId());
 		multipleChoice(quizFavoritePnl, ta, cb1);
 
-//		bt.ListAdd("ASH");
+		
 		pnlR3.setVisible(false);
 		ta2.setPreferredSize(new Dimension(500, 200));
 //		ta2.setLayout();
@@ -163,11 +165,10 @@ public class Main extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	// 객관식보기 버튼
+	// 즐겨찾기 보기 버튼
 	public void multipleChoice(JPanel p, JTextArea ta, JCheckBox cb1) {
 		FourlettersDaoImpl fld = new FourlettersDaoImpl();
 		GridLayout grid = new GridLayout(5, 6);
-		System.out.println(fld.favlist.size());
 		JButton[] bt = new JButton[fld.favlist.size()];
 
 		for (int i = 0; i < fld.favlist.size(); i++) {
@@ -182,7 +183,6 @@ public class Main extends JFrame {
 						ta.setText(dao.read(Integer.valueOf((array[0]))).toQuestion());
 						int result = (dao.readst(ta.getText()).toNumber());
 						if (fld.favlist.contains(result)) {
-							System.out.println(result);
 							cb1.setSelected(true);
 						} else {
 							cb1.setSelected(false);
