@@ -178,7 +178,9 @@ public class MusicManagerMode extends JFrame implements ActionListener {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				dispose();
-				player.end();
+				if(play) {
+					player.end();
+				}
 			}
 			
 		});
@@ -270,7 +272,8 @@ public class MusicManagerMode extends JFrame implements ActionListener {
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(allPnl, "해당 필드 값이 올바른지 확인하세요.");
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(allPnl, "같은 이름의 곡은 등록 할 수 없습니다.");
+			e.printStackTrace();
+//			JOptionPane.showMessageDialog(allPnl, "같은 이름의 곡은 등록 할 수 없습니다.");
 		}
 	}
 
