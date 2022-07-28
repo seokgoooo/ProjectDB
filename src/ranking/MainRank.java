@@ -9,9 +9,9 @@ import javax.swing.UIManager;
 public class MainRank extends JFrame {
 	private JTabbedPane tabbedPane = null;
 
+	private MyRankPanel musicsPnl = new MyRankPanel("music");
 	private MyRankPanel fourlettersPnl = new MyRankPanel("fourletters");
 	private MyRankPanel capitalsPnl = new MyRankPanel("capitals");
-	private MyRankPanel musicsPnl = new MyRankPanel("music");
 
 	public MainRank() throws SQLException {
 		super();
@@ -25,9 +25,9 @@ public class MainRank extends JFrame {
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane);
 		tabbedPane.setBounds(0, 0, 1180, 800);
+		tabbedPane.addTab("음악", null, musicsPnl.getPnl(), null);
 		tabbedPane.addTab("사자성어", null, fourlettersPnl.getPnl(), null);
 		tabbedPane.addTab("국가수도", null, capitalsPnl.getPnl(), null);
-		tabbedPane.addTab("음악", null, musicsPnl.getPnl(), null);
 
 	}
 
