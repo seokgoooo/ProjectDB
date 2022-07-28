@@ -32,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -42,6 +43,7 @@ import attempts.AttemptsQuiz;
 import favorite.FavoritesDAO;
 import favorite.FavoritesDAOImpl;
 import user.User;
+import java.awt.Font;
 
 public class MusicQuiz extends JFrame implements ActionListener {
 	private MusicDao musicDao = new MusicDaoImpl();
@@ -116,9 +118,10 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private boolean prev = false;
 	private JPanel quizClearPnl;
 	private JPanel quizFavoritePnl;
-	private JLabel infoLbl;
+	private JTextArea infoTA;
 
 	public MusicQuiz(User user) {
+		getContentPane().setBackground(new Color(0, 0, 0));
 		this.user = user;
 
 		pnlMain = new JPanel();
@@ -142,12 +145,17 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		URL lpUrl = MusicQuiz.class.getClassLoader().getResource("spacing out.gif");
 
 		JLabel lpLbl = new JLabel(new ImageIcon(lpUrl));
-		lpLbl.setPreferredSize(new Dimension(600, 350));
+		lpLbl.setPreferredSize(new Dimension(650, 370));
 		
-		infoLbl = new JLabel();
+		infoTA = new JTextArea();
+		infoTA.setDisabledTextColor(new Color(0, 204, 0));
+		infoTA.setFont(new Font("Monospaced", Font.PLAIN, 40));
+		infoTA.setForeground(Color.GREEN);
 		
 		questionPnl.add(lpLbl);
-		questionPnl.add(infoLbl);
+		questionPnl.add(infoTA);
+		infoTA.setVisible(false);
+		infoTA.setEnabled(false);
 		
 
 		// 오른쪽 하위 Panel
@@ -183,7 +191,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		allQuiz = new JButton[list.size()];
 
 		for (int i = 0; i < allQuiz.length; i++) {
-			allQuiz[i] = new JButton(String.valueOf(i + 1));
+			allQuiz[i] = new JButton(String.format("%02d",(i + 1)));
 			allQuiz[i].addActionListener(this);
 			quizAllPnl.add(allQuiz[i]);
 		}
@@ -219,8 +227,11 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		leftTopPnl.setLayout(new BorderLayout());
 
 		quizNumberLbl = new JLabel("문제 번호");
-		timeLbl = new JLabel("" + timeOut);
+		quizNumberLbl.setFont(new Font("굴림", Font.PLAIN, 20));
+		timeLbl = new JLabel("" + timeOut + "초");
+		timeLbl.setFont(new Font("굴림", Font.PLAIN, 20));
 		favoriteCb = new JCheckBox("즐겨찾기");
+		favoriteCb.setFont(new Font("굴림", Font.PLAIN, 20));
 		favoriteCb.addActionListener(this);
 
 		leftTopPnl.add(quizNumberLbl, "West");
@@ -265,7 +276,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		functionPnl.setBorder(new TitledBorder(new LineBorder(Color.yellow, 3), "기능"));
 
 		// 메인
-		add(pnlMain);
+		getContentPane().add(pnlMain);
 		pnlMain.add(pnlLEFT);
 		pnlMain.add(pnlRight);
 
@@ -332,7 +343,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			timer.cancel();
 		}
 		
-		infoLbl.setText("");
+		infoTA.setVisible(false);
 		answerTf.setText("");
 		pauseBtn.setVisible(false);
 		playBtn.setVisible(true);
@@ -344,10 +355,10 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		clearTrue(currentMusic);
 		favoriteCheck(currentMusic);
 		
-		quizNumberLbl.setText(String.valueOf(i + 1));
+		quizNumberLbl.setText(String.format("%02d", (i + 1)) + "번");
 		map.put(currentMusic, prevMusic);
 
-		timeLbl.setText("" + 60);
+		timeLbl.setText("" + 60 + "초");
 
 		first = true;
 	}
@@ -435,7 +446,8 @@ public class MusicQuiz extends JFrame implements ActionListener {
 				}
 				JOptionPane.showMessageDialog(pnlMain, "정답입니다.");
 				confirmBtn.setEnabled(false);
-				infoLbl.setText(String.valueOf(currentMusic));
+				infoTA.setText("가수: " + currentMusic.getSinger() + "\n제목: " + currentMusic.getTitle() + "\n발매년도: " + currentMusic.getYear());
+				infoTA.setVisible(true);
 				timer.cancel();
 				clearPnlRepaint();
 			} else {
@@ -460,7 +472,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 			@Override
 			public void run() {
-				timeLbl.setText("" + count);
+				timeLbl.setText("" + count + "초");
 				count--;
 
 				if (count < 0) {
@@ -482,8 +494,8 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			player.end();
 			timer.cancel();
 		}
-		infoLbl.setText("");
-		timeLbl.setText("" + timeOut);
+		infoTA.setText("");
+		timeLbl.setText("" + timeOut + "초");
 
 		pauseBtn.setVisible(false);
 		playBtn.setVisible(true);
@@ -499,7 +511,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		clearTrue(currentMusic);
 		favoriteCheck(currentMusic);
 
-		quizNumberLbl.setText("" + (list.indexOf(currentMusic) + 1));
+		quizNumberLbl.setText(String.format("%02d", (list.indexOf(currentMusic) + 1)) + "번");
 
 		prev = true;
 		first = true;
@@ -512,8 +524,8 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			timer.cancel();
 		}
 		
-		infoLbl.setText("");
-		timeLbl.setText("" + timeOut);
+		infoTA.setText("");
+		timeLbl.setText("" + timeOut + "초");
 		getMusic(list);
 		prevBtn.setEnabled(true);
 		pauseBtn.setVisible(false);
@@ -556,7 +568,8 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	// 해결한 문제인지 check 메소드
 	public void clearTrue(Music music) {
 		if(clearList.indexOf(music.getNumber()) != -1) {
-			infoLbl.setText(String.valueOf(music));
+			infoTA.setText("가수: " + currentMusic.getSinger() + "\n제목: " + currentMusic.getTitle() + "\n발매년도: " + currentMusic.getYear());
+			infoTA.setVisible(true);
 			confirmBtn.setEnabled(false);
 		} else {
 			confirmBtn.setEnabled(true);
@@ -582,7 +595,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			clearQuiz[i] = new JButton("" + (list.indexOf(m) + 1));
+			clearQuiz[i] = new JButton(String.format("%02d", (list.indexOf(m) + 1)));
 			clearQuiz[i].addMouseListener(mouseAdapter2);
 			quizClearPnl.add(clearQuiz[i]);
 		}
@@ -611,7 +624,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 				e.printStackTrace();
 			}
 
-			favoriteQuiz[i] = new JButton("" + (list.indexOf(m) + 1));
+			favoriteQuiz[i] = new JButton(String.format("%02d", (list.indexOf(m) + 1)));
 			favoriteQuiz[i].addMouseListener(mouseAdapter);
 			quizFavoritePnl.add(favoriteQuiz[i]);
 		}
@@ -638,12 +651,12 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		Random random = new Random();
 		int index = random.nextInt(list.size());
 		Music music = list.get(index);
-		quizNumberLbl.setText(String.valueOf(index + 1));
+		quizNumberLbl.setText(String.format("%02d",(index + 1)) + "번");
 
 		while (music.equals(currentMusic)) {
 			index = random.nextInt(list.size());
 			music = list.get(index);
-			quizNumberLbl.setText(String.valueOf(index + 1));
+			quizNumberLbl.setText(String.format("%02d",(index + 1)) + "번");
 		}
 
 		prevMusic = currentMusic;
