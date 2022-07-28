@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import kr.co.greenart.dbutil.QuizDBUtil;
 // 관리자 클래스 CRUD 기능 
@@ -21,6 +22,7 @@ public class Manager implements CapitalsDao {
 		return new Capitals(number, question, answer, continent);
 	}
 
+	// create
 	@Override
 	public int create(int number, String question, String answer, String continent) throws SQLException {
 		String query = "INSERT INTO Capitals(number, question, answer, continent) VALUES (?, ?, ?, ?)";
@@ -44,6 +46,7 @@ public class Manager implements CapitalsDao {
 		}
 	}
 
+	// read 목록전체
 	@Override
 	public List<Capitals> read() throws SQLException {
 		String query = "SELECT * FROM Capitals";
@@ -73,6 +76,7 @@ public class Manager implements CapitalsDao {
 		return list;
 	}
 
+	// 업데이트
 	@Override
 	public int update(int number, String question, String answer, String continent) throws SQLException {
 		String query = "UPDATE Capitals Set question = ?, answer = ?, continent = ? Where number = ?";
@@ -96,6 +100,7 @@ public class Manager implements CapitalsDao {
 
 	}
 
+	// 삭제
 	@Override
 	public int delete(int number) throws SQLException {
 		String query = "DELETE FROM Capitals Where number = ?";
@@ -115,4 +120,33 @@ public class Manager implements CapitalsDao {
 		}
 	}
 
+	// 하나불러오기
+	@Override
+	public Capitals read(int number) throws SQLException {
+		String query = "Select * from music where number = ?";
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		conn = QuizDBUtil.getConnection();
+		pstmt = conn.prepareStatement(query);
+		pstmt.setInt(1, number);
+
+		rs = pstmt.executeQuery();
+
+		try {
+			if (rs.next()) {
+				return resultMapping(rs);
+			} else {
+				return null;
+			}
+		} finally {
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
+
+		}
+
+	}
 }
