@@ -125,4 +125,44 @@ public class RankingDaoImpl implements RankingDao {
 		return list;
 	}
 
+	@Override
+	public List<Ranking> maxTest(String table) throws SQLException {
+		int low,high;
+		if(table.equals("music")) {
+			low = 3000;
+			high = 3999;
+		} else if(table.equals("fourletters")) {
+			low = 2000;
+			high = 2999;
+		} else {
+			low = 1000;
+			high = 1999;
+		}
+		String query = "call max_test(?, ?, ?)";
+		List<Ranking> list = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, low);
+			pstmt.setInt(2, high);
+			pstmt.setString(3, table);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				list.add(resultMapping(rs));
+			}
+			
+		}finally {
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
+		}
+		
+		return list;
+	}
+
 }

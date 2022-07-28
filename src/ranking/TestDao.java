@@ -7,7 +7,7 @@ public class TestDao {
 		RankingDao dao = new RankingDaoImpl();
 		
 		try {
-			System.out.println(dao.incorrectRatio("music"));
+			System.out.println(dao.maxTest("music"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
