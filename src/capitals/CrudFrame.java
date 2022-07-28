@@ -204,7 +204,6 @@ public class CrudFrame extends JFrame {
 			}
 		});
 
-		setVisible(true);
 		setSize(1180, 820);
 	}
 
