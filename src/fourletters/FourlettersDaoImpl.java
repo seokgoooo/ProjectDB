@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import attempts.AttemptsDAOImpl;
 import kr.co.greenart.dbutil.QuizDBUtil;
 
 public class FourlettersDaoImpl implements Dao {
@@ -109,7 +110,7 @@ public class FourlettersDaoImpl implements Dao {
 	// 다푼문제에 저장
 	@Override
 	public int clearSave(String id, int quizNum) throws SQLException {
-		String query = "INSERT INTO clearquiz_copy (id, quiznumber) VALUES (?, ?)";
+		String query = "INSERT INTO attemptsquiz (id, quiznumber) VALUES (?, ?)";
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -306,12 +307,12 @@ public class FourlettersDaoImpl implements Dao {
 	// 즐겨찾기 메소드
 	@Override
 	public List<Integer> favread(String id) throws SQLException {
-		String query = "SELECT quiznumber FROM favoritesquiz_copy where id = ?";
+		String query = "SELECT quiznumber FROM favoritesquiz where id = ?";
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-
+		
 		try {
 			conn = QuizDBUtil.getConnection();
 			pstmt = conn.prepareStatement(query);
@@ -360,7 +361,7 @@ public class FourlettersDaoImpl implements Dao {
 
 	@Override
 	public int favoriteUpdate(String id, int number) throws SQLException {
-		String query = "INSERT INTO favoritesquiz_copy (id, quiznumber) VALUES (?, ?)";
+		String query = "INSERT INTO favoritesquiz (id, quiznumber) VALUES (?, ?)";
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -384,7 +385,7 @@ public class FourlettersDaoImpl implements Dao {
 
 	@Override
 	public int favoriteDelete(String id, int number) throws SQLException {
-		String query = "DELETE FROM favoritesquiz_copy WHERE quiznumber = ?";
+		String query = "DELETE FROM favoritesquiz WHERE quiznumber = ?";
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -403,24 +404,28 @@ public class FourlettersDaoImpl implements Dao {
 			QuizDBUtil.closeConn(conn);
 		}
 	}
-
-	@Override
-	public int favoriteSerch(int number) throws SQLException {
-		String query = "SELECT quiznumber FROM favoritesquiz_copy GROUP BY ? HAVING COUNT (quiznumber) > 1";
-
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-
-		try {
-			conn = QuizDBUtil.getConnection();
-			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, number);
-
-			return pstmt.executeUpdate();
-		} finally {
-			QuizDBUtil.closePstmt(pstmt);
-			QuizDBUtil.closeConn(conn);
-		}
-	}
-
+	
+//	@Override
+//	public Integer favoriteSerch(int number) throws SQLException {
+////		String query = "SELECT count(?) FROM favoritesquiz GROUP BY ? HAVING COUNT(?) > 1 and quiznumber between 2000 and 2999";
+//		String query = "select quiznumber FROM favoritesquiz where quiznumber = ?";
+//
+//		Connection conn = null;
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+//		rs = pstmt.executeQuery();
+//		
+//		try {
+//			conn = QuizDBUtil.getConnection();
+//			pstmt = conn.prepareStatement(query);
+//			pstmt.setInt(1, number);
+//
+//			if (rs.next()) {
+//				return favMapping(rs);
+//			}
+//		} finally {
+//			QuizDBUtil.closePstmt(pstmt);
+//			QuizDBUtil.closeConn(conn);
+//		}
+//	}
 }
