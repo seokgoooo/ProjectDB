@@ -21,7 +21,7 @@ public interface Dao {
 	int readque(int number) throws SQLException;
 	int favoriteUpdate(String id, int number) throws SQLException;
 	int favoriteDelete(String id, int number) throws SQLException;
-	int favoriteSerch(int number) throws SQLException;
+//	int favoriteSerch(int number) throws SQLException;
 
 }
 
