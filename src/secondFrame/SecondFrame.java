@@ -16,6 +16,8 @@ import javax.swing.JButton;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.Color;
 import java.awt.Font;
 
@@ -81,6 +83,16 @@ public class SecondFrame extends JFrame implements ActionListener {
 			} else {
 				MusicQuiz musicQuiz = new MusicQuiz(user);
 				musicQuiz.setVisible(true);
+				setVisible(false);
+				musicQuiz.addWindowListener(new WindowAdapter() {
+
+					@Override
+					public void windowClosing(WindowEvent e) {
+						dispose();
+						setVisible(true);
+					}
+					
+				});
 			}
 				
 		} else if (click == btn[4]) {
