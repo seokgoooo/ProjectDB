@@ -135,5 +135,4 @@ public class SecondFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	
 }

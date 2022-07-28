@@ -180,13 +180,6 @@ public class FirstFrame extends JFrame implements ActionListener {
 		signInBtn.setForeground(new Color(0, 102, 102));
 		signInBtn.setFont(new Font("한컴산뜻돋움", Font.PLAIN, 30));
 
-		signInBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				loginClick();
-			}
-		});
-
 		signInBtn.addActionListener(this);
 		signInBtn.setActionCommand("login");
 		signUpBtn.addMouseListener(mc);
