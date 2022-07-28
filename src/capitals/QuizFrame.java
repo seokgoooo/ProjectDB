@@ -24,6 +24,7 @@ import attempts.AttemptsDAOImpl;
 import attempts.AttemptsQuiz;
 import favorite.FavoritesDAO;
 import favorite.FavoritesDAOImpl;
+import sun.tools.jar.resources.jar;
 import user.User;
 
 import javax.swing.JCheckBox;
@@ -45,16 +46,14 @@ public class QuizFrame extends JFrame implements ActionListener {
 	private JCheckBox favorite;
 	private Capitals capitals;
 	private JTextField answertf;
-	private JButton confirmBtn;
 	private AttemptsQuiz attemptsQuiz;
 	private JPanel clearPnl;
 	private JButton[] clearQuiz;
 	private JButton[] favoriteQuiz;
 	private CapitalsDao capitalsDao;
-
+    private int currentNumber;
 	public QuizFrame(User user) {
 		this.user = user;
-
 		setTitle("수도퀴즈");
 		JPanel pnlMain = new JPanel();
 		JPanel pnlLEFT = new JPanel();
@@ -68,8 +67,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 
-		// 문제와 정답을 맞출 텍스트 필드들
-		JTextArea ja = new JTextArea(15, 20);
+		ja = new JTextArea(15, 20);
 		ja.setBounds(7, 17, 561, 593);
 		answertf = new JTextField(20);
 		answertf.setBounds(140, 23, 226, 21);
@@ -137,6 +135,17 @@ public class QuizFrame extends JFrame implements ActionListener {
 			allQuiz[i].addActionListener(this);
 			allPanel.add(allQuiz[i]);
 		}
+//		//
+//		allQuiz[0].addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				ja.setText(String.valueOf(list.get(0).getContinent()));
+//				
+//			}
+//		});
+
+		// 맞춘문제
 
 		clearPnl = new JPanel();
 		tabbedPane.addTab("맞춘 문제", null, clearPnl, null);
@@ -151,6 +160,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 			clearPnl.repaint();
 		}
 
+		// 즐겨찾기
 		favoritePnl = new JPanel();
 		tabbedPane.addTab("즐겨찾기", null, favoritePnl, null);
 		favoritePnl.setLayout(new GridLayout(5, 5));
@@ -165,12 +175,15 @@ public class QuizFrame extends JFrame implements ActionListener {
 			favoritePnl.repaint();
 		}
 
-		// --오른쪽[3]
+		// 왼쪽 확인 버튼 및 텍스트
 
-		OK_button(pnlL1);
+		confirmBtn = new JButton("확인");
+		confirmBtn.setBounds(379, 24, 76, 21);
+		confirmBtn.addActionListener(this);
+		pnlL1.add(confirmBtn);
 
 		JTextArea ja2 = new JTextArea(20, 30);
-		ja2.setBounds(12, 16, 537, 60);
+		ja2.setBounds(12, 16, 458, 60);
 		JPanel pnlhint = new JPanel();
 		pnlhint.setBounds(7, 620, 561, 86);
 		pnlLEFT.add(pnlhint);
@@ -180,29 +193,84 @@ public class QuizFrame extends JFrame implements ActionListener {
 
 		// --힌트[1]
 		pnlhint.add(ja2);
-
+		
+		JButton btnNewButton = new JButton("힌트");
+		btnNewButton.setBounds(482, 36, 67, 23);
+		pnlhint.add(btnNewButton);
 		setSize(1180, 820);
-
 		setLocationRelativeTo(null);
 		setResizable(false);
-
 		favorite.addActionListener(this);
-
 	}
 
 	// 버튼 이벤트
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == favorite) {
-			favoriteEvent();
+			//favoriteEvent();
 		}
+
+		for (int i = 0; i < allQuiz.length; i++) {
+			if (e.getSource() == allQuiz[i]) {
+//				allQuizEvent();
+				allQuiz[i].addActionListener(this);
+				ja.setText(String.valueOf(list.get(i).getContinent()));
+				currentNumber = i;
+			}
+		}
+
+		if (e.getSource() == confirmBtn) {
+			System.out.println(currentNumber);
+			if (answertf.getText().equals(list.get(currentNumber).getAnswer())) {
+
+				try {
+					attemptsDao.updateClear(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(), true);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				JOptionPane.showMessageDialog(QuizFrame.this, "정답입니다.");
+				confirmBtn.setEnabled(false);
+				clearPnl.repaint();
+			} else {
+				JOptionPane.showMessageDialog(QuizFrame.this, "오답입니다.");
+			}
+			
+//			if(ja.getText().equals(list.get(0).getContinent())) {
+//				answertf.getText().equals(list.get(0).getAnswer());
+//				answertf.addActionListener(this);
+//				JOptionPane.showMessageDialog(QuizFrame.this, "정답");
+//				
+//			}
+		}
+		
+		confirmBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(ja.getText().equals(list.get(0).getContinent())) {
+					answertf.getText().equals(list.get(0).getAnswer());
+					JOptionPane.showMessageDialog(QuizFrame.this, "정답");
+				}
+			}
+			
+		});
+		
+
 	}
+	
+	
+
+//	private void allQuizEvent() {
+//		for (int i = 0; i < allQuiz.length; i++) {
+//
+//		}
+//	}
 
 	// 즐겨 찾기
 	public void favoriteEvent() {
 		if (favorite.isSelected()) {
 			try {
-				favoriteDao.create(user.getFavoriteID(), capitals.getNumber());
+				favoriteDao.create(user.getFavoriteID(), list.get(0).getNumber());
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -229,9 +297,6 @@ public class QuizFrame extends JFrame implements ActionListener {
 
 	// 확인버튼
 	public void OK_button(JPanel p) {
-		confirmBtn = new JButton("확인");
-		confirmBtn.setBounds(378, 22, 74, 23);
-		p.add(confirmBtn);
 	}
 
 	public void confirmBtnEvent() {
@@ -280,6 +345,8 @@ public class QuizFrame extends JFrame implements ActionListener {
 		}
 	};
 	private JPanel favoritePnl;
+	private JTextArea ja;
+	private JButton confirmBtn;
 
 	// 해결 문제 그리기
 	public void clearPnlRepaint() {

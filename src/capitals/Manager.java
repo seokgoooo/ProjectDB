@@ -22,28 +22,45 @@ public class Manager implements CapitalsDao {
 		return new Capitals(number, question, answer, continent);
 	}
 
-	// create
+	// 음악을 DB에 추가
 	@Override
-	public int create(int number, String question, String answer, String continent) throws SQLException {
-		String query = "INSERT INTO Capitals(number, question, answer, continent) VALUES (?, ?, ?, ?)";
+	public void create(int number, String question, String answer, String continent) throws SQLException {
+		String query = "Insert Into capitals (number, question, answer, continent) values (?, ?, ?, ?)";
+		String mediumQuery = "Insert Into mediumtable (quizType, quiznumber) values (?,?)";
 
 		Connection conn = null;
-		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;
 
 		try {
 			conn = QuizDBUtil.getConnection();
-			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, number);
-			pstmt.setString(2, question);
-			pstmt.setString(3, answer);
-			pstmt.setString(4, continent);
+			conn.setAutoCommit(false);
 
-			return pstmt.executeUpdate();
+			pstmt1 = conn.prepareStatement(mediumQuery);
+			pstmt1.setString(1, "capitals");
+			pstmt1.setInt(2, number);
+			pstmt1.executeUpdate();
 
+			pstmt2 = conn.prepareStatement(query);
+			pstmt2.setInt(1, number);
+			pstmt2.setString(2, question);
+			pstmt2.setString(3, answer);
+			pstmt2.setString(4, continent);
+			pstmt2.executeUpdate();
+
+			conn.commit();
+
+		} catch (
+
+		SQLException e) {
+			e.printStackTrace();
+			conn.rollback();
 		} finally {
-			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closePstmt(pstmt1);
+			QuizDBUtil.closePstmt(pstmt2);
 			QuizDBUtil.closeConn(conn);
 		}
+
 	}
 
 	// read 목록전체
@@ -100,10 +117,10 @@ public class Manager implements CapitalsDao {
 
 	}
 
-	// 삭제
+	// 음악 삭제
 	@Override
 	public int delete(int number) throws SQLException {
-		String query = "DELETE FROM Capitals Where number = ?";
+		String query = "DELETE FROM mediumtable where quiznumber = ?";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 

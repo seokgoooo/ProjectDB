@@ -9,7 +9,7 @@ import music.Music;
 
 public interface CapitalsDao {
 
-	int create(int number, String question, String answer, String continent) throws SQLException;
+	void create(int number, String question, String answer, String continent) throws SQLException;
 
 	List<Capitals> read() throws SQLException;
 	
