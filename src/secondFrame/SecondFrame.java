@@ -70,6 +70,7 @@ public class SecondFrame extends JFrame implements ActionListener {
 		}
 		setResizable(false);
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
 	@Override
