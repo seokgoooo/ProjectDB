@@ -9,8 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +56,7 @@ public class FirstFrame extends JFrame implements ActionListener {
 	private TextLimit tl = new TextLimit();
 	private TextFieldFocus tff = new TextFieldFocus();
 	private MusicPlayer player = new MusicPlayer();
-	private URI uri = null;
+	private URL url = null;
 	private SecondFrame sf = new SecondFrame();
 
 	public FirstFrame() throws SQLException {
@@ -63,13 +66,13 @@ public class FirstFrame extends JFrame implements ActionListener {
 		makeFrame();
 		makeGui();
 
+		url = FirstFrame.class.getClassLoader().getResource("사랑해도 될까요.mp3");
+
 		try {
-			uri = FirstFrame.class.getClassLoader().getResource("사랑해도 될까요.mp3").toURI();
-		} catch (URISyntaxException e) {
+			player.play(new File(URLDecoder.decode(url.getPath(), "UTF-8")));
+		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-
-		player.play(new File(uri));
 	}
 
 //      JFrame 기본틀
