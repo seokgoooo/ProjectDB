@@ -16,7 +16,7 @@ public class RankingDaoImpl implements RankingDao {
 		int ratio = rs.getInt("ratio");
 		return new Ranking(title, ratio);
 	}
-
+	//  정답률 top5
 	@Override
 	public List<Ranking> correctRatio(String table) throws SQLException {
 		int low, high;
@@ -57,6 +57,7 @@ public class RankingDaoImpl implements RankingDao {
 		return list;
 	}
 
+	// 오답률 top5
 	@Override
 	public List<Ranking> incorrectRatio(String table) throws SQLException {
 		int low, high;
@@ -97,6 +98,7 @@ public class RankingDaoImpl implements RankingDao {
 		return list;
 	}
 
+	// 즐겨찾기 top5
 	@Override
 	public List<Ranking> favoriteTop(String table) throws SQLException {
 		String query = "call favorite_top(?)";
@@ -125,6 +127,7 @@ public class RankingDaoImpl implements RankingDao {
 		return list;
 	}
 
+	// 많이푼 순서  top5
 	@Override
 	public List<Ranking> maxTest(String table) throws SQLException {
 		int low, high;
@@ -166,6 +169,7 @@ public class RankingDaoImpl implements RankingDao {
 		return list;
 	}
 
+	// 연령대별 퀴즈 유형 순위 
 	@Override
 	public List<Ranking> ageTop(int age) throws SQLException {
 		String query = "call age_best(?)";
