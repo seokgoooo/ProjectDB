@@ -154,7 +154,7 @@ public class SecondFrame extends JFrame implements ActionListener {
 			// 퀴즈 랭킹 열기
 			MainRank rank;
 			try {
-				rank = new MainRank(user);
+				rank = new MainRank();
 				rank.setVisible(true);
 				setVisible(false);
 
@@ -175,14 +175,6 @@ public class SecondFrame extends JFrame implements ActionListener {
 				});
 
 				rank.getFourlettersPnl().getHomeBtn().addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						rank.dispose();
-						setVisible(true);
-					}
-				});
-
-				rank.getTotalPnl().getHomeBtn().addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						rank.dispose();

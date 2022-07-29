@@ -27,23 +27,6 @@ public class Ranking {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof Ranking))
-			return false;
-		Ranking other = (Ranking) obj;
-		if (ratio != other.ratio)
-			return false;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "Ranking [title=" + title + ", ratio=" + ratio + "]";
 	}
