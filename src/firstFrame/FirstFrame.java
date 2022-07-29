@@ -76,7 +76,7 @@ public class FirstFrame extends JFrame implements ActionListener {
 	public void makeFrame() {
 		setSize(1180, 820);
 		setVisible(true);
-		getContentPane().setBackground(Color.WHITE);
+		getContentPane().setBackground(new Color(255, 255, 255));
 		getContentPane().setLayout(null);
 		setResizable(false);
 		setLocationRelativeTo(null);
