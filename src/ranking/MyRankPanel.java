@@ -26,11 +26,11 @@ public class MyRankPanel implements ActionListener {
 	private JPanel bottomPnl = new JPanel();
 	private JComboBox<String> comboBox = new JComboBox<String>();
 	private JButton openBtn = new JButton();
+	private JButton homeBtn = new JButton();
 
 	private RankingDao dao = new RankingDaoImpl();
 
 	public MyRankPanel(String table) throws SQLException {
-		System.out.println(table);
 		pnl.setBackground(Color.WHITE);
 		pnl.setLayout(null);
 
@@ -42,7 +42,7 @@ public class MyRankPanel implements ActionListener {
 		pnl.add(titleLbl);
 
 		bottomPnl.setBackground(Color.WHITE);
-		bottomPnl.setBounds(750, 700, 390, 35);
+		bottomPnl.setBounds(620, 700, 500, 35);
 		bottomPnl.setLayout(null);
 		pnl.add(bottomPnl);
 
@@ -61,6 +61,13 @@ public class MyRankPanel implements ActionListener {
 		openBtn.setFont(new Font("휴먼모음T", Font.PLAIN, 22));
 		openBtn.addActionListener(this);
 		bottomPnl.add(openBtn);
+
+		homeBtn = new JButton("HOME");
+		homeBtn.setBounds(390, 0, 90, 35);
+		homeBtn.setBackground(new Color(0, 102, 102));
+		homeBtn.setForeground(new Color(255, 255, 255));
+		homeBtn.setFont(new Font("휴먼모음T", Font.PLAIN, 22));
+		bottomPnl.add(homeBtn);
 
 		paintMain();
 	}
@@ -198,5 +205,9 @@ public class MyRankPanel implements ActionListener {
 
 	public Panel getPnl() {
 		return pnl;
+	}
+
+	public JButton getHomeBtn() {
+		return homeBtn;
 	}
 }

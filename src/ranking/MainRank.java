@@ -4,7 +4,6 @@ import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
 
 public class MainRank extends JFrame {
 	private JTabbedPane tabbedPane = null;
@@ -15,12 +14,11 @@ public class MainRank extends JFrame {
 
 	public MainRank() throws SQLException {
 		super();
-		setTitle("랭킹");
+		setTitle("랭킹 & 통계");
 		setSize(1180, 820);
 		getContentPane().setLayout(null);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		dispose();
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane);
@@ -28,14 +26,17 @@ public class MainRank extends JFrame {
 		tabbedPane.addTab("음악", null, musicsPnl.getPnl(), null);
 		tabbedPane.addTab("사자성어", null, fourlettersPnl.getPnl(), null);
 		tabbedPane.addTab("국가수도", null, capitalsPnl.getPnl(), null);
-
 	}
 
-	public static void main(String[] args) throws SQLException {
-		try {
-			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-		} catch (Exception e) {
-		}
-		new MainRank().setVisible(true);
+	public MyRankPanel getMusicsPnl() {
+		return musicsPnl;
+	}
+
+	public MyRankPanel getFourlettersPnl() {
+		return fourlettersPnl;
+	}
+
+	public MyRankPanel getCapitalsPnl() {
+		return capitalsPnl;
 	}
 }
