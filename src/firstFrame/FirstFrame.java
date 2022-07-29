@@ -69,7 +69,7 @@ public class FirstFrame extends JFrame implements ActionListener {
 		makeFrame();
 		makeGui();
 		
-		InputStream is = FirstFrame.class.getClassLoader().getResourceAsStream("사랑해도 될까요.mp3");
+		InputStream is = FirstFrame.class.getClassLoader().getResourceAsStream("사랑해도될까요.mp3");
 		
 		player.play(copyInputStreamTofile(is));
 	}
