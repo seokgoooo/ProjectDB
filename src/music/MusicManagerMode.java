@@ -7,6 +7,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
@@ -172,17 +176,17 @@ public class MusicManagerMode extends JFrame implements ActionListener {
 		setSize(700, 500);
 		setResizable(false);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		
+
 		addWindowListener(new WindowAdapter() {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
 				dispose();
-				if(play) {
+				if (play) {
 					player.end();
 				}
 			}
-			
+
 		});
 	}
 
@@ -233,7 +237,7 @@ public class MusicManagerMode extends JFrame implements ActionListener {
 	// 재생 버튼 이벤트 메소드
 	public void playBtnEvent() {
 		try {
-			player.play(new File(getURI(m.getTitle())));
+			player.play(copyInputStreamTofile(m.getTitle()));
 			play = true;
 			playBtn.setVisible(false);
 			stopBtn.setVisible(true);
@@ -262,38 +266,53 @@ public class MusicManagerMode extends JFrame implements ActionListener {
 	// music 생성 메소드
 	public void createMusic() {
 		try {
-			uri = getURI(titleTf.getText());
-			if (uri != null) {
-				dao.create(titleTf.getText(), singerTf.getText(), genreTf.getText(), Integer.valueOf(yearTf.getText()));
-				list = dao.read();
-				repaint();
+			File file = copyInputStreamTofile(titleTf.getText());
+			if (file == null) {
+				System.out.println("file없음");
+			} else {
+				Music musicTmp = new Music(titleTf.getText(), singerTf.getText(), genreTf.getText(),
+						Integer.valueOf(yearTf.getText()), 0);
+				if (!list.contains(musicTmp)) {
+					dao.create(titleTf.getText(), singerTf.getText(), genreTf.getText(),
+							Integer.valueOf(yearTf.getText()));
+					list = dao.read();
+					repaint();
+				} else {
+					JOptionPane.showMessageDialog(allPnl, "같은 이름의 곡은 등록 할 수 없습니다.");
+				}
 			}
-			uri = null;
+
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(allPnl, "해당 필드 값이 올바른지 확인하세요.");
 		} catch (SQLException e) {
 			e.printStackTrace();
-//			JOptionPane.showMessageDialog(allPnl, "같은 이름의 곡은 등록 할 수 없습니다.");
 		}
 	}
 
 	// music 수정 메소드
 	public void updateMusic() {
 		try {
-			uri = getURI(titleTf.getText());
-			if (uri != null) {
-				dao.update(m.getNumber(), titleTf.getText(), singerTf.getText(), genreTf.getText(),
-						Integer.valueOf(yearTf.getText()));
-				list = dao.read();
-				repaint();
+			File file = copyInputStreamTofile(titleTf.getText());
+			if (file == null) {
+				System.out.println("file없음");
+			} else {
+				Music musicTmp = new Music(titleTf.getText(), singerTf.getText(), genreTf.getText(),
+						Integer.valueOf(yearTf.getText()), 0);
+				if (!list.contains(musicTmp)) {
+					dao.update(m.getNumber(), titleTf.getText(), singerTf.getText(), genreTf.getText(),
+							Integer.valueOf(yearTf.getText()));
+					list = dao.read();
+					repaint();
+				} else {
+					JOptionPane.showMessageDialog(allPnl, "이미 해당 이름의 곡이 있습니다.");
+				}
 			}
-			uri = null;
 		} catch (NullPointerException e) {
 			JOptionPane.showMessageDialog(allPnl, "선택후 수정해 주세요");
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(allPnl, "해당 필드 값이 올바른지 확인하세요");
 		} catch (SQLException e) {
-
+			e.printStackTrace();
 		}
 	}
 
@@ -309,20 +328,47 @@ public class MusicManagerMode extends JFrame implements ActionListener {
 		}
 	}
 
-	// URI 가져오는 메소드
-	public URI getURI(String title) {
+	// inputStream을 파일로
+	public File copyInputStreamTofile(String title) {
 		title += ".mp3";
-		URI uri = null;
+		File file = new File(title);
+		InputStream is = MusicManagerMode.class.getClassLoader().getResourceAsStream(title);
+
+		FileOutputStream outStream = null;
 		try {
-			uri = MusicQuiz.class.getClassLoader().getResource(title).toURI();
+			outStream = new FileOutputStream(file);
+			int read;
+			byte[] bytes = new byte[1024];
+
+			while ((read = is.read(bytes)) != -1) {
+				outStream.write(bytes, 0, read);
+			}
+
 		} catch (NullPointerException e) {
-			JOptionPane.showMessageDialog(allPnl, "해당 제목의 mp3파일이 있는지 확인하세요");
-		} catch (URISyntaxException e) {
+			JOptionPane.showMessageDialog(allPnl, "해당 이름의 mp3파일이 있는지 확인하세요.");
+			return null;
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			System.out.println("뭘까");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (outStream != null) {
+				try {
+					outStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
-		return uri;
+		return file;
 	}
 
 	// quizNumberPnl 다시 그리기

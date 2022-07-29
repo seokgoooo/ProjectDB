@@ -11,6 +11,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -378,21 +382,19 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 	public void homeBtnEvent() {
 		dispose();
-
+		
 	}
 
 	// 재생 버튼 이벤트
 	public void playBtnEvent() {
 		if (prev) {
 
-			URI uri = getURI(currentMusic.getTitle());
-			player.play(new File(uri));
+			player.play(copyInputStreamTofile(currentMusic.getTitle()));
 			prev = false;
 			countDown();
 
 		} else if (first) {
-			URI uri = getURI(currentMusic.getTitle());
-			player.play(new File(uri));
+			player.play(copyInputStreamTofile(currentMusic.getTitle()));
 
 			try {
 
@@ -428,7 +430,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		replayBtn.setVisible(false);
 		pauseBtn.setVisible(true);
 		confirmBtn.setEnabled(true);
-		player.play(new File(getURI(currentMusic.getTitle())));
+		player.play(copyInputStreamTofile(currentMusic.getTitle()));
 
 		try {
 			Music music = musicDao.read(currentMusic.getNumber());
@@ -653,18 +655,56 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		quizFavoritePnl.repaint();
 	}
 
-	// URI 가져오는 메소드
-	public URI getURI(String title) {
+	public File copyInputStreamTofile(String title) {
 		title += ".mp3";
-		URI uri = null;
+		File file = new File("musicTmp");
+		InputStream is = MusicQuiz.class.getClassLoader().getResourceAsStream(title);
+		FileOutputStream outStream = null;
 		try {
-			uri = MusicQuiz.class.getClassLoader().getResource(title).toURI();
-		} catch (URISyntaxException e) {
+			outStream = new FileOutputStream(file);
+			int read;
+			byte[] bytes = new byte[1024];
+			
+			while((read = is.read(bytes)) != -1) {
+				outStream.write(bytes, 0, read);
+			}
+			
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(outStream != null) {
+				try {
+					outStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-
-		return uri;
+		
+		return file;
 	}
+	
+//	// URI 가져오는 메소드
+//	public URI getURI(String title) {
+//		title += ".mp3";
+//		URI uri = null;
+//		try {
+//			uri = MusicQuiz.class.getClassLoader().getResource(title).toURI();
+//		} catch (URISyntaxException e) {
+//			e.printStackTrace();
+//		}
+//
+//		return uri;
+//	}
 
 	// 음악 가져오는 메소드
 	public Music getMusic(List<Music> list) {

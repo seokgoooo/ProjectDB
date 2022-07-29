@@ -39,6 +39,7 @@ public class Button {
 	AttemptsQuiz attemptsQuiz = null;
 	User user;
 	fourletters currentfourletters = null;
+	
 
 	static int result = 0;
 
@@ -101,6 +102,7 @@ public class Button {
 	// 확인버튼
 	public void OK_button(JButton b, JTextArea ta, JTextField tf, String id, JPanel pnlR4, JCheckBox cb1) {
 		FourlettersDaoImpl fld = new FourlettersDaoImpl();
+		
 		ActionListener a = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent a) {
@@ -108,13 +110,15 @@ public class Button {
 					String s = String.valueOf(dao.readan(ta.getText()).toQuestion());
 					int quizNumber = (dao.readst(ta.getText()).toNumber());
 					attemptsQuiz = adao.read(id, quizNumber);
+					
+					if (attemptsQuiz == null) {
+						adao.create(id, quizNumber);
+						attemptsQuiz = adao.read(id, quizNumber);
+					} else {
+						adao.updateCount(id, quizNumber, attemptsQuiz.getAttemptsCount());
+					}
+					
 					if (s.equals(tf.getText())) {
-						if (attemptsQuiz == null) {
-							adao.create(id, quizNumber);
-							attemptsQuiz = adao.read(id, quizNumber);
-						} else {
-							adao.updateCount(id, quizNumber, attemptsQuiz.getAttemptsCount());
-						}
 						adao.updateClear(id, quizNumber, true);
 						tf.setText("");
 						ta.setText("");

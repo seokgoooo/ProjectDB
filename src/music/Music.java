@@ -74,7 +74,7 @@ public class Music {
 	public void setPlayCount(int playCount) {
 		this.playCount = playCount;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -82,24 +82,10 @@ public class Music {
 		if (!(obj instanceof Music))
 			return false;
 		Music other = (Music) obj;
-		if (genre == null) {
-			if (other.genre != null)
-				return false;
-		} else if (!genre.equals(other.genre))
-			return false;
-		if (number != other.number)
-			return false;
-		if (singer == null) {
-			if (other.singer != null)
-				return false;
-		} else if (!singer.equals(other.singer))
-			return false;
 		if (title == null) {
 			if (other.title != null)
 				return false;
 		} else if (!title.equals(other.title))
-			return false;
-		if (year != other.year)
 			return false;
 		return true;
 	}

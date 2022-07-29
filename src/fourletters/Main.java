@@ -161,6 +161,7 @@ public class Main extends JFrame {
 		setSize(1180, 820);
 		setLocationRelativeTo(null);
 		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	// 즐겨찾기 보기 버튼
