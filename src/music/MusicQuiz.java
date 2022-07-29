@@ -11,11 +11,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -380,29 +378,21 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 	public void homeBtnEvent() {
 		dispose();
-
+		
 	}
 
 	// 재생 버튼 이벤트
 	public void playBtnEvent() {
 		if (prev) {
 
-			URL url = getURL(currentMusic.getTitle());
-			try {
-				player.play(new File(URLDecoder.decode(url.getPath(), "UTF-8")));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+			URI uri = getURI(currentMusic.getTitle());
+			player.play(new File(uri));
 			prev = false;
 			countDown();
 
 		} else if (first) {
-			URL url = getURL(currentMusic.getTitle());
-			try {
-				player.play(new File(URLDecoder.decode(url.getPath(), "UTF-8")));
-			} catch (UnsupportedEncodingException e1) {
-				e1.printStackTrace();
-			}
+			URI uri = getURI(currentMusic.getTitle());
+			player.play(new File(uri));
 
 			try {
 
@@ -438,12 +428,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		replayBtn.setVisible(false);
 		pauseBtn.setVisible(true);
 		confirmBtn.setEnabled(true);
-		URL url = getURL(currentMusic.getTitle());
-		try {
-			player.play(new File(URLDecoder.decode(url.getPath(), "UTF-8")));
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
+		player.play(new File(getURI(currentMusic.getTitle())));
 
 		try {
 			Music music = musicDao.read(currentMusic.getNumber());
@@ -669,13 +654,16 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	}
 
 	// URI 가져오는 메소드
-	public URL getURL(String title) {
+	public URI getURI(String title) {
 		title += ".mp3";
-		URL url = null;
+		URI uri = null;
+		try {
+			uri = MusicQuiz.class.getClassLoader().getResource(title).toURI();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 
-		url = MusicQuiz.class.getClassLoader().getResource(title);
-
-		return url;
+		return uri;
 	}
 
 	// 음악 가져오는 메소드

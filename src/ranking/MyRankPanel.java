@@ -26,11 +26,11 @@ public class MyRankPanel implements ActionListener {
 	private JPanel bottomPnl = new JPanel();
 	private JComboBox<String> comboBox = new JComboBox<String>();
 	private JButton openBtn = new JButton();
-	private JButton homeBtn = new JButton();
 
 	private RankingDao dao = new RankingDaoImpl();
 
 	public MyRankPanel(String table) throws SQLException {
+		System.out.println(table);
 		pnl.setBackground(Color.WHITE);
 		pnl.setLayout(null);
 
@@ -42,7 +42,7 @@ public class MyRankPanel implements ActionListener {
 		pnl.add(titleLbl);
 
 		bottomPnl.setBackground(Color.WHITE);
-		bottomPnl.setBounds(620, 700, 500, 35);
+		bottomPnl.setBounds(750, 700, 390, 35);
 		bottomPnl.setLayout(null);
 		pnl.add(bottomPnl);
 
@@ -62,13 +62,6 @@ public class MyRankPanel implements ActionListener {
 		openBtn.addActionListener(this);
 		bottomPnl.add(openBtn);
 
-		homeBtn = new JButton("HOME");
-		homeBtn.setBounds(390, 0, 90, 35);
-		homeBtn.setBackground(new Color(0, 102, 102));
-		homeBtn.setForeground(new Color(255, 255, 255));
-		homeBtn.setFont(new Font("휴먼모음T", Font.PLAIN, 22));
-		bottomPnl.add(homeBtn);
-
 		paintMain();
 	}
 
@@ -77,47 +70,29 @@ public class MyRankPanel implements ActionListener {
 		int length = 120;
 		for (int i = 0; i < questionLbl.length; i++) {
 			questionLbl[i] = new JLabel(dao.correctRatio("music").get(i).getTitle());
-			questionLbl[i].setBounds(120, y - 50, 1000, 50);
+			questionLbl[i].setBounds(6, y, 250, 50);
 			questionLbl[i].setForeground(new Color(0, 102, 102));
 			questionLbl[i].setFont(new Font("HY얕은샘물M", Font.PLAIN, 40));
-			questionLbl[i].setHorizontalAlignment(SwingConstants.LEFT);
+			questionLbl[i].setHorizontalAlignment(SwingConstants.CENTER);
 			pnl.add(questionLbl[i]);
 
 			progressBar[i] = new JProgressBar();
 			progressBar[i].setBounds(200, y, 800, 50);
 			progressBar[i].setUI(new MyProgressUI());
+			progressBar[i].setForeground(new Color(0, 102, 102));
 			progressBar[i].setBackground(new Color(255, 255, 255));
 			pnl.add(progressBar[i]);
 
 			percentLbl[i] = new JLabel(dao.correctRatio("music").get(i).getRatio() + "%");
-			percentLbl[i].setBounds(950, y, 200, 50);
 			String[] value = percentLbl[i].getText().split("%");
-			setColor(i, value);
-
+			progressBar[i].setValue(Integer.parseInt(value[0]));
+			percentLbl[i].setBounds(950, y, 200, 50);
+			percentLbl[i].setForeground(new Color(0, 102, 102));
 			percentLbl[i].setFont(new Font("GOST Common", Font.PLAIN, 45));
 			percentLbl[i].setHorizontalAlignment(SwingConstants.CENTER);
 			pnl.add(percentLbl[i]);
 			y += length;
 		}
-	}
-
-	private void setColor(int i, String[] value) {
-		int bound = Integer.parseInt(value[0]);
-		progressBar[i].setValue(bound);
-		Color boundColor = new Color(0, 102, 102);
-		if (bound >= 80) {
-			boundColor = new Color(255, 0, 51);
-		} else if (bound >= 60) {
-			boundColor = new Color(153, 255, 102);
-		} else if (bound >= 40) {
-			boundColor = new Color(255, 102, 0);
-		} else if (bound >= 20) {
-
-		} else {
-			boundColor = new Color(102, 102, 102);
-		}
-		progressBar[i].setForeground(boundColor);
-		percentLbl[i].setForeground(boundColor);
 	}
 
 	@Override
@@ -135,7 +110,6 @@ public class MyRankPanel implements ActionListener {
 
 				String[] value = percentLbl[i].getText().split("%");
 				progressBar[i].setValue(Integer.parseInt(value[0]));
-				setColor(i, value);
 			}
 			pnl.repaint();
 			titleLbl.setText(comboBox.getSelectedItem().toString());
@@ -152,49 +126,17 @@ public class MyRankPanel implements ActionListener {
 
 				String[] value = percentLbl[i].getText().split("%");
 				progressBar[i].setValue(Integer.parseInt(value[0]));
-				setColor(i, value);
-				progressBar[i].repaint();
-				percentLbl[i].repaint();
+				pnl.add(percentLbl[i]);
 			}
 			pnl.repaint();
 			titleLbl.setText(comboBox.getSelectedItem().toString());
 			break;
 
 		case 2:
-			for (int i = 0; i < questionLbl.length; i++) {
-				try {
-					questionLbl[i].setText(dao.favoriteTop("music").get(i).getTitle());
-					percentLbl[i].setText(dao.favoriteTop("music").get(i).getRatio() + "%");
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-
-				String[] value = percentLbl[i].getText().split("%");
-				progressBar[i].setValue(Integer.parseInt(value[0]));
-				setColor(i, value);
-				progressBar[i].repaint();
-				percentLbl[i].repaint();
-			}
-			pnl.repaint();
 			titleLbl.setText(comboBox.getSelectedItem().toString());
 			break;
 
 		case 3:
-			for (int i = 0; i < questionLbl.length; i++) {
-				try {
-					questionLbl[i].setText(dao.ageTop(20).get(i).getTitle());
-					percentLbl[i].setText(dao.ageTop(20).get(i).getRatio() + "%");
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-
-				String[] value = percentLbl[i].getText().split("%");
-				progressBar[i].setValue(Integer.parseInt(value[0]));
-				setColor(i, value);
-				progressBar[i].repaint();
-				percentLbl[i].repaint();
-			}
-			pnl.repaint();
 			titleLbl.setText(comboBox.getSelectedItem().toString());
 			break;
 
@@ -205,9 +147,5 @@ public class MyRankPanel implements ActionListener {
 
 	public Panel getPnl() {
 		return pnl;
-	}
-
-	public JButton getHomeBtn() {
-		return homeBtn;
 	}
 }
