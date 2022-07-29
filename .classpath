@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry excluding="music/|capitals/" kind="src" path="resources"/>
 	<classpathentry excluding="resources/|src/|resources/capitals/" kind="src" path=""/>
-	<classpathentry kind="src" path="resources/music"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="resources/capitals"/>
 	<classpathentry kind="lib" path="//GREEN-424/java/Your Codes/_Free(Team)/5조/jlayer-1.0.1.jar"/>
