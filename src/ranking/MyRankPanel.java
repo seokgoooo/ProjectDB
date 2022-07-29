@@ -63,9 +63,6 @@ public class MyRankPanel implements ActionListener {
 			setColor(i, value);
 			percentLbl[i].setFont(new Font("HY얕은샘물M", Font.PLAIN, 45));
 		}
-
-		// rankList.size() == 0 일때 나타낼것 구현
-
 		try {
 			rankList = new LinkedList<>(dao.scoreRank());
 			for (int i = 0; i < rankList.size(); i++) {

@@ -141,7 +141,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 		// 맞춘문제
 
 		clearPnl = new JPanel();
-		tabbedPane.addTab("정답", null, clearPnl, null);
+		tabbedPane.addTab("맞춘 문제", null, clearPnl, null);
 		clearPnl.setLayout(new GridLayout(5, 5));
 		
 		try {
@@ -399,13 +399,8 @@ public class QuizFrame extends JFrame implements ActionListener {
 		System.out.println(clearList);
 
 		clearQuiz = new JButton[clearList.size()];
-		//System.out.println(clearQuiz.length);
-		//System.out.println(clearList.get(0));
-		try {
-			System.out.println(capitalsDao.read(1000));
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		System.out.println(clearQuiz.length);
+		System.out.println(clearList.get(0));
 		for (int i = 0; i < clearQuiz.length; i++) {
 			Capitals c = null;
 

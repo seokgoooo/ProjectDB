@@ -115,7 +115,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private Timer timer;
 	private JLabel timeLbl;
 	private final int timeOut = 60;
-
+	
 	private JButton[] allQuiz;
 	private JButton[] clearQuiz;
 	private JButton[] favoriteQuiz;
@@ -126,6 +126,8 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private boolean play = false;
 	private boolean first = true;
 	private boolean prev = false;
+	
+	
 	private JPanel quizClearPnl;
 	private JPanel quizFavoritePnl;
 	private JTextArea infoTA;
@@ -469,6 +471,15 @@ public class MusicQuiz extends JFrame implements ActionListener {
 						+ currentMusic.getYear());
 				infoTA.setVisible(true);
 				timer.cancel();
+				int time = 60 - Integer.valueOf(timeLbl.getText().replace("초", ""));
+				System.out.println(time);
+				
+				try {
+					attemptsDao.updateClearTime(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(), time);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
 				clearPnlRepaint();
 			} else {
 				JOptionPane.showMessageDialog(pnlMain, "오답입니다.");
