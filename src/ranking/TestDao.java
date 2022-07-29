@@ -8,6 +8,7 @@ public class TestDao {
 
 		try {
 			System.out.println(dao.scoreRank());
+			System.out.println(dao.scoreRank().size());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
