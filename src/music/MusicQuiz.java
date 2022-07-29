@@ -15,8 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -136,7 +134,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	public MusicQuiz(User user) {
 		getContentPane().setBackground(new Color(0, 0, 0));
 		this.user = user;
-
+		JOptionPane.showMessageDialog(pnlMain, "**정답은 띄어쓰기 없이 한글로만 입력하셔야 됩니다.**");
 		pnlMain = new JPanel();
 		JPanel pnlLEFT = new JPanel();
 		JPanel pnlRight = new JPanel();
@@ -382,7 +380,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 	public void homeBtnEvent() {
 		dispose();
-		
+
 	}
 
 	// 재생 버튼 이벤트
@@ -456,8 +454,6 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	public void confirmBtnEvent() {
 		if (play) {
 
-			
-			
 			if (answerTf.getText().equals(currentMusic.getTitle())) {
 				player.stop();
 				playBtn.setVisible(true);
@@ -485,7 +481,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
+
 		} else {
 			JOptionPane.showMessageDialog(pnlMain, "노래를 먼저 재생해 주세요.");
 		}
@@ -501,7 +497,17 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			public void run() {
 				timeLbl.setText("" + count + "초");
 				count--;
-
+				if (count == 30) {
+					infoTA.setText("가수: " + currentMusic.getSinger() + "\n장르: " + currentMusic.getGenre() + "\n발매년도: "
+							+ currentMusic.getYear());
+					infoTA.setVisible(true);
+				} else if (count == 40) {
+					infoTA.setText("가수: " + currentMusic.getSinger() + "\n장르: " + currentMusic.getGenre());
+					infoTA.setVisible(true);
+				} else if (count == 50) {
+					infoTA.setText("가수: " + currentMusic.getSinger());
+					infoTA.setVisible(true);
+				}
 				if (count < 0) {
 					timer.cancel();
 					timeLbl.setText("시간 초과");
@@ -670,24 +676,24 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			outStream = new FileOutputStream(file);
 			int read;
 			byte[] bytes = new byte[1024];
-			
-			while((read = is.read(bytes)) != -1) {
+
+			while ((read = is.read(bytes)) != -1) {
 				outStream.write(bytes, 0, read);
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if(outStream != null) {
+			if (outStream != null) {
 				try {
 					outStream.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			if(is != null) {
+			if (is != null) {
 				try {
 					is.close();
 				} catch (IOException e) {
@@ -695,10 +701,10 @@ public class MusicQuiz extends JFrame implements ActionListener {
 				}
 			}
 		}
-		
+
 		return file;
 	}
-	
+
 //	// URI 가져오는 메소드
 //	public URI getURI(String title) {
 //		title += ".mp3";

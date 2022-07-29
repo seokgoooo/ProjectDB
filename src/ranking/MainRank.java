@@ -5,22 +5,16 @@ import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import user.User;
-
 public class MainRank extends JFrame {
 	private JTabbedPane tabbedPane = null;
 
 	private MyRankPanel musicsPnl = new MyRankPanel("music");
 	private MyRankPanel fourlettersPnl = new MyRankPanel("fourletters");
 	private MyRankPanel capitalsPnl = new MyRankPanel("capitals");
-	private MyRankPanel totalPnl = null;
+	private MyRankPanel totalPnl = new MyRankPanel("age");
 
-	private User user;
-
-	public MainRank(User user) throws SQLException {
+	public MainRank() throws SQLException {
 		super();
-		this.user = user;
-		totalPnl = new MyRankPanel("total", getUser());
 		setTitle("랭킹 & 통계");
 		setSize(1180, 820);
 		getContentPane().setLayout(null);
@@ -33,11 +27,7 @@ public class MainRank extends JFrame {
 		tabbedPane.addTab("음악", null, musicsPnl.getPnl(), null);
 		tabbedPane.addTab("사자성어", null, fourlettersPnl.getPnl(), null);
 		tabbedPane.addTab("국가수도", null, capitalsPnl.getPnl(), null);
-		tabbedPane.addTab("랭킹", null, totalPnl.getPnl(), null);
-	}
-
-	public User getUser() {
-		return user;
+		tabbedPane.addTab("종합", null, totalPnl.getPnl(), null);
 	}
 
 	public MyRankPanel getMusicsPnl() {
@@ -52,7 +42,7 @@ public class MainRank extends JFrame {
 		return capitalsPnl;
 	}
 
-	public MyRankPanel getTotalPnl() {
+	public MyRankPanel totalPnl() {
 		return totalPnl;
 	}
 }

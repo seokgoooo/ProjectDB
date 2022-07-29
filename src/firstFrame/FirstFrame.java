@@ -65,9 +65,7 @@ public class FirstFrame extends JFrame implements ActionListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		makeFrame();
 		makeGui();
-
-		InputStream is = FirstFrame.class.getClassLoader().getResourceAsStream("사랑해도 될까요.mp3");
-
+		InputStream is = FirstFrame.class.getClassLoader().getResourceAsStream("사랑해도될까요.mp3");
 		player.play(copyInputStreamTofile(is));
 	}
 
