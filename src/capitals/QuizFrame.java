@@ -3,6 +3,7 @@ package capitals;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.List;
+import java.util.Random;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -24,6 +25,7 @@ import attempts.AttemptsDAOImpl;
 import attempts.AttemptsQuiz;
 import favorite.FavoritesDAO;
 import favorite.FavoritesDAOImpl;
+import music.Music;
 import sun.tools.jar.resources.jar;
 import user.User;
 
@@ -52,6 +54,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 	private JButton[] favoriteQuiz;
 	private CapitalsDao capitalsDao;
     private int currentNumber;
+    private Capitals selectNumber = null;
 	public QuizFrame(User user) {
 		this.user = user;
 		setTitle("수도퀴즈");
@@ -113,6 +116,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 		favorite.setBounds(460, 22, 93, 23);
 		favorite.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		pnlL1.add(favorite);
+		
 
 		// 오른쪽 탭
 		pnlRight.add(pnlR2);
@@ -121,6 +125,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(12, 20, 527, 727);
 		pnlR2.add(tabbedPane);
+		
 
 		// 전체 문제 panel
 
@@ -164,6 +169,13 @@ public class QuizFrame extends JFrame implements ActionListener {
 		favoritePnl = new JPanel();
 		tabbedPane.addTab("즐겨찾기", null, favoritePnl, null);
 		favoritePnl.setLayout(new GridLayout(5, 5));
+		
+		favoriteQuiz = new JButton[favoriteList.size()];
+		
+		for(int i = 0; i < favoriteQuiz.length; i ++) {
+			favoriteQuiz[i] = new JButton(String.valueOf(i + 1));
+			favoritePnl.add(favoriteQuiz[i]);
+		}
 
 		try {
 			favoriteList = favoriteDao.capitalRead(user.getId());
@@ -242,7 +254,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 ////				
 ////			}
 //		}
-		
+		//확인버튼
 		confirmBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -250,9 +262,30 @@ public class QuizFrame extends JFrame implements ActionListener {
 				if(ja.getText().equals(list.get(0).getContinent())) {
 					answertf.getText().equals(list.get(0).getAnswer());
 					JOptionPane.showMessageDialog(QuizFrame.this, "정답");
+					textReset();
+				} else if(ja.getText() != list.get(0).getContinent()){
+					JOptionPane.showMessageDialog(QuizFrame.this, "떙");
 				}
 			}
 			
+		});
+		//즐겨찾기 버튼
+		favorite.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(favorite.isSelected()) {
+					try {
+						for(int i = 0; i < list.size(); i ++) {
+						favoriteDao.create(user.getFavoriteID(), list.get(i).getNumber());
+						favoritePnlRepaint();}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
+			}
 		});
 		
 
@@ -260,30 +293,24 @@ public class QuizFrame extends JFrame implements ActionListener {
 	
 	
 
-//	private void allQuizEvent() {
-//		for (int i = 0; i < allQuiz.length; i++) {
-//
+//	// 즐겨 찾기
+//	public void favoriteEvent() {
+//		if (favorite.isSelected()) {
+//			try {
+//				favoriteDao.create(user.getFavoriteID(), list.get(0).getNumber());
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		} else {
+//			try {
+//				favoriteDao.delete(user.getFavoriteID(), capitals.getNumber());
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
 //		}
+//		favorite.repaint();
 //	}
-
-	// 즐겨 찾기
-	public void favoriteEvent() {
-		if (favorite.isSelected()) {
-			try {
-				favoriteDao.create(user.getFavoriteID(), list.get(0).getNumber());
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			try {
-				favoriteDao.delete(user.getFavoriteID(), capitals.getNumber());
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		favorite.repaint();
-	}
 
 	// 즐겨찾기 표시버튼
 
@@ -295,9 +322,9 @@ public class QuizFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	// 확인버튼
-	public void OK_button(JPanel p) {
-	}
+//	// 확인버튼
+//	public void OK_button(JPanel p) {
+//	}
 
 	public void confirmBtnEvent() {
 		if (true) {
@@ -404,4 +431,11 @@ public class QuizFrame extends JFrame implements ActionListener {
 		favoritePnl.revalidate();
 		favoritePnl.repaint();
 	}
+	// 텍스트 초기화
+	public void textReset() {
+		ja.setText("");
+		answertf.setText("");
+	}
+	
+	
 }

@@ -14,10 +14,10 @@ public class Test {
 		
 //		try {
 //			mg.create(101, "독일", "베를린", "유럽");
-//		} catch (SQLException e) {
+//	} catch (SQLException e) {
 //			System.out.println(e.getMessage());
-//		}
-		
+//F		}
+//		
 
 //	}
 //		try {
