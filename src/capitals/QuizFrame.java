@@ -51,7 +51,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 	private JPanel clearPnl;
 	private JButton[] clearQuiz;
 	private JButton[] favoriteQuiz;
-	private CapitalsDao capitalsDao;
+	private CapitalsDao capitalsDao = new Manager();
 	private int currentNumber;
 
 	public QuizFrame(User user) {
@@ -141,7 +141,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 		// 맞춘문제
 
 		clearPnl = new JPanel();
-		tabbedPane.addTab("맞춘 문제", null, clearPnl, null);
+		tabbedPane.addTab("정답", null, clearPnl, null);
 		clearPnl.setLayout(new GridLayout(5, 5));
 		
 		try {
@@ -399,8 +399,13 @@ public class QuizFrame extends JFrame implements ActionListener {
 		System.out.println(clearList);
 
 		clearQuiz = new JButton[clearList.size()];
-		System.out.println(clearQuiz.length);
-		System.out.println(clearList.get(0));
+		//System.out.println(clearQuiz.length);
+		//System.out.println(clearList.get(0));
+		try {
+			System.out.println(capitalsDao.read(1000));
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 		for (int i = 0; i < clearQuiz.length; i++) {
 			Capitals c = null;
 

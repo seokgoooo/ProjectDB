@@ -67,7 +67,7 @@ public class Manager implements CapitalsDao {
 	@Override
 	public List<Capitals> read() throws SQLException {
 		String query = "SELECT * FROM Capitals";
-		
+
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -140,24 +140,25 @@ public class Manager implements CapitalsDao {
 	// 하나불러오기
 	@Override
 	public Capitals read(int number) throws SQLException {
-		String query = "Select * from music where number = ?";
+		String query = "select * from capitals where number = ?";
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		conn = QuizDBUtil.getConnection();
-		pstmt = conn.prepareStatement(query);
-		pstmt.setInt(1, number);
-
-		rs = pstmt.executeQuery();
-
 		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, number);
+
+			rs = pstmt.executeQuery();
+
 			if (rs.next()) {
 				return resultMapping(rs);
 			} else {
 				return null;
 			}
+
 		} finally {
 			QuizDBUtil.closeRS(rs);
 			QuizDBUtil.closePstmt(pstmt);
