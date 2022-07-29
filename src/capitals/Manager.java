@@ -67,7 +67,7 @@ public class Manager implements CapitalsDao {
 	@Override
 	public List<Capitals> read() throws SQLException {
 		String query = "SELECT * FROM Capitals";
-
+		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
