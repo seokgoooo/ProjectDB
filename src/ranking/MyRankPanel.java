@@ -30,7 +30,10 @@ public class MyRankPanel implements ActionListener {
 
 	private RankingDao dao = new RankingDaoImpl();
 
+	private String table = null;
+
 	public MyRankPanel(String table) throws SQLException {
+		this.table = table;
 		pnl.setBackground(Color.WHITE);
 		pnl.setLayout(null);
 
@@ -127,8 +130,8 @@ public class MyRankPanel implements ActionListener {
 		case 0:
 			for (int i = 0; i < questionLbl.length; i++) {
 				try {
-					questionLbl[i].setText(dao.correctRatio("music").get(i).getTitle());
-					percentLbl[i].setText(dao.correctRatio("music").get(i).getRatio() + "%");
+					questionLbl[i].setText(dao.correctRatio(table).get(i).getTitle());
+					percentLbl[i].setText(dao.correctRatio(table).get(i).getRatio() + "%");
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
@@ -144,8 +147,8 @@ public class MyRankPanel implements ActionListener {
 		case 1:
 			for (int i = 0; i < questionLbl.length; i++) {
 				try {
-					questionLbl[i].setText(dao.incorrectRatio("music").get(i).getTitle());
-					percentLbl[i].setText(dao.incorrectRatio("music").get(i).getRatio() + "%");
+					questionLbl[i].setText(dao.incorrectRatio(table).get(i).getTitle());
+					percentLbl[i].setText(dao.incorrectRatio(table).get(i).getRatio() + "%");
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
@@ -163,8 +166,8 @@ public class MyRankPanel implements ActionListener {
 		case 2:
 			for (int i = 0; i < questionLbl.length; i++) {
 				try {
-					questionLbl[i].setText(dao.favoriteTop("music").get(i).getTitle());
-					percentLbl[i].setText(dao.favoriteTop("music").get(i).getRatio() + "%");
+					questionLbl[i].setText(dao.favoriteTop(table).get(i).getTitle());
+					percentLbl[i].setText(dao.favoriteTop(table).get(i).getRatio() + "%");
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}

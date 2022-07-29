@@ -2,9 +2,7 @@ import java.sql.SQLException;
 
 import javax.swing.UIManager;
 
-import capitals.QuizFrame;
 import firstFrame.FirstFrame;
-import user.User;
 
 // Main 프로그램 클래스
 // GUI 사이즈 setSize(1180, 820)
