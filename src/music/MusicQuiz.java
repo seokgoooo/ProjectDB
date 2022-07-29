@@ -435,6 +435,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		try {
 			Music music = musicDao.read(currentMusic.getNumber());
 			musicDao.playCountPlus(music.getNumber(), music.getPlayCount());
+			attemptsQuiz = attemptsDao.read(user.getClearID(), currentMusic.getNumber());
 			attemptsDao.updateCount(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(),
 					attemptsQuiz.getAttemptsCount());
 		} catch (SQLException e) {
@@ -455,6 +456,8 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	public void confirmBtnEvent() {
 		if (play) {
 
+			
+			
 			if (answerTf.getText().equals(currentMusic.getTitle())) {
 				player.stop();
 				playBtn.setVisible(true);
@@ -477,9 +480,12 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			try {
 				attemptsDao.updateCount(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(),
 						attemptsQuiz.getAttemptsCount());
+				int n = attemptsQuiz.getAttemptsCount() + 1;
+				attemptsQuiz.setAttemptsCount(n);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			
 		} else {
 			JOptionPane.showMessageDialog(pnlMain, "노래를 먼저 재생해 주세요.");
 		}
