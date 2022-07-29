@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +54,6 @@ public class QuizFrame extends JFrame implements ActionListener {
 	private JButton[] clearQuiz;
 	private JButton[] favoriteQuiz;
 	private CapitalsDao capitalsDao;
-	private int currentNumber;
 
 	public QuizFrame(User user) {
 		this.user = user;
@@ -178,7 +178,6 @@ public class QuizFrame extends JFrame implements ActionListener {
 		try {
 			favoriteList = favoriteDao.capitalRead(user.getId());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (favoriteList.size() != 0) {
@@ -190,7 +189,6 @@ public class QuizFrame extends JFrame implements ActionListener {
 		confirmBtn = new JButton("확인");
 		confirmBtn.setBounds(379, 24, 76, 21);
 		confirmBtn.addActionListener(new ActionListener() {
-			@SuppressWarnings("unlikely-arg-type")
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (answertf.getText().equals(currentCapitals.getAnswer())) {
