@@ -52,8 +52,8 @@ public class MyRankPanel implements ActionListener {
 		paintBasic();
 		paintMain();
 
-		titleLbl.setText("전체회원 랭킹 TOP 3");
-		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "전체회원 랭킹 TOP 3", "10대의 선택 TOP 3",
+		titleLbl.setText("전체회원 랭킹 TOP 4");
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "전체회원 랭킹 TOP 4", "10대의 선택 TOP 3",
 				"20대의 선택 TOP 3", "30대의 선택 TOP 3", "40대의 선택 TOP 3", "50대의 선택 TOP 3", }));
 
 		for (int i = 0; i < questionLbl.length; i++) {
@@ -90,7 +90,6 @@ public class MyRankPanel implements ActionListener {
 							String[] value = percentLbl[i].getText().split("회");
 							progressBar[i].setValue(Integer.parseInt(value[0]));
 							setColor(i, value);
-							percentLbl[i].setFont(new Font("HY얕은샘물M", Font.PLAIN, 45));
 						}
 						rankList = new LinkedList<>(dao.scoreRank());
 						for (int i = 0; i < rankList.size(); i++) {
@@ -254,15 +253,20 @@ public class MyRankPanel implements ActionListener {
 		case 0:
 			for (int i = 0; i < questionLbl.length; i++) {
 				try {
-					questionLbl[i].setText(dao.correctRatio(table).get(i).getTitle());
-					percentLbl[i].setText(dao.correctRatio(table).get(i).getRatio() + "%");
+					if (i < dao.correctRatio(table).size()) {
+						questionLbl[i].setText(dao.correctRatio(table).get(i).getTitle());
+						percentLbl[i].setText(dao.correctRatio(table).get(i).getRatio() + "%");
+						String[] value = percentLbl[i].getText().split("%");
+						progressBar[i].setValue(Integer.parseInt(value[0]));
+						setColor(i, value);
+					} else {
+						questionLbl[i].setText(" ");
+						percentLbl[i].setText(" ");
+						progressBar[i].setValue(0);
+					}
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-
-				String[] value = percentLbl[i].getText().split("%");
-				progressBar[i].setValue(Integer.parseInt(value[0]));
-				setColor(i, value);
 			}
 			pnl.repaint();
 			titleLbl.setText(comboBox.getSelectedItem().toString());
@@ -271,15 +275,20 @@ public class MyRankPanel implements ActionListener {
 		case 1:
 			for (int i = 0; i < questionLbl.length; i++) {
 				try {
-					questionLbl[i].setText(dao.incorrectRatio(table).get(i).getTitle());
-					percentLbl[i].setText(dao.incorrectRatio(table).get(i).getRatio() + "%");
+					if (i < dao.incorrectRatio(table).size()) {
+						questionLbl[i].setText(dao.incorrectRatio(table).get(i).getTitle());
+						percentLbl[i].setText(dao.incorrectRatio(table).get(i).getRatio() + "%");
+						String[] value = percentLbl[i].getText().split("%");
+						progressBar[i].setValue(Integer.parseInt(value[0]));
+						setColor(i, value);
+					} else {
+						questionLbl[i].setText(" ");
+						percentLbl[i].setText(" ");
+						progressBar[i].setValue(0);
+					}
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-
-				String[] value = percentLbl[i].getText().split("%");
-				progressBar[i].setValue(Integer.parseInt(value[0]));
-				setColor(i, value);
 			}
 			pnl.repaint();
 			titleLbl.setText(comboBox.getSelectedItem().toString());
@@ -288,15 +297,21 @@ public class MyRankPanel implements ActionListener {
 		case 2:
 			for (int i = 0; i < questionLbl.length; i++) {
 				try {
-					questionLbl[i].setText(dao.favoriteTop(table).get(i).getTitle());
-					percentLbl[i].setText(dao.favoriteTop(table).get(i).getRatio() + "회");
+					if (i < dao.favoriteTop(table).size()) {
+						questionLbl[i].setText(dao.favoriteTop(table).get(i).getTitle());
+						percentLbl[i].setText(dao.favoriteTop(table).get(i).getRatio() + "회");
+						String[] value = percentLbl[i].getText().split("회");
+						progressBar[i].setValue(Integer.parseInt(value[0]));
+						setColor(i, value);
+						percentLbl[i].setFont(new Font("HY얕은샘물M", Font.PLAIN, 45));
+					} else {
+						questionLbl[i].setText(" ");
+						percentLbl[i].setText(" ");
+						progressBar[i].setValue(0);
+					}
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-
-				String[] value = percentLbl[i].getText().split("회");
-				progressBar[i].setValue(Integer.parseInt(value[0]));
-				setColor(i, value);
 			}
 			pnl.repaint();
 			titleLbl.setText(comboBox.getSelectedItem().toString());
@@ -305,15 +320,21 @@ public class MyRankPanel implements ActionListener {
 		case 3:
 			for (int i = 0; i < questionLbl.length; i++) {
 				try {
-					questionLbl[i].setText(dao.maxTest(table).get(i).getTitle());
-					percentLbl[i].setText(dao.maxTest(table).get(i).getRatio() + "회");
+					if (i < dao.maxTest(table).size()) {
+						questionLbl[i].setText(dao.maxTest(table).get(i).getTitle());
+						percentLbl[i].setText(dao.maxTest(table).get(i).getRatio() + "회");
+						String[] value = percentLbl[i].getText().split("회");
+						progressBar[i].setValue(Integer.parseInt(value[0]));
+						percentLbl[i].setFont(new Font("HY얕은샘물M", Font.PLAIN, 45));
+						setColor(i, value);
+					} else {
+						questionLbl[i].setText(" ");
+						percentLbl[i].setText(" ");
+						progressBar[i].setValue(0);
+					}
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-
-				String[] value = percentLbl[i].getText().split("회");
-				progressBar[i].setValue(Integer.parseInt(value[0]));
-				setColor(i, value);
 			}
 			pnl.repaint();
 			titleLbl.setText(comboBox.getSelectedItem().toString());

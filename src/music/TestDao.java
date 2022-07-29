@@ -17,24 +17,24 @@ public class TestDao {
 			System.out.println("파일 수정 실패");
 			e.printStackTrace();
 		}
-		
+
 		String title = result.getTitle();
 		path += title + ".mp3";
 		mp.play(new File(path));
-		
+
 		Scanner scan = new Scanner(System.in);
-				
-		while(true) {
+
+		while (true) {
 			System.out.println("정답 입력");
 			String answer = scan.nextLine();
-			if(answer.equals(title)) {
+			if (answer.equals(title)) {
 				System.out.println("정답");
 				mp.stop();
 				break;
 			} else {
 				System.out.println("오답");
 			}
-		}		
-		
+		}
+
 	}
 }
