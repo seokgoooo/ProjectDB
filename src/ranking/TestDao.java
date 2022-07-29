@@ -7,7 +7,7 @@ public class TestDao {
 		RankingDao dao = new RankingDaoImpl();
 
 		try {
-			System.out.println(dao.ageTop(30));
+			System.out.println(dao.scoreRank());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

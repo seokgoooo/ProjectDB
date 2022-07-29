@@ -16,6 +16,7 @@ public class RankingDaoImpl implements RankingDao {
 		int ratio = rs.getInt("ratio");
 		return new Ranking(title, ratio);
 	}
+	
 	//  정답률 top5
 	@Override
 	public List<Ranking> correctRatio(String table) throws SQLException {
@@ -206,6 +207,31 @@ public class RankingDaoImpl implements RankingDao {
 			QuizDBUtil.closeConn(conn);
 		}
 
+		return list;
+	}
+	
+	// 종합 순위
+	@Override
+	public List<Ranking> scoreRank() throws SQLException {
+		String query = "select id question, sum(clear) `ratio` from attemptsquiz group by id order by `ratio` desc";
+		List<Ranking> list = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				list.add(resultMapping(rs));
+			}
+			
+		}finally {
+			
+		}
 		return list;
 	}
 

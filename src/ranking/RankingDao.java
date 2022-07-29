@@ -19,4 +19,6 @@ public interface RankingDao {
 	// 연령대별 인기 게임
 	List<Ranking> ageTop(int age) throws SQLException;
 	
+	// 종합 순위
+	List<Ranking> scoreRank() throws SQLException;
 }
