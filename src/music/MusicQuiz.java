@@ -115,7 +115,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private Timer timer;
 	private JLabel timeLbl;
 	private final int timeOut = 60;
-	
+
 	private JButton[] allQuiz;
 	private JButton[] clearQuiz;
 	private JButton[] favoriteQuiz;
@@ -126,12 +126,14 @@ public class MusicQuiz extends JFrame implements ActionListener {
 	private boolean play = false;
 	private boolean first = true;
 	private boolean prev = false;
-	
-	
+
 	private JPanel quizClearPnl;
 	private JPanel quizFavoritePnl;
 	private JTextArea infoTA;
 	private JButton homeBtn;
+	private JLabel bestTimeLbl;
+	private URL lpUrl;
+	private JLabel lpLbl;
 
 	public MusicQuiz(User user) {
 		getContentPane().setBackground(new Color(0, 0, 0));
@@ -155,9 +157,9 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		// question Panel
 		questionPnl.setPreferredSize(new Dimension(700, 600));
 
-		URL lpUrl = MusicQuiz.class.getClassLoader().getResource("spacing out.gif");
+		lpUrl = MusicQuiz.class.getClassLoader().getResource("question.jpg");
 
-		JLabel lpLbl = new JLabel(new ImageIcon(lpUrl));
+		lpLbl = new JLabel(new ImageIcon(lpUrl));
 		lpLbl.setPreferredSize(new Dimension(650, 370));
 
 		infoTA = new JTextArea();
@@ -235,7 +237,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 			favoritePnlRepaint();
 		}
 
-		// 왼쪽 버튼
+		// leftTopPnl
 		leftTopPnl.setLayout(new BorderLayout());
 
 		quizNumberLbl = new JLabel("문제 번호");
@@ -245,11 +247,14 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		favoriteCb = new JCheckBox("즐겨찾기");
 		favoriteCb.setFont(new Font("굴림", Font.PLAIN, 20));
 		favoriteCb.addActionListener(this);
+		bestTimeLbl = new JLabel("Best Time: ");
 
+		leftTopPnl.add(bestTimeLbl, BorderLayout.NORTH);
 		leftTopPnl.add(quizNumberLbl, "West");
 		leftTopPnl.add(timeLbl, "Center");
-		timeLbl.setHorizontalAlignment((int) CENTER_ALIGNMENT);
 		leftTopPnl.add(favoriteCb, "East");
+		timeLbl.setHorizontalAlignment((int) CENTER_ALIGNMENT);
+		bestTimeLbl.setHorizontalAlignment((int) CENTER_ALIGNMENT);
 
 		homeBtn = new JButton("HOME");
 		homeBtn.addActionListener(this);
@@ -373,6 +378,13 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		favoriteCheck(currentMusic);
 
 		quizNumberLbl.setText(String.format("%02d", (i + 1)) + "번");
+		
+		try {
+			bestTimeLbl.setText(String.format("%02d", attemptsDao.readClearTime(currentMusic.getNumber())));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		map.put(currentMusic, prevMusic);
 
 		timeLbl.setText("" + 60 + "초");
@@ -380,6 +392,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		first = true;
 	}
 
+	// 홈 버튼 이벤트
 	public void homeBtnEvent() {
 		dispose();
 
@@ -473,13 +486,13 @@ public class MusicQuiz extends JFrame implements ActionListener {
 				timer.cancel();
 				int time = 60 - Integer.valueOf(timeLbl.getText().replace("초", ""));
 				System.out.println(time);
-				
+
 				try {
 					attemptsDao.updateClearTime(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(), time);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-				
+
 				clearPnlRepaint();
 			} else {
 				JOptionPane.showMessageDialog(pnlMain, "오답입니다.");
@@ -556,7 +569,12 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		favoriteCheck(currentMusic);
 
 		quizNumberLbl.setText(String.format("%02d", (list.indexOf(currentMusic) + 1)) + "번");
-
+		try {
+			bestTimeLbl.setText(String.format("%02d", attemptsDao.readClearTime(currentMusic.getNumber())));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		prev = true;
 		first = true;
 	}
@@ -678,6 +696,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		quizFavoritePnl.repaint();
 	}
 
+	// InputStream을 File로 변경하는 메소드
 	public File copyInputStreamTofile(String title) {
 		title += ".mp3";
 		File file = new File("musicTmp");
@@ -716,30 +735,31 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		return file;
 	}
 
-//	// URI 가져오는 메소드
-//	public URI getURI(String title) {
-//		title += ".mp3";
-//		URI uri = null;
-//		try {
-//			uri = MusicQuiz.class.getClassLoader().getResource(title).toURI();
-//		} catch (URISyntaxException e) {
-//			e.printStackTrace();
-//		}
-//
-//		return uri;
-//	}
-
 	// 음악 가져오는 메소드
 	public Music getMusic(List<Music> list) {
 		Random random = new Random();
 		int index = random.nextInt(list.size());
 		Music music = list.get(index);
 		quizNumberLbl.setText(String.format("%02d", (index + 1)) + "번");
-
+		
+		try {
+			bestTimeLbl.setText(String.format("%02d", attemptsDao.readClearTime(currentMusic.getNumber())));
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		lpUrl = MusicQuiz.class.getClassLoader().getResource(currentMusic.getTitle() + ".JPG");
+		lpLbl.setIcon(new ImageIcon(lpUrl));
+		
 		while (music.equals(currentMusic)) {
 			index = random.nextInt(list.size());
 			music = list.get(index);
 			quizNumberLbl.setText(String.format("%02d", (index + 1)) + "번");
+			try {
+				bestTimeLbl.setText(String.format("%02d", attemptsDao.readClearTime(currentMusic.getNumber())));
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 
 		prevMusic = currentMusic;
