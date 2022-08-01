@@ -9,14 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,9 +65,7 @@ public class FirstFrame extends JFrame implements ActionListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		makeFrame();
 		makeGui();
-		
-		InputStream is = FirstFrame.class.getClassLoader().getResourceAsStream("사랑해도 될까요.mp3");
-		
+		InputStream is = FirstFrame.class.getClassLoader().getResourceAsStream("사랑해도될까요.mp3");
 		player.play(copyInputStreamTofile(is));
 	}
 
@@ -239,24 +234,24 @@ public class FirstFrame extends JFrame implements ActionListener {
 			showPopUp("회원가입을 해주세요");
 		}
 	}
-	
+
 	public File copyInputStreamTofile(InputStream inputStream) {
 		File file = new File("musicTmp");
-		
+
 		try {
 			FileOutputStream outStream = new FileOutputStream(file);
 			int read;
 			byte[] bytes = new byte[1024];
-			
-			while((read = inputStream.read(bytes)) != -1) {
+
+			while ((read = inputStream.read(bytes)) != -1) {
 				outStream.write(bytes, 0, read);
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
+		}
 		try {
 			System.out.println(file.getCanonicalPath());
 		} catch (IOException e) {

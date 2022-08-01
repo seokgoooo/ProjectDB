@@ -152,21 +152,30 @@ public class SignUpPage extends JDialog {
 		ageToolTipLbl.setFont(new Font("휴먼모음T", Font.PLAIN, 20));
 
 		signUpBtn.addActionListener(new ActionListener() {
+			private String id;
+			private String pw;
+			private boolean manager;
+			private int age;
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String id = idField.getText();
-					String pw = new String(passwordField.getPassword());
-					boolean manager = managerCheckBox.isSelected();
-					int age = Integer.parseInt(ageField.getText());
+					id = idField.getText().replaceAll(" ", "");
+					pw = new String(passwordField.getPassword());
+					manager = managerCheckBox.isSelected();
+					age = Integer.parseInt(ageField.getText());
 					ageToolTipLbl.setText("");
 
-					if (!server.containsKey(id)) {
+					if (id.length() == 0 || id.contains(" ")) {
+						idToolTipLbl.setText("ID를 입력해주세요");
+						if (pw.length() == 0 || pw.contains(" ")) {
+							idToolTipLbl.setText("Password를 입력해주세요");
+						}
+					} else if (!server.containsKey(id)) {
 						server.put(id, new User(id, pw, manager, age));
 						user.create(id, pw, manager, age);
 						showPopUp("회원가입 완료");
 						dispose();
-
 					} else {
 						idToolTipLbl.setText("이미 등록된 ID 입니다");
 					}
@@ -176,6 +185,8 @@ public class SignUpPage extends JDialog {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
+				ageToolTipLbl.repaint();
+				idToolTipLbl.repaint();
 			}
 		});
 

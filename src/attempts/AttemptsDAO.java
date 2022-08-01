@@ -25,4 +25,11 @@ public interface AttemptsDAO {
 	
 	// 삭제
 	int delete(String id, int quizNumber) throws SQLException;
+	
+	// 클리어 시간
+	int updateClearTime(String id, int quiznumber, int time) throws SQLException;
+	
+	// 클리어 시간 불러오기
+	int readClearTime(int quiznumber) throws SQLException;
+	
 }

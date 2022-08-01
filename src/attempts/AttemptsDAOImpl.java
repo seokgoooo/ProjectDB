@@ -222,6 +222,52 @@ public class AttemptsDAOImpl implements AttemptsDAO {
 		return list;
 	}
 
+	@Override
+	public int updateClearTime(String id, int quiznumber, int time) throws SQLException {
+		String query = "UPDATE attemptsquiz SET time = ? WHERE id = ? and quizNumber = ?";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, time);
+			pstmt.setString(2, id);
+			pstmt.setInt(3, quiznumber);
+
+			return pstmt.executeUpdate();
+		} finally {
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
+		}
+	}
+
+	@Override
+	public int readClearTime(int quiznumber) throws SQLException {
+		String query = "SELECT time FROM quiz_db.attemptsquiz where quiznumber = ? order by time asc limit 1";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = QuizDBUtil.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, quiznumber);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				return rs.getInt("time");
+			} else {
+				return 0;
+			}
+		} finally {
+			QuizDBUtil.closeRS(rs);
+			QuizDBUtil.closePstmt(pstmt);
+			QuizDBUtil.closeConn(conn);
+		}
+	}
+
 	
 
 }
