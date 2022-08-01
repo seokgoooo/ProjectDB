@@ -6,7 +6,7 @@ public class Capitals {
 	private String question;
 	private String answer;
 	private String continent;
-	
+
 	public Capitals(int number, String question, String answer, String continent) {
 		super();
 		this.number = number;
@@ -55,11 +55,36 @@ public class Capitals {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Capitals))
+			return false;
+		Capitals other = (Capitals) obj;
+		if (answer == null) {
+			if (other.answer != null)
+				return false;
+		} else if (!answer.equals(other.answer))
+			return false;
+		if (continent == null) {
+			if (other.continent != null)
+				return false;
+		} else if (!continent.equals(other.continent))
+			return false;
+		if (number != other.number)
+			return false;
+		if (question == null) {
+			if (other.question != null)
+				return false;
+		} else if (!question.equals(other.question))
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return "Capitals [number=" + number + ", question=" + question + ", answer=" + answer + ", continent="
 				+ continent + "]";
 	}
-	
-	
 
 }

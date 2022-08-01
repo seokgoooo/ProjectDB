@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 	private JButton[] favoriteQuiz;
 	private CapitalsDao capitalsDao = new Manager();
 	private int currentNumber;
+	private JTextArea hintArea;
 
 	public QuizFrame(User user) {
 		this.user = user;
@@ -71,8 +73,10 @@ public class QuizFrame extends JFrame implements ActionListener {
 
 		ja = new JTextArea(15, 20);
 		ja.setBounds(7, 17, 561, 593);
+		ja.setLineWrap(true); // 자동 줄바꿈
 		answertf = new JTextField(20);
 		answertf.setBounds(140, 25, 226, 25);
+		
 
 		// 왼쪽 객관식 버튼
 //		JButton[] bt = new JButton[4];
@@ -124,6 +128,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 		tabbedPane.setBounds(12, 20, 527, 727);
 		pnlR2.add(tabbedPane);
 
+		
 		// 전체 문제 panel
 
 		JPanel allPanel = new JPanel();
@@ -137,23 +142,24 @@ public class QuizFrame extends JFrame implements ActionListener {
 			allQuiz[i].addActionListener(this);
 			allPanel.add(allQuiz[i]);
 		}
+		
+		
+		
 
 		// 맞춘문제
 
 		clearPnl = new JPanel();
 		tabbedPane.addTab("정답", null, clearPnl, null);
 		clearPnl.setLayout(new GridLayout(5, 5));
-		
+
 		try {
 			clearList = attemptsDao.capitalClearRead(user.getClearID(), true);
 		} catch (SQLException e4) {
-			// TODO Auto-generated catch block
 			e4.printStackTrace();
 		}
-		if(clearList.size() != 0) {
+		if (clearList.size() != 0) {
 			clearPnlRepaint();
 		}
-
 
 		clearQuiz = new JButton[clearList.size()];
 
@@ -167,6 +173,16 @@ public class QuizFrame extends JFrame implements ActionListener {
 		favoritePnl = new JPanel();
 		tabbedPane.addTab("즐겨찾기", null, favoritePnl, null);
 		favoritePnl.setLayout(new GridLayout(5, 5));
+		
+		try {
+			favoriteList = favoriteDao.capitalRead(user.getFavoriteID());
+		} catch (SQLException e4) {
+			// TODO Auto-generated catch block
+			e4.printStackTrace();
+		} 
+//		if(favoriteList.size() != 0) {
+//			favoritePnlRepaint();
+//		}
 
 		favoriteQuiz = new JButton[favoriteList.size()];
 
@@ -185,7 +201,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				if (answertf.getText().equals(currentCapitals.getAnswer())) {
 					JOptionPane.showMessageDialog(QuizFrame.this, "정답");
-			
+
 					try {
 						attemptsQuiz = attemptsDao.read(user.getId(), currentCapitals.getNumber());
 					} catch (SQLException e3) {
@@ -203,7 +219,8 @@ public class QuizFrame extends JFrame implements ActionListener {
 						}
 					} else {
 						try {
-							attemptsDao.updateCount(user.getClearID(), currentCapitals.getNumber(), attemptsQuiz.getAttemptsCount());
+							attemptsDao.updateCount(user.getClearID(), currentCapitals.getNumber(),
+									attemptsQuiz.getAttemptsCount());
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -215,7 +232,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
+
 					try {
 						attemptsDao.capitalClearRead(user.getId(), true);
 					} catch (SQLException e2) {
@@ -225,12 +242,38 @@ public class QuizFrame extends JFrame implements ActionListener {
 				} else {
 					JOptionPane.showMessageDialog(QuizFrame.this, "땡");
 				}
+				textReset();
 			}
 		});
 		pnlL1.add(confirmBtn);
+		
+		
+		// 즐겨찾기 버튼구현
+		favorite.addActionListener(new ActionListener() {
 
-		JTextArea ja2 = new JTextArea(20, 30);
-		ja2.setBounds(15, 20, 450, 51);
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (favorite.isSelected()) {
+					try {
+						favoriteDao.create(user.getFavoriteID(), currentCapitals.getNumber());
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				} else {
+					try {
+						favoriteDao.delete(user.getFavoriteID(), currentCapitals.getNumber());
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				favoritePnlRepaint();
+
+			}
+		});
+
+		hintArea = new JTextArea(20, 30);
+		hintArea.setBounds(15, 20, 450, 51);
 		JPanel pnlhint = new JPanel();
 		pnlhint.setBounds(7, 620, 561, 86);
 		pnlLEFT.add(pnlhint);
@@ -239,35 +282,51 @@ public class QuizFrame extends JFrame implements ActionListener {
 		pnlhint.setLayout(null);
 
 		// --힌트[1]
-		pnlhint.add(ja2);
-
-		JButton btnNewButton = new JButton("힌트");
-		btnNewButton.setBounds(482, 36, 67, 23);
-		pnlhint.add(btnNewButton);
+		pnlhint.add(hintArea);
+		
+        // 힌트 버튼 구현
+		JButton hintBtn = new JButton("힌트");
+		hintBtn.setBounds(482, 36, 67, 23);
+		pnlhint.add(hintBtn);
+		
+		hintBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == hintBtn) {
+					hintArea.setText(currentCapitals.getQuestion());
+					JOptionPane.showMessageDialog(QuizFrame.this, "눌러짐");
+				} 
+				
+			}
+		});
+		
+		
 		setSize(1180, 820);
 		setLocationRelativeTo(null);
 		setResizable(false);
-		favorite.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (favorite.isSelected()) {
-					try {
-						for (int i = 0; i < list.size(); i++) {
-							favoriteDao.create(user.getFavoriteID(), list.get(i).getNumber());
-							favoritePnlRepaint();
-						}
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-
-			}
-		});
 	}
+//		favorite.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				if (favorite.isSelected()) {
+//					try {
+//						for (int i = 0; i < list.size(); i++) {
+//							favoriteDao.create(user.getFavoriteID(), list.get(i).getNumber());
+//							favoritePnlRepaint();
+//						}
+//					} catch (SQLException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+//				}
+//
+//			}
+//		});
+//	}
 
-	// 버튼 이벤트 전체목록
+    // 우측 문제 버튼 전체문제
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		for (int i = 0; i < allQuiz.length; i++) {
@@ -282,110 +341,51 @@ public class QuizFrame extends JFrame implements ActionListener {
 
 		}
 
-//		if (e.getSource() == confirmBtn) {
-//			System.out.println(currentNumber);
-//			if (answertf.getText().equals(list.get(currentNumber).getAnswer())) {
-//
-//				try {
-//					attemptsDao.updateClear(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(), true);
-//				} catch (SQLException e1) {
-//					e1.printStackTrace();
-//				}
-//				JOptionPane.showMessageDialog(QuizFrame.this, "정답입니다.");
-//				confirmBtn.setEnabled(false);
-//				clearPnl.repaint();
-//			} else {
-//				JOptionPane.showMessageDialog(QuizFrame.this, "오답입니다.");
-//			}
-//			
-////			if(ja.getText().equals(list.get(0).getContinent())) {
-////				answertf.getText().equals(list.get(0).getAnswer());
-////				answertf.addActionListener(this);
-////				JOptionPane.showMessageDialog(QuizFrame.this, "정답");
-////				
-////			}
-//		}
-		// 확인버튼
-		// 즐겨찾기 버튼
 	}
+	// 맞춘문제 버튼
+	public void actionPerformed2(ActionEvent e) {
+		for (int i = 0; i < clearQuiz.length; i++) {
+			if (e.getSource() == clearQuiz[i]) {
+//				allQuizEvent();
+				clearQuiz[i].addActionListener(this);
+				ja.setText(String.valueOf(list.get(i).getContinent()));
+//				currentCapitals = new Capitals(list.get(i).getNumber(), list.get(i).getQuestion(),
+//						list.get(i).getAnswer(), list.get(i).getContinent());
+//				currentNumber = i;
+			}
 
-//	// 즐겨 찾기
-//	public void favoriteEvent() {
-//		if (favorite.isSelected()) {
-//			try {
-//				favoriteDao.create(user.getFavoriteID(), list.get(0).getNumber());
-//			} catch (SQLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		} else {
-//			try {
-//				favoriteDao.delete(user.getFavoriteID(), capitals.getNumber());
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		favorite.repaint();
-//	}
-
-	// 즐겨찾기 표시버튼
-
-	public void favoriteCheck(Capitals capitals) {
-		if (favoriteList.contains(capitals.getNumber())) {
-			favorite.setSelected(true);
-		} else {
-			favorite.setSelected(false);
 		}
+
 	}
+	// 즐겨찾기 버튼
 
-//	// 확인버튼
-//	public void OK_button(JPanel p) {
-//	}
 
-	public void confirmBtnEvent() {
-		if (true) {
 
-			if (answertf.getText().equals(capitals.getAnswer())) {
-
-				try {
-					attemptsDao.updateClear(attemptsQuiz.getId(), attemptsQuiz.getQuizNumber(), true);
-				} catch (SQLException e) {
-					e.printStackTrace();
+	 //즐겨찾기에 있는 번호 누를때
+	private MouseAdapter favoriteMad = new MouseAdapter() {
+		@Override
+		public void mousePressed(MouseEvent e) {
+			for (int i = 0; i < favoriteQuiz.length; i++) {
+				if (e.getSource() == favoriteQuiz[i]) {
 				}
-				JOptionPane.showMessageDialog(QuizFrame.this, "정답입니다.");
-				confirmBtn.setEnabled(false);
-				clearPnl.repaint();
-			} else {
-				JOptionPane.showMessageDialog(QuizFrame.this, "오답입니다.");
 			}
 		}
-	}
+	};
 
-	// 즐겨찾기에 있는 번호 누를때
-//	private MouseAdapter mouseAdapter = new MouseAdapter() {
-//		@Override
-//		public void mousePressed(MouseEvent e) {
-//			for (int i = 0; i < favoriteQuiz.length; i++) {
-//				if (e.getSource() == favoriteQuiz[i]) {
-//				}
-//			}
-//		}
-//	};
-//
-//	// 해결 문제에 있는 번호 누를때
-//	private MouseAdapter mouseAdapter2 = new MouseAdapter() {
-//		@Override
-//		public void mouseReleased(MouseEvent e) {
-//			try {
-//				for (int i = 0; i < clearQuiz.length; i++) {
-//					if (e.getSource() == clearQuiz[i]) {
-//					}
-//				}
-//
-//			} catch (NullPointerException e1) {
-//			}
-//		}
-//	};
+	// 해결 문제에 있는 번호 누를때
+	private MouseAdapter clearMad = new MouseAdapter() {
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			try {
+				for (int i = 0; i < clearQuiz.length; i++) {
+					if (e.getSource() == clearQuiz[i]) {
+					}
+				}
+
+			} catch (NullPointerException e1) {
+			}
+		}
+	};
 
 	// 해결 문제 그리기
 	public void clearPnlRepaint() {
@@ -396,16 +396,11 @@ public class QuizFrame extends JFrame implements ActionListener {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println(clearList);
+		
 
 		clearQuiz = new JButton[clearList.size()];
-		//System.out.println(clearQuiz.length);
-		//System.out.println(clearList.get(0));
-		try {
-			System.out.println(capitalsDao.read(1000));
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		// System.out.println(clearQuiz.length);
+		// System.out.println(clearList.get(0));
 		for (int i = 0; i < clearQuiz.length; i++) {
 			Capitals c = null;
 
@@ -415,7 +410,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 				e.printStackTrace();
 			}
 			clearQuiz[i] = new JButton(String.format("%02d", (list.indexOf(c) + 1)));
-			// clearQuiz[i].addMouseListener(mouseAdapter2);
+			clearQuiz[i].addMouseListener(clearMad);
 			clearPnl.add(clearQuiz[i]);
 		}
 
@@ -425,9 +420,9 @@ public class QuizFrame extends JFrame implements ActionListener {
 
 	// 즐찾 문제 그리기
 	public void favoritePnlRepaint() {
-		favorite.removeAll();
+		favoritePnl.removeAll();
 		try {
-			favoriteList = favoriteDao.musicRead(user.getFavoriteID());
+			favoriteList = favoriteDao.capitalRead(user.getFavoriteID());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -442,10 +437,10 @@ public class QuizFrame extends JFrame implements ActionListener {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
-			favoriteQuiz[i] = new JButton(String.format("%02d", (list.indexOf(c) + 1)));
-			// favoriteQuiz[i].addMouseListener(mouseAdapter);
-			favorite.add(favoriteQuiz[i]);
+			System.out.println(c);
+			favoriteQuiz[i] = new JButton(String.format("%02d", (list.indexOf(c) + 1))); //capitals equals로 해결
+			favoriteQuiz[i].addMouseListener(favoriteMad);
+			favoritePnl.add(favoriteQuiz[i]);
 		}
 
 		favoritePnl.revalidate();
@@ -456,6 +451,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 	public void textReset() {
 		ja.setText("");
 		answertf.setText("");
+		hintArea.setText("");
 	}
 
 }
