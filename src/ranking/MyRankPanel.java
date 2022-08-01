@@ -116,7 +116,7 @@ public class MyRankPanel implements ActionListener {
 					break;
 
 				case 3:
-					useAgeTop(20);
+					useAgeTop(30);
 					break;
 
 				case 4:
