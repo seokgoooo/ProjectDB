@@ -154,7 +154,7 @@ public class ManagerMode extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
 	public void inputButton(JPanel p, JButton a, JButton b, int user) {
