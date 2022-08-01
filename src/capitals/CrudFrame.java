@@ -204,7 +204,7 @@ public class CrudFrame extends JFrame {
 			}
 		});
 
-		setSize(1180, 820);
+		setSize(600, 520);
 	}
 
 //갱신 메소드
@@ -217,7 +217,7 @@ public class CrudFrame extends JFrame {
 			e.printStackTrace();
 		}
 
-		String header[] = { "number", "힌트(나라)", "정답", "대륙" };
+		String header[] = { "number", "힌트(나라)", "정답", "힌트" };
 
 		String body[][] = new String[list.size()][4];
 		for (int i = 0; i < list.size(); i++) {
