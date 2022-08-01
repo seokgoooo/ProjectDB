@@ -248,6 +248,8 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		favoriteCb.setFont(new Font("굴림", Font.PLAIN, 20));
 		favoriteCb.addActionListener(this);
 		bestTimeLbl = new JLabel("Best Time: ");
+		bestTimeLbl.setForeground(Color.RED);
+		bestTimeLbl.setFont(new Font("굴림", Font.PLAIN, 20));
 
 		leftTopPnl.add(bestTimeLbl, BorderLayout.NORTH);
 		leftTopPnl.add(quizNumberLbl, "West");
@@ -378,13 +380,17 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		favoriteCheck(currentMusic);
 
 		quizNumberLbl.setText(String.format("%02d", (i + 1)) + "번");
+
+		System.out.println(currentMusic.getTitle());
+		lpUrl = MusicQuiz.class.getClassLoader().getResource(currentMusic.getTitle() + ".JPG");
+		lpLbl.setIcon(new ImageIcon(lpUrl));
 		
 		try {
-			bestTimeLbl.setText(String.format("%02d", attemptsDao.readClearTime(currentMusic.getNumber())));
+			bestTimeLbl.setText(String.format("Best Clear Time : %02d", attemptsDao.readClearTime(currentMusic.getNumber())));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		map.put(currentMusic, prevMusic);
 
 		timeLbl.setText("" + 60 + "초");
@@ -570,11 +576,11 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 		quizNumberLbl.setText(String.format("%02d", (list.indexOf(currentMusic) + 1)) + "번");
 		try {
-			bestTimeLbl.setText(String.format("%02d", attemptsDao.readClearTime(currentMusic.getNumber())));
+			bestTimeLbl.setText(String.format("Best Clear Time : %02d", attemptsDao.readClearTime(currentMusic.getNumber())));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		prev = true;
 		first = true;
 	}
@@ -741,29 +747,27 @@ public class MusicQuiz extends JFrame implements ActionListener {
 		int index = random.nextInt(list.size());
 		Music music = list.get(index);
 		quizNumberLbl.setText(String.format("%02d", (index + 1)) + "번");
+
 		
-		try {
-			bestTimeLbl.setText(String.format("%02d", attemptsDao.readClearTime(currentMusic.getNumber())));
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		
-		lpUrl = MusicQuiz.class.getClassLoader().getResource(currentMusic.getTitle() + ".JPG");
-		lpLbl.setIcon(new ImageIcon(lpUrl));
-		
+	
+
 		while (music.equals(currentMusic)) {
 			index = random.nextInt(list.size());
 			music = list.get(index);
 			quizNumberLbl.setText(String.format("%02d", (index + 1)) + "번");
-			try {
-				bestTimeLbl.setText(String.format("%02d", attemptsDao.readClearTime(currentMusic.getNumber())));
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+
 		}
 
 		prevMusic = currentMusic;
 		currentMusic = music;
+
+		lpUrl = MusicQuiz.class.getClassLoader().getResource(currentMusic.getTitle() + ".JPG");
+		lpLbl.setIcon(new ImageIcon(lpUrl));
+		try {
+			bestTimeLbl.setText(String.format("Best Clear Time : %02d", attemptsDao.readClearTime(currentMusic.getNumber())));
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 
 		if (prevMusic != null) {
 			map.put(currentMusic, prevMusic);
