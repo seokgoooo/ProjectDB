@@ -273,6 +273,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 		pauseBtn.setVisible(false);
 		replayBtn.setVisible(false);
+		prevBtn.setEnabled(false);
 
 		functionPnl.add(homeBtn);
 		functionPnl.add(prevBtn);
@@ -369,6 +370,7 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 		infoTA.setVisible(false);
 		answerTf.setText("");
+		prevBtn.setEnabled(true);
 		pauseBtn.setVisible(false);
 		playBtn.setVisible(true);
 		replayBtn.setVisible(false);
@@ -567,6 +569,9 @@ public class MusicQuiz extends JFrame implements ActionListener {
 
 		currentMusic = map.get(currentMusic);
 		prevMusic = map.get(currentMusic);
+		
+		lpUrl = MusicQuiz.class.getClassLoader().getResource(currentMusic.getTitle() + ".JPG");
+		lpLbl.setIcon(new ImageIcon(lpUrl));
 
 		if (prevMusic == null) {
 			prevBtn.setEnabled(false);
