@@ -11,7 +11,7 @@ public class MainRank extends JFrame {
 	private MyRankPanel musicsPnl = new MyRankPanel("music");
 	private MyRankPanel fourlettersPnl = new MyRankPanel("fourletters");
 	private MyRankPanel capitalsPnl = new MyRankPanel("capitals");
-	private MyRankPanel totalPnl = new MyRankPanel("age");
+	private MyRankPanel totalPnl = new MyRankPanel();
 
 	public MainRank() throws SQLException {
 		super();

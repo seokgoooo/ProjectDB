@@ -76,7 +76,6 @@ public class QuizFrame extends JFrame implements ActionListener {
 		ja.setLineWrap(true); // 자동 줄바꿈
 		answertf = new JTextField(20);
 		answertf.setBounds(140, 25, 226, 25);
-		
 
 		// 왼쪽 객관식 버튼
 //		JButton[] bt = new JButton[4];
@@ -128,7 +127,6 @@ public class QuizFrame extends JFrame implements ActionListener {
 		tabbedPane.setBounds(12, 20, 527, 727);
 		pnlR2.add(tabbedPane);
 
-		
 		// 전체 문제 panel
 
 		JPanel allPanel = new JPanel();
@@ -142,9 +140,6 @@ public class QuizFrame extends JFrame implements ActionListener {
 			allQuiz[i].addActionListener(this);
 			allPanel.add(allQuiz[i]);
 		}
-		
-		
-		
 
 		// 맞춘문제
 
@@ -173,13 +168,13 @@ public class QuizFrame extends JFrame implements ActionListener {
 		favoritePnl = new JPanel();
 		tabbedPane.addTab("즐겨찾기", null, favoritePnl, null);
 		favoritePnl.setLayout(new GridLayout(5, 5));
-		
+
 		try {
 			favoriteList = favoriteDao.capitalRead(user.getFavoriteID());
 		} catch (SQLException e4) {
 			// TODO Auto-generated catch block
 			e4.printStackTrace();
-		} 
+		}
 //		if(favoriteList.size() != 0) {
 //			favoritePnlRepaint();
 //		}
@@ -246,8 +241,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 			}
 		});
 		pnlL1.add(confirmBtn);
-		
-		
+
 		// 즐겨찾기 버튼구현
 		favorite.addActionListener(new ActionListener() {
 
@@ -283,25 +277,24 @@ public class QuizFrame extends JFrame implements ActionListener {
 
 		// --힌트[1]
 		pnlhint.add(hintArea);
-		
-        // 힌트 버튼 구현
+
+		// 힌트 버튼 구현
 		JButton hintBtn = new JButton("힌트");
 		hintBtn.setBounds(482, 36, 67, 23);
 		pnlhint.add(hintBtn);
-		
+
 		hintBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(e.getSource() == hintBtn) {
+				if (e.getSource() == hintBtn) {
 					hintArea.setText(currentCapitals.getQuestion());
 					JOptionPane.showMessageDialog(QuizFrame.this, "눌러짐");
-				} 
-				
+				}
+
 			}
 		});
-		
-		
+
 		setSize(1180, 820);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -326,7 +319,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 //		});
 //	}
 
-    // 우측 문제 버튼 전체문제
+	// 우측 문제 버튼 전체문제
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		for (int i = 0; i < allQuiz.length; i++) {
@@ -336,12 +329,20 @@ public class QuizFrame extends JFrame implements ActionListener {
 				ja.setText(String.valueOf(list.get(i).getContinent()));
 				currentCapitals = new Capitals(list.get(i).getNumber(), list.get(i).getQuestion(),
 						list.get(i).getAnswer(), list.get(i).getContinent());
+				
+				if(favoriteList.contains(currentCapitals.getNumber())) {
+					favorite.setSelected(true);
+				} else {
+					favorite.setSelected(false);
+				}
+				
 				currentNumber = i;
 			}
 
 		}
 
 	}
+
 	// 맞춘문제 버튼
 	public void actionPerformed2(ActionEvent e) {
 		for (int i = 0; i < clearQuiz.length; i++) {
@@ -349,9 +350,15 @@ public class QuizFrame extends JFrame implements ActionListener {
 //				allQuizEvent();
 				clearQuiz[i].addActionListener(this);
 				ja.setText(String.valueOf(list.get(i).getContinent()));
-//				currentCapitals = new Capitals(list.get(i).getNumber(), list.get(i).getQuestion(),
-//						list.get(i).getAnswer(), list.get(i).getContinent());
-//				currentNumber = i;
+				currentCapitals = new Capitals(list.get(i).getNumber(), list.get(i).getQuestion(),
+						list.get(i).getAnswer(), list.get(i).getContinent());
+				
+				if(clearList.contains(currentCapitals.getNumber())) {
+					favorite.setSelected(true);
+				} else {
+					favorite.setSelected(false);
+				}
+				currentNumber = i;
 			}
 
 		}
@@ -359,9 +366,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 	}
 	// 즐겨찾기 버튼
 
-
-
-	 //즐겨찾기에 있는 번호 누를때
+	// 즐겨찾기에 있는 번호 누를때
 	private MouseAdapter favoriteMad = new MouseAdapter() {
 		@Override
 		public void mousePressed(MouseEvent e) {
@@ -396,7 +401,6 @@ public class QuizFrame extends JFrame implements ActionListener {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 
 		clearQuiz = new JButton[clearList.size()];
 		// System.out.println(clearQuiz.length);
@@ -438,7 +442,7 @@ public class QuizFrame extends JFrame implements ActionListener {
 				e.printStackTrace();
 			}
 			System.out.println(c);
-			favoriteQuiz[i] = new JButton(String.format("%02d", (list.indexOf(c) + 1))); //capitals equals로 해결
+			favoriteQuiz[i] = new JButton(String.format("%02d", (list.indexOf(c) + 1))); // capitals equals로 해결
 			favoriteQuiz[i].addMouseListener(favoriteMad);
 			favoritePnl.add(favoriteQuiz[i]);
 		}

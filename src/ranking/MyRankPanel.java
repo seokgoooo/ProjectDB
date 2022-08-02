@@ -39,6 +39,10 @@ public class MyRankPanel implements ActionListener {
 
 	private List<Ranking> rankList = null;
 	private Ranking nowUser = null;
+	
+	
+	public MyRankPanel() throws SQLException {
+	}
 
 	public MyRankPanel(String table) throws SQLException {
 		this.table = table;
